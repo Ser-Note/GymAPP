@@ -1,0 +1,23 @@
+# Environment variables (contains password hash - NEVER commit this!)
+.env
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+#SUPABASE_URL=https://qvylkpbjbplozbbvjzrz.supabase.co
+#SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2eWxrcGJqYnBsb3piYnZqenJ6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjA5OTQ4NCwiZXhwIjoyMDgxNjc1NDg0fQ.AQiPHRmVJwtTOlHyVWtbJSSa0Micr7CDNO4k5GAk6o4
+#SESSION_SECRET=9e8f0d6d5b1ef3e04b17f0c9f40b8d2e6a311b4a8cfc0f8f6c1d5c7f3e2a9b0c

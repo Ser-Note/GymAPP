@@ -1,0 +1,27 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/login.css">
+    <script src="./js/frontRegister.js" defer></script>
+    <title>Sign Up</title>
+</head>
+<body>
+    
+    <div id="winterSnowContainer"></div>
+    <ul class="info">
+        <div class="header-margin">
+            <img src="./photos/polarbear_benchPress.svg" alt="Polar Bear Logo" class="logo">
+        </div>
+        <h1>{{title}}</h1>
+        <form id="registerForm" action="/register" method="POST">
+            <label for="username" >Full Name:</label>
+            <input type="text" placeholder="John Doe" id="username" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" placeholder="***********" id="password" name="password" required>
+            <br>
+            <button type="submit">Register</button>
+            <a href="/">Already Have an Account? Login</a>
+        </form>
+    </ul>
+</body>
