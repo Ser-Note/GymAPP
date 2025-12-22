@@ -68,7 +68,62 @@ const userDB = {
             .single();
         if (error) throw error;
         return data || null;
+    },
+
+    async getIsAdmin(username) {
+        const { data, error } = await supabase
+            .from('user')
+            .select('isAdmin')
+            .eq('user_name', username)
+            .maybeSingle();
+        if (error && error.code !== 'PGRST116') throw error; // ignore no-match
+        return data ? data.isAdmin : null;
+    },
+
+    async setIsAdmin(username, isAdmin) {
+        const { data, error } = await supabase
+            .from('user')
+            .update({ isAdmin: isAdmin })
+            .eq('user_name', username)
+            .select()
+            .single();
+        if (error) throw error;
+        return data || null;
+    },
+
+    async deleteUser(username) {
+        const {data, error } = await supabase
+            .from('user')
+            .delete()
+            .eq('user_name', username)
+            .select()
+            .single();
+        if (error) throw error;
+        return data || null;
+    },
+
+    async updateUsername(oldUsername, newUsername) {
+        const { data, error } = await supabase
+            .from('user')
+            .update({ user_name: newUsername })
+            .eq('user_name', oldUsername)
+            .select()
+            .single();
+        if (error) throw error;
+        return data || null;
+    },
+
+    async updatePassword(username, newPassword) {
+        const { data, error } = await supabase
+            .from('user')
+            .update({ password: newPassword })
+            .eq('user_name', username)
+            .select()
+            .single();
+        if (error) throw error;
+        return data || null;
     }
+
 }
 
 module.exports = userDB;

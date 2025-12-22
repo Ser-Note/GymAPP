@@ -1,0 +1,60 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/manageUsers.css">
+    <script src="./js/frontManageUsers.js" defer></script>
+    <title>Manage Users</title>
+</head>
+<body>
+    
+        <div id="winterSnowContainer"></div>
+
+        
+
+        <ul class="info">
+            <div class="header-margin">
+                <img src="./photos/polarbear_dumbellCurl.svg" alt="Polar Bear Logo" class="logo">
+            </div>
+            <h1>{{title}}</h1>
+            {{#each users}}
+                <li>
+                    <div class="user-id">
+                        <img src="./photos/avatar.svg" alt="{{this.user_name}} avatar" class="avatar">
+                        <strong>{{this.user_name}}</strong>
+                    </div> - 
+                    {{#if this.isAuthenticated}}
+                    <button id="btnAuthActive">Active</button>
+                    {{else}}
+                    <button id="btnAuthPending">Pending</button>
+                    {{/if}} - 
+                    {{#if this.isAdmin}}
+                    <button  id="btnAdminActive" class="admin-badge">Admin</button>
+                    {{else}}
+                    <button id="btnAdminPending" class="user-badge">User</button>
+                    {{/if}} -
+                    <button id="btnDeleteUser">Delete</button>
+                </li>
+            {{/each}}
+
+    <nav class="nav-bar">
+            <div class="nav-track">
+                <a class="nav-link nav-profile" href="/profile">
+                    <img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+                    <span>Profile</span>
+                </a>
+                    <a class="nav-link" href="/manageUsers">
+                        <img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
+                        <span>Manage Users</span>
+                    </a>
+                <a class="nav-link nav-home" href="/dashboard">
+                    <img class="nav-icon" src="/photos/home.svg" alt="Home">
+                    <span>Home</span>
+                </a>
+                    <a class="nav-link nav-workout" href="/exercises">
+                        <img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
+                        <span>My Workout</span>
+                    </a>
+            </div>
+        </nav>
+        </ul>
+</body>

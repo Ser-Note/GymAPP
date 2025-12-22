@@ -14,12 +14,16 @@ const userDB = require('../database/db');
         else
         {
             const isAuthenticated = await userDB.getIsAuthenticated(req.session.username);
+            const isAdmin = await userDB.getIsAdmin(req.session.username);
+
                 res.render('dashboard',
                     {
                         
                         title: 'Dashboard',
                         isAuthenticated: isAuthenticated,
+                        isAdmin: isAdmin,
                         username: req.session.username
+                        
                     });
         }
     });

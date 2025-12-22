@@ -13,6 +13,9 @@ const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/backLogin.js');
 const registerRouter = require('./routes/backRegister.js');
 const dashboardRouter = require('./routes/backDashboard.js');
+const manageUsersRouter = require('./routes/backManageUsers.js');
+const profileRouter = require('./routes/backProfile.js');
+const myWorkoutRouter = require('./routes/backMyWorkouts.js');
 
 // ---- Initialize express ---- //
 
@@ -46,6 +49,9 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/manageUsers', manageUsersRouter);
+app.use('/profile', profileRouter);
+app.use('/exercises', myWorkoutRouter);
 
 // ---- Start Server ---- //
 

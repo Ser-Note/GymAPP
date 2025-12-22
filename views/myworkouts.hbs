@@ -1,0 +1,50 @@
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{title}}</title>
+	<link rel="stylesheet" href="/css/dashboard.css">
+	<script src="./js/frontNotAuthorized.js" defer></script>
+</head>
+<body>
+    
+    <div id="winterSnowContainer"></div>
+
+    <ul class="info">
+        <div class="header-margin">
+            <img src="./photos/polarbear_dumbellCurl.svg" alt="Polar Bear Logo" class="logo">
+        </div>
+        <h1>{{title}} <button>+</button></h1>
+        {{#each user.workouts}}
+            <li>
+                <div class="workout-id">
+                    <strong>{{this.workout_name}}</strong>
+                </div> - 
+                <p>{{this.description}}</p>
+                <button id="btnViewWorkout">View</button>
+                <button id="btnDeleteWorkout">Delete</button>
+            </li>
+        {{/each}}
+        <nav class="nav-bar">
+            <div class="nav-track">
+                <a class="nav-link nav-profile" href="/profile">
+                    <img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+                    <span>Profile</span>
+                </a>
+                {{#if user.isAdmin}}
+                    <a class="nav-link" href="/manageUsers">
+                        <img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
+                        <span>Manage Users</span>
+                    </a>
+                {{/if}}
+                <a class="nav-link nav-home" href="/dashboard">
+                    <img class="nav-icon" src="/photos/home.svg" alt="Home">
+                    <span>Home</span>
+                </a>
+                <a class="nav-link nav-workout" href="/exercises">
+                    <img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
+                    <span>My Workout</span>
+                </a>
+            </div>
+        </nav>
+    </ul>
+</body>

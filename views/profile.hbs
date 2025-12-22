@@ -1,0 +1,67 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/profile.css">
+    <script src="./js/frontProfile.js" defer></script>
+    <title>Profile</title>
+</head>
+<body>
+        <div id="winterSnowContainer"></div>
+
+    <main class="profile">
+        <h1>{{title}}</h1>
+        {{#if user.isAuthenticated}}
+            <div class="profile-info">
+                {{#if user.isAdmin}}
+                    <h2> Admin Profile </h2>
+                    <img src="/photos/admin.svg" alt="{{user.username}} avatar" class="avatar-admin-large">
+                {{else}}
+                    <h2> User Profile </h2>
+                    <img src="/photos/avatar.svg" alt="{{user.username}} avatar" class="avatar-user-large">
+                {{/if}}
+                
+                <h2> Username: {{user.username}} <input type="text"></h2> 
+                <p>New Password: <input type="text"> </p></p>
+                {{#if user.isAdmin}}
+                    <p>Status: Admin</p>
+                {{else}}
+                    <p>Status: User</p>
+                {{/if}}
+            </div>
+        {{else}}
+            <div class="notAuthorized">
+                <img src="/photos/polarbear_notAuthorized.svg" alt="Polar Bear Logo" class="logo">
+                <h2>Pending for Activation</h2>
+                <p>Your account is not yet activated. Please check with an administrator or wait to be authorized.</p>
+            </div>
+        {{/if}}
+        <button>Save Changes</button>
+        <button> <a href="/">Logout</a></button>
+    </main>
+
+    <nav class="nav-bar">
+		<div class="nav-track">
+            <a class="nav-link nav-profile" href="/profile">
+                <img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+				<span>Profile</span>
+			</a>
+
+			{{#if user.isAdmin}}
+			<a class="nav-link" href="/manageUsers">
+				<img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
+				<span>Manage Users</span>
+			</a>
+			{{/if}}
+
+            <a class="nav-link nav-home" href="/dashboard">
+                <img class="nav-icon" src="/photos/home.svg" alt="Home">
+				<span>Home</span>
+			</a>
+
+			<a class="nav-link nav-workout" href="/exercises">
+                <img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
+				<span>My Workout</span>
+			</a>
+		</div>
+	</nav>
+</body>

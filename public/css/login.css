@@ -97,6 +97,10 @@ a:hover {
     font-size: 1.25rem;
   }
 }
+/*---------------------------------------*/
+/* Start Copying if you want winter affect */
+/*---------------------------------------*/
+
 /* Hide unused snow container if present in markup */
 #winterSnowContainer {
   display: none;
@@ -178,6 +182,10 @@ body:not(.Winter) #winterSnowContainer {
 body:not(.Winter) #winterBackground {
   display: none;
 }
+
+/*---------------------------------------*/
+/* Stop Copying if you want winter affect */
+/*---------------------------------------*/
 
 /* --- Form styling --- */
 .info form {

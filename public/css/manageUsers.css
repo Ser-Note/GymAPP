@@ -1,0 +1,766 @@
+/* ===== Manage Users Page Styles ===== */
+
+/* CSS Variables for maintainability */
+:root {
+    --color-primary: #2c3e50;
+    --color-accent: #3498db;
+    --color-success: #27ae60;
+    --color-danger: #e74c3c;
+    --color-warning: #f39c12;
+    --color-bg: #ecf0f1;
+    --color-border: #bdc3c7;
+    --color-text: #2c3e50;
+    --color-text-light: #7f8c8d;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --border-radius: 16px;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s ease;
+}
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    padding: var(--spacing-md);
+    padding-bottom: calc(var(--spacing-xl) + 72px);
+}
+
+.logo {
+    max-width: 100px;
+    height: auto;
+    transition: var(--transition);
+    background: transparent !important;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+/* Main Heading */
+h1 {
+    text-align: center;
+    color: var(--color-primary);
+    font-size: 2rem;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Navigation Bar */
+.nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--spacing-sm) var(--spacing-sm);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+    background: linear-gradient(180deg, rgba(236, 240, 241, 0.4), rgba(236, 240, 241, 0.9));
+    backdrop-filter: blur(8px);
+}
+
+.nav-track {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 999px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0,0,0,0.08);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+}
+
+.nav-link {
+    position: relative;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: color 0.25s ease, transform 0.25s ease;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.nav-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+}
+
+.nav-home,
+.nav-profile,
+.nav-workout,
+.nav-link[href="/manageUsers"] {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 104px;
+    text-align: center;
+}
+
+.nav-home .nav-icon,
+.nav-profile .nav-icon,
+.nav-workout .nav-icon,
+.nav-link[href="/manageUsers"] .nav-icon {
+    display: block;
+    margin: 0 auto;
+    width: 52px;
+    height: 52px;
+}
+
+/* Larger polar bear head without changing other icons */
+.nav-workout .nav-icon {
+    width: 80px;
+    height: 80px;
+}
+
+/* Overlay label only for My Workout so text sits atop the icon */
+.nav-workout {
+    position: relative;
+}
+
+/* Make polar bear head icon larger on desktop */
+/* center overlay labels over icons */
+.nav-home span,
+.nav-profile span,
+.nav-workout span,
+.nav-link[href="/manageUsers"] span {
+    display: block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-primary);
+    white-space: nowrap;
+}
+
+.nav-workout span {
+    margin-top: -1.50rem;
+    white-space: nowrap;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+    color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+    width: 70%;
+}
+
+.nav-link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+}
+
+/* Users List Container */
+.info {
+    list-style: none;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 24px;
+    z-index: 1200;
+    position: relative;
+}
+
+/* Individual User Item */
+.info li {
+    background-color: white;
+    border-left: 5px solid var(--color-accent);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.info li:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* Username Styling */
+.info li strong {
+    font-size: 1.1rem;
+    color: var(--color-primary);
+    flex: 1 1 100%;
+    margin-bottom: var(--spacing-xs);
+    word-break: break-word;
+}
+
+/* Avatar + username wrapper */
+.user-id {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+/* Override strong inside wrapper to avoid stretching */
+.info li .user-id strong {
+    flex: 0 1 auto;
+    margin-bottom: 0;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+}
+
+.header-margin {
+    background: transparent !important;
+}
+
+/* Button Styles */
+button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 80px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* Authentication Status Buttons */
+#btnAuthActive {
+    background-color: var(--color-success);
+    color: white;
+}
+
+#btnAuthActive:hover {
+    background-color: #229954;
+}
+
+#btnAuthPending {
+    background-color: var(--color-warning);
+    color: white;
+}
+
+#btnAuthPending:hover {
+    background-color: #d68910;
+}
+
+/* Admin/User Role Buttons */
+.admin-badge {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.admin-badge:hover {
+    background-color: #1a252f;
+}
+
+.user-badge {
+    background-color: var(--color-text-light);
+    color: white;
+}
+
+.user-badge:hover {
+    background-color: #5a6c7d;
+}
+
+/* Delete Button */
+#btnDeleteUser {
+    background-color: var(--color-danger);
+    color: white;
+    margin-left: auto;
+}
+
+#btnDeleteUser:hover {
+    background-color: #c0392b;
+}
+
+/* ===== TABLET STYLES (768px and up) ===== */
+@media (min-width: 768px) {
+    body {
+        padding: var(--spacing-lg);
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        width: 100%;
+    }
+
+    .info li {
+        padding: var(--spacing-lg);
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .info li strong {
+        flex: 0 1 auto;
+        margin-bottom: 0;
+        min-width: 150px;
+    }
+
+    button {
+        min-width: 100px;
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+}
+
+/* ===== DESKTOP STYLES (1024px and up) ===== */
+@media (min-width: 1024px) {
+    body {
+        padding: var(--spacing-xl);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    .info {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .info li {
+        padding: var(--spacing-lg) var(--spacing-xl);
+        min-height: 70px;
+        align-items: center;
+    }
+
+    h1 {
+        font-size: 2.75rem;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .nav-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: var(--spacing-md) var(--spacing-lg);
+        z-index: 10;
+    }
+
+    .nav-track {
+        padding: 1rem 1.75rem;
+        gap: 1rem;
+    }
+
+    /* Nudge polar bear icon up without moving label */
+    .nav-workout .nav-icon {
+        transform: translateY(-6px);
+    }
+}
+
+/* ===== MOBILE STYLES (under 768px) ===== */
+@media (max-width: 767px) {
+    body {
+        padding: var(--spacing-sm);
+        padding-top: var(--spacing-sm);
+        padding-bottom: calc(var(--spacing-lg) + 64px);
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .header-margin {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .logo {
+        max-width: 80px;
+    }
+
+    .avatar {
+        width: 28px;
+        height: 28px;
+    }
+
+    .info li {
+        flex-direction: column;
+        align-items: stretch;
+        padding: var(--spacing-md);
+        gap: var(--spacing-xs);
+    }
+
+    .info li strong {
+        margin-bottom: var(--spacing-xs);
+        font-size: 1rem;
+    }
+
+    button {
+        width: 100%;
+        padding: var(--spacing-sm) var(--spacing-xs);
+        font-size: 0.8rem;
+        margin-left: 0;
+    }
+
+    #btnDeleteUser {
+        margin-left: 0;
+        margin-top: var(--spacing-xs);
+        background-color: var(--color-danger);
+    }
+
+    .info li:last-child {
+        margin-bottom: 0;
+    }
+
+    .nav-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        margin: 0;
+        z-index: 10;
+    }
+
+    .nav-track {
+        width: 100%;
+        justify-content: space-evenly;
+        gap: 0.25rem;
+        padding: 0.4rem 0.5rem;
+    }
+
+    .nav-link {
+        flex: 0 0 auto;
+        padding: 0.15rem 0.35rem;
+        font-size: 0.9rem;
+    }
+
+    .nav-home,
+    .nav-profile,
+    .nav-workout,
+    .nav-link[href="/manageUsers"] {
+        width: 72px;
+        height: auto;
+    }
+
+    /* Nav icon sizing on mobile */
+    .nav-home .nav-icon,
+    .nav-profile .nav-icon,
+    .nav-workout .nav-icon,
+    .nav-link[href="/manageUsers"] .nav-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .nav-workout .nav-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .nav-home span,
+    .nav-profile span,
+    .nav-workout span,
+    .nav-link[href="/manageUsers"] span {
+        font-size: 0.75rem;
+    }
+
+    .nav-workout span {
+        margin-top: -0.1rem;
+    }
+
+    /* On the Manage Users page, hide the Manage Users link on mobile */
+    .nav-link[href="/manageUsers"] {
+        display: none;
+    }
+}
+
+/* ===== SMALL MOBILE STYLES (under 480px) ===== */
+@media (max-width: 479px) {
+    body {
+        padding: var(--spacing-sm);
+        padding-bottom: calc(var(--spacing-lg) + 64px);
+    }
+
+    h1 {
+        font-size: 1.25rem;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .header-margin {
+        margin-bottom: var(--spacing-sm);
+        padding-top: var(--spacing-xs);
+    }
+
+    .logo {
+        max-width: 70px;
+    }
+
+    .avatar {
+        width: 24px;
+        height: 24px;
+    }
+
+    .nav-home,
+    .nav-profile,
+    .nav-workout,
+    .nav-link[href="/manageUsers"] {
+        width: 72px;
+        height: auto;
+    }
+
+    .nav-home .nav-icon,
+    .nav-profile .nav-icon,
+    .nav-workout .nav-icon,
+    .nav-link[href="/manageUsers"] .nav-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .nav-workout .nav-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .nav-home span,
+    .nav-profile span,
+    .nav-workout span,
+    .nav-link[href="/manageUsers"] span {
+        font-size: 0.75rem;
+    }
+
+    .nav-workout span {
+        margin-top: -0.08rem;
+    }
+
+    /* Also hide on very small screens */
+    .nav-link[href="/manageUsers"] {
+        display: none;
+    }
+
+    /* Even spacing for 4 items on very small screens */
+    .nav-track {
+        width: 100%;
+        justify-content: space-evenly;
+        gap: 0.2rem;
+        padding: 0.35rem 0.5rem;
+    }
+
+    .nav-link {
+        padding: 0.1rem 0.25rem;
+    }
+
+    .info li {
+        padding: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+        border-left-width: 4px;
+    }
+
+    .info li strong {
+        font-size: 0.95rem;
+    }
+
+    button {
+        padding: var(--spacing-xs);
+        font-size: 0.75rem;
+        min-width: auto;
+    }
+}
+
+/* Focus visible for keyboard navigation */
+button:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+    button {
+        border: 2px solid currentColor;
+    }
+
+    .info li {
+        border-left-width: 6px;
+        border: 2px solid var(--color-border);
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background-color: white;
+    }
+
+    button {
+        display: none;
+    }
+
+    .info li {
+        page-break-inside: avoid;
+        border: 1px solid var(--color-border);
+    }
+}
+
+
+/* Snow container should remain visible when added */
+#winterSnowContainer {
+    display: block;
+}
+
+/* --- Winter Theme Overrides (dark background, card tint) --- */
+.Winter body, .Winter {
+  color: #e6eef8;
+  cursor: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52"><text y="36" font-size="38" fill="%232563eb">❄</text></svg>') 14 14, pointer;
+}
+
+.Winter .info {
+  background: #ffffff !important;
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.Winter .info h1, .Winter .info p, .Winter .info li, .Winter .info a, .Winter .info h2 {
+  color: #111827 !important;
+}
+
+/* --- Snow container and snowflake base styles --- */
+#winterSnowContainer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: visible;
+  display: block;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10vh;
+  left: 0;
+  color: #e2f1ff;
+  font-size: 14px;
+  opacity: 0.95;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 16px rgba(52, 152, 219, 0.25);
+  transform-origin: center;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  z-index: -1;
+}
+
+/* gentle fall with rotation */
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0.9;
+  }
+}
+/* Winter background layer */
+#winterBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("/photos/icymountain.svg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-color: none;
+}
+
+body:not(.Winter) #winterBackground {
+  display: none;
+}
+/* ===== MODAL STYLES ===== */
+
+/* Modal Overlay/Backdrop */
+.modal-overlay,
+.modal-backdrop,
+[role="dialog"] ~ .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+}
+
+.modal-overlay.active,
+.modal-backdrop.active {
+    display: block;
+}
+
+/* Modal Dialog */
+.modal,
+.modal-content,
+[role="dialog"] {
+    position: fixed;
+    z-index: 1100;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Modals should be on top */
+.modal.show,
+.modal.active {
+    z-index: 1100;
+}
+
+/* Tooltips above modals */
+.tooltip,
+[role="tooltip"] {
+    z-index: 1200;
+}
+
+/* Popup/Alert above everything */
+.alert-popup,
+.success-popup,
+.error-popup {
+    position: fixed;
+    z-index: 1200;
+}
