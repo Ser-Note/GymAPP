@@ -46,31 +46,41 @@
 				</div>
 		{{/if}}
 	</main>
+	{{#if isAuthenticated}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
 
-	<nav class="nav-bar">
-		<div class="nav-track">
-			<a class="nav-link nav-profile" href="/profile">
-				<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
-				<span>Profile</span>
-			</a>
+				{{#if isAdmin}}
+				<a class="nav-link" href="/manageUsers">
+					<img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
+					<span>Manage Users</span>
+				</a>
+				{{/if}}
 
-			{{#if isAdmin}}
-			<a class="nav-link" href="/manageUsers">
-				<img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
-				<span>Manage Users</span>
-			</a>
-			{{/if}}
+				<a class="nav-link nav-home" href="/dashboard">
+					<img class="nav-icon" src="/photos/home.svg" alt="Home">
+					<span>Home</span>
+				</a>
 
-			<a class="nav-link nav-home" href="/dashboard">
-				<img class="nav-icon" src="/photos/home.svg" alt="Home">
-				<span>Home</span>
-			</a>
-
-			<a class="nav-link nav-workout" href="/exercises">
-				<img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
-				<span>My Workout</span>
-			</a>
-		</div>
-	</nav>
+				<a class="nav-link nav-workout" href="/myWorkouts">
+					<img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
+					<span>My Workout</span>
+				</a>
+			</div>
+		</nav>
+		{{else}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
+			</div>
+		</nav>
+	{{/if}}
 </body>
 </html>

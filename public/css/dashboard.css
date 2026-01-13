@@ -298,6 +298,46 @@ a {
   text-decoration: none;
 }
 
+/* Action links row above mascot/title */
+.workout-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.25rem;
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.action-link:hover,
+.action-link:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  opacity: 0.95;
+}
+
+.action-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 3px;
+}
+
+.action-create { background: linear-gradient(135deg, #808080, #808080); }
+.action-edit   { background: linear-gradient(135deg, #808080, #808080); }
+.action-delete { background: linear-gradient(135deg, #808080, #808080); }
+
 /* Shared bottom nav styling (from manageUsers) */
 .nav-bar {
   position: fixed;

@@ -1,0 +1,108 @@
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{title}}</title>
+	<link rel="stylesheet" href="/css/createWorkout.css">
+	<script src="./js/frontCreateWorkout.js" defer></script>
+</head>
+
+<body>
+	<div class="info">
+		<h1>Create New Workout Plan</h1>
+    
+		<form id="workoutForm" class="workout-form">
+				<div id="step-1" class="step-section active" data-step="1">
+					<!-- Section 1: Workout Plan Name -->
+					<div class="form-section">
+						<h2>Workout Plan Name</h2>
+						<div class="form-group">
+							<label for="workoutName">Plan Name:</label>
+							<input 
+								type="text" 
+								id="workoutName" 
+								name="workoutName" 
+								placeholder="e.g., Chest, Arms, Shoulders"
+								required
+							>
+						</div>
+					</div>
+
+					<!-- Section 2: Rest Time Between Sets -->
+					<div class="form-section">
+						<h2>Rest Time Between Sets</h2>
+						<div class="form-group">
+							<label for="restTime">Select Rest Time (minutes):</label>
+							<select id="restTime" name="restTime" required>
+								<option value="">-- Choose rest time --</option>
+								<option value="1">1 minute</option>
+								<option value="2">2 minutes</option>
+								<option value="3">3 minutes</option>
+								<option value="4">4 minutes</option>
+								<option value="5">5 minutes</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div id="step-2" class="step-section" data-step="2">
+					<!-- Section 3: Exercises -->
+					<div class="form-section">
+						<h2>Exercises</h2>
+						<p class="exercise-note">Note: Your exercises will be pending admin authentication before they're fully active.</p>
+                    
+						<div class="form-group">
+							<label for="exerciseInput">Exercise Name:</label>
+							<input 
+								type="text" 
+								id="exerciseInput" 
+								name="exerciseInput" 
+								placeholder="e.g., Bench Press, Barbell Curl, Deadlifts"
+							>
+							<button type="button" id="addExerciseBtn" class="btn-add">Add Exercise</button>
+						</div>
+
+						<!-- Exercises Container -->
+						<div id="exercisesContainer" class="exercises-container">
+							<!-- Exercises will be dynamically added here -->
+						</div>
+					</div>
+
+					<!-- Submit Button (desktop/tablet) -->
+					<div class="form-actions">
+						<button type="submit" class="btn-submit">Create Workout Plan</button>
+						<button type="reset" onclick="location.reload()" class="btn-reset">Clear Form</button>
+					</div>
+				</div>
+
+				<!-- Mobile wizard controls -->
+				<div class="wizard-actions" aria-label="Form navigation" role="navigation">
+					<div class="wizard-progress" aria-hidden="true">
+						<span class="dot" data-step="1"></span>
+						<span class="dot" data-step="2"></span>
+					</div>
+					<div class="wizard-buttons">
+						<button type="button" id="wizardBack" class="btn-reset" disabled>Back</button>
+						<button type="button" id="wizardNext" class="btn-submit">Next</button>
+					</div>
+				</div>
+			</form>
+	</div>
+
+	<!-- Overview Modal -->
+	<div id="overviewModal" class="modal" aria-labelledby="modalTitle" role="dialog" aria-modal="true">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h2 id="modalTitle">Muscle Group Overview</h2>
+				<button id="closeModalBtn" class="btn-close" aria-label="Close modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div id="svgContainer" class="svg-container">
+					<!-- SVG will be loaded here -->
+				</div>
+			</div>
+			<div class="modal-footer">
+				<p id="muscleInfo" class="muscle-info">Select exercises to see highlighted muscle groups</p>
+			</div>
+		</div>
+	</div>
+</body>

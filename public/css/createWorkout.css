@@ -1,0 +1,911 @@
+/* Snow container should remain visible when added */
+#winterSnowContainer {
+    display: block;
+}
+
+/* --- Winter Theme Overrides (dark background, card tint) --- */
+.Winter body, .Winter {
+  color: #e6eef8;
+  cursor: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52"><text y="36" font-size="38" fill="%232563eb">❄</text></svg>') 14 14, pointer;
+}
+
+.Winter .info {
+  background: #ffffff !important;
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.Winter .info h1, .Winter .info p, .Winter .info li, .Winter .info a, .Winter .info h2 {
+  color: #111827 !important;
+}
+
+/* --- Snow container and snowflake base styles --- */
+#winterSnowContainer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: visible;
+  display: block;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10vh;
+  left: 0;
+  color: #e2f1ff;
+  font-size: 14px;
+  opacity: 0.95;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 16px rgba(52, 152, 219, 0.25);
+  transform-origin: center;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  z-index: -1;
+}
+
+/* gentle fall with rotation */
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0.9;
+  }
+}
+/* Winter background layer */
+#winterBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("/photos/icymountain.svg") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-color: none;
+}
+
+body:not(.Winter) #winterBackground {
+  display: none;
+}
+/* ===== WORKOUT FORM STYLES ===== */
+
+.info {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 30px;
+  background: #f9fafb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.info h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #1f2937;
+  font-size: 28px;
+}
+
+.info h2 {
+  font-size: 20px;
+  color: #374151;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 10px;
+}
+
+.workout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Hide mobile wizard controls by default (desktop/tablet) */
+.wizard-actions {
+  display: none;
+}
+
+/* Step sections for mobile wizard */
+.step-section {
+  display: block;
+}
+
+.step-section:not(.active) {
+  display: none;
+}
+
+.form-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #374151;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-group input::placeholder {
+  color: #9ca3af;
+}
+
+/* --- Enhanced Select Appearance (applies to all selects on this page) --- */
+.form-group select,
+.set-input-group select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'><path d='M6 8l4 4 4-4' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 36px;
+  height: 40px;
+}
+
+.set-input-group select:hover,
+.form-group select:hover {
+  border-color: #9ca3af;
+}
+
+.set-input-group select:focus,
+.form-group select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.set-input-group select:disabled,
+.form-group select:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Optional: basic option styling (browser support varies) */
+.set-input-group select option,
+.form-group select option {
+  color: #111827;
+}
+
+.set-input-group select option:checked,
+.form-group select option:checked {
+  background-color: #e5edff;
+}
+
+/* Emphasize the two exercise selects */
+.exercise-type-select {
+  border-left: 4px solid #3b82f6;
+}
+
+.exercise-subtype-select {
+  border-left: 4px solid #8b5cf6;
+}
+
+.exercise-note {
+  background: #fef3c7;
+  border-left: 4px solid #f59e0b;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  color: #92400e;
+  font-size: 14px;
+}
+
+/* Add Exercise Section */
+#exerciseSelect {
+  width: 100%;
+}
+
+.btn-add {
+  background: #3b82f6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+  margin-top: 10px;
+}
+
+.btn-add:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.btn-add:active {
+  transform: translateY(0);
+}
+
+/* Exercises Container */
+.exercises-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Exercise Card */
+.exercise-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.exercise-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 10px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Exercise meta row (type + sub-region + collapse toggle) */
+.exercise-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: end;
+  margin: 10px 0 5px 0;
+}
+
+.exercise-meta .meta-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 600;
+}
+
+.btn-toggle-collapse {
+  height: 40px;
+  align-self: end;
+  background: #e5e7eb;
+  color: #111827;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-toggle-collapse:hover {
+  background: #dfe3e7;
+}
+
+/* Collapsible exercise cards on mobile */
+.exercise-card.collapsed .sets-container {
+  display: none;
+}
+
+.exercise-card.collapsed .exercise-name::after {
+  content: ' (collapsed)';
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.exercise-header-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.exercise-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auth-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.auth-badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #f59e0b;
+}
+
+.auth-badge.approved {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.btn-remove {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-remove:hover {
+  background: #dc2626;
+}
+
+/* Sets Container */
+.sets-container {
+  display: flex;
+  flex-direction: column;
+
+    .exercise-meta {
+      grid-template-columns: 1fr;
+    }
+  gap: 12px;
+}
+
+.set-input-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto; /* reps, weight, remove */
+  gap: 10px;
+  align-items: end;
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #f3f4f6;
+}
+
+.set-input-group > div {
+  min-width: 0; /* allow children to shrink inside grid */
+}
+
+.set-input-group label {
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.set-input-group input {
+  padding: 8px;
+  font-size: 13px;
+}
+
+.btn-remove-set {
+  background: #f87171;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.3s ease;
+}
+
+.btn-remove-set:hover {
+  background: #ef4444;
+}
+
+.btn-add-set {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.btn-add-set:hover {
+  background: #059669;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-submit {
+  background: #10b981;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+  flex: 1;
+  max-width: 300px;
+}
+
+.btn-overview {
+  background: #3b82f6;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+  flex: 1;
+  max-width: 300px;
+}
+
+.btn-overview:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.btn-overview:active {
+  transform: translateY(0);
+}
+.btn-submit:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+.btn-reset {
+  background: #6b7280;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex: 1;
+  max-width: 300px;
+}
+
+.btn-reset:hover {
+  background: #4b5563;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* Wizard controls fixed to bottom for phones */
+  .wizard-actions {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: saturate(150%) blur(4px);
+    border-top: 1px solid #e5e7eb;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    z-index: 20;
+  }
+
+  .wizard-progress {
+    display: flex;
+    gap: 6px;
+  }
+
+  .wizard-progress .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #e5e7eb;
+  }
+
+  .wizard-progress .dot.active {
+    background: #3b82f6;
+  }
+
+  .wizard-buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+  }
+
+  /* Hide desktop actions on mobile; wizard handles submit */
+  .form-actions {
+    display: none;
+  }
+
+  .set-input-group {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .btn-remove-set {
+    grid-column: 1 / -1;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-submit,
+  .btn-reset {
+    max-width: none;
+  }
+
+  /* Make exercise headers tappable to collapse */
+  .exercise-header {
+    cursor: pointer;
+  }
+
+
+/* Ultra-small phones: tighten layout further */
+@media (max-width: 380px) {
+  .set-input-group {
+    grid-template-columns: 1fr; /* stack all fields */
+    gap: 8px;
+  }
+
+  .set-input-group label {
+    font-size: 12px;
+  }
+
+  .set-input-group input,
+  .set-input-group select {
+    height: 36px;
+    font-size: 13px;
+  }
+
+  .btn-remove-set {
+    grid-column: 1 / -1;
+    width: 100%;
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  /* Header controls stay on-screen */
+  .btn-remove {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .auth-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+
+  /* Reduce select arrow padding to avoid overflow */
+  .form-group select,
+  .set-input-group select {
+    padding-right: 28px;
+    background-size: 14px;
+    background-position: right 8px center;
+  }
+
+  /* Ensure header buttons wrap below long titles */
+  .exercise-header {
+    align-items: flex-start;
+  }
+
+  .exercise-header .btn-remove {
+    order: 3;
+  }
+
+  /* Place collapse button below selects and make it full-width */
+  .exercise-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-toggle-collapse {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-self: stretch;
+    align-self: center;
+    margin-top: 6px;
+  }
+}
+  .info {
+    margin: 15px;
+    padding: 20px;
+  }
+}
+
+/* ===== OVERVIEW MODAL STYLES ===== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease-in-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.btn-close:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.modal-body {
+  padding: 30px 20px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.svg-container {
+  width: 100%;
+  max-width: 400px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.svg-container svg {
+  width: 100%;
+  height: 100%;
+  max-width: 400px;
+}
+
+/* SVG element highlighting */
+.svg-container svg [id] {
+  transition: fill 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+
+.svg-container svg [id].highlighted {
+  filter: drop-shadow(0 0 4px rgba(76, 175, 80, 0.8));
+}
+
+/* Color mapping for different muscle groups */
+.svg-container svg #chest-upper.highlighted,
+.svg-container svg #chest-mid.highlighted,
+.svg-container svg #chest-lower.highlighted {
+  fill: #FF6B6B !important;
+}
+
+.svg-container svg #back-upper.highlighted,
+.svg-container svg #back-mid.highlighted,
+.svg-container svg #back-lower.highlighted {
+  fill: #4ECDC4 !important;
+}
+
+.svg-container svg #biceps-left.highlighted,
+.svg-container svg #biceps-right.highlighted {
+  fill: #FFD93D !important;
+}
+
+.svg-container svg #triceps-left.highlighted,
+.svg-container svg #triceps-right.highlighted {
+  fill: #FF8C42 !important;
+}
+
+.svg-container svg #forearms-left.highlighted,
+.svg-container svg #forearms-right.highlighted {
+  fill: #A8E6CF !important;
+}
+
+.svg-container svg #shoulders-front-left.highlighted,
+.svg-container svg #shoulders-front-right.highlighted {
+  fill: #9D7BE0 !important;
+}
+
+.svg-container svg #abs-upper.highlighted,
+.svg-container svg #abs-lower.highlighted {
+  fill: #FF6B9D !important;
+}
+
+.svg-container svg #obliques-left.highlighted,
+.svg-container svg #obliques-right.highlighted {
+  fill: #FFB6B9 !important;
+}
+
+.svg-container svg #quads-left.highlighted,
+.svg-container svg #quads-right.highlighted {
+  fill: #4A90E2 !important;
+}
+
+.svg-container svg #hamstrings-left.highlighted,
+.svg-container svg #hamstrings-right.highlighted {
+  fill: #7C5D75 !important;
+}
+
+.svg-container svg #glutes-left.highlighted,
+.svg-container svg #glutes-right.highlighted {
+  fill: #E0A287 !important;
+}
+
+.svg-container svg #calves-left.highlighted,
+.svg-container svg #calves-right.highlighted {
+  fill: #50C878 !important;
+}
+
+.svg-container svg #legs-left.highlighted,
+.svg-container svg #legs-right.highlighted {
+  fill: #5B9BD5 !important;
+}
+
+.modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.muscle-info {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Mobile responsiveness for modal */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-height: 85vh;
+  }
+
+  .modal-header h2 {
+    font-size: 18px;
+  }
+
+  .svg-container {
+    max-width: 350px;
+    height: 450px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .modal-header {
+    padding: 15px;
+  }
+
+  .modal-body {
+    padding: 20px 15px;
+    min-height: 200px;
+  }
+
+  .svg-container {
+    max-width: 280px;
+    height: 420px;
+  }
+}

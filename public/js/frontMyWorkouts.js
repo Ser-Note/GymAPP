@@ -109,3 +109,13 @@ function getTheme() {
 
     return theme;
 }
+
+const menuToggle = document.getElementById('menuToggle');
+if (menuToggle) {
+    menuToggle.onclick = function() {
+        const menuLinks = document.querySelectorAll('menu ul a');
+        menuLinks.forEach(link => {
+            link.hidden = !link.hidden;
+        });
+    };
+}

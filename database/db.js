@@ -124,6 +124,56 @@ const userDB = {
         return data || null;
     }
 
-}
+};
 
-module.exports = userDB;
+const my_workoutsDB = {
+    // -- Get Workouts by Username -- //
+    async getWorkoutsByUsernameandID(username, workoutID) {
+        const { data, error } = await supabase
+            .from('my_workouts')
+            .select('*')
+            .eq('username', username)
+            .eq('workout_id', workoutID);
+
+        if (error) throw error;
+        return data || [];
+    },
+
+    // -- Add New Workout -- //
+    async addWorkout(userID, username, workoutID, workoutName, exercises, restTime) {
+        const { data, error } = await supabase
+            .from('my_workouts')
+            .insert([{ user_id: userID, username: username, workout_id: workoutID, workout_name: workoutName, exercises: exercises, rest_time: restTime }])
+            .select()
+            .single();
+        if (error) throw error;
+        return data || null;
+    },
+
+    // -- Delete Workout by ID -- //
+    async deleteWorkoutById(workoutId) {
+        const { data, error } = await supabase
+            .from('my_workouts')
+            .delete()
+            .eq('id', workoutId)
+            .select()
+            .single();
+        if (error) throw error;
+        return data || null;
+    },
+
+    async lastWorkoutID(username) {
+        const { data, error } = await supabase
+            .from('my_workouts')
+            .select('workout_id')
+            .eq('username', username)
+            .order('workout_id', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+        if (error && error.code !== 'PGRST116') throw error; // ignore no-match
+        return data ? data.workout_id : null;
+    }
+};
+
+
+module.exports = { userDB, my_workoutsDB };

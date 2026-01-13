@@ -10,10 +10,17 @@
     <div id="winterSnowContainer"></div>
 
     <ul class="info">
+        <div class="workout-actions" aria-label="Workout actions">
+            <a class="action-link action-create" href="/createWorkouts">+ Create Workout</a>
+            <a class="action-link action-edit" href="/editWorkouts">/ Edit Workout</a>
+            <a class="action-link action-delete" href="/deleteWorkouts">- Delete Workout</a>
+        </div>
+
         <div class="header-margin">
             <img src="./photos/polarbear_dumbellCurl.svg" alt="Polar Bear Logo" class="logo">
         </div>
-        <h1>{{title}} <button>+</button></h1>
+        <h1>{{title}} </h1>
+        
         {{#each user.workouts}}
             <li>
                 <div class="workout-id">
@@ -40,7 +47,7 @@
                     <img class="nav-icon" src="/photos/home.svg" alt="Home">
                     <span>Home</span>
                 </a>
-                <a class="nav-link nav-workout" href="/exercises">
+                <a class="nav-link nav-workout" href="/myWorkouts">
                     <img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
                     <span>My Workout</span>
                 </a>

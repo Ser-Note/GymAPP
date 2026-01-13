@@ -1,0 +1,30 @@
+
+{
+  "workoutName": "Push Day",
+  "restTime": "2",
+  "exercises": [
+    {
+      "id": 1,
+      "name": "Bench Press",
+      "authenticated": false,
+      "exerciseType": "Chest",
+      "subType": "Upper Chest",
+      "targetSets": 10,
+      "sets": [
+        { "setNumber": 1, "weight": 185, "reps": 8 },
+        { "setNumber": 2, "weight": 185, "reps": 6 }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Lat Pulldown",
+      "authenticated": false,
+      "exerciseType": "Back",
+      "subType": "Lats",
+      "targetSets": 10,
+      "sets": [
+        { "setNumber": 1, "weight": 140, "reps": 10 }
+      ]
+    }
+  ]
+}

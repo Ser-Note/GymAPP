@@ -16,6 +16,7 @@ const dashboardRouter = require('./routes/backDashboard.js');
 const manageUsersRouter = require('./routes/backManageUsers.js');
 const profileRouter = require('./routes/backProfile.js');
 const myWorkoutRouter = require('./routes/backMyWorkouts.js');
+const createWorkoutRouter = require('./routes/backCreateWorkout.js');
 
 // ---- Initialize express ---- //
 
@@ -25,23 +26,28 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }
+    cookie: { secure: false}
 }));
-
-
-// ---- Body Parsing ---- //
-
-app.use(express.urlencoded({ extended: true }));
 
 // ---- View Engine Setup ---- //
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+// Register custom handlebars helpers
+const hbs = require('hbs');
+hbs.registerHelper('stringify', function(obj) {
+    return JSON.stringify(obj);
+});
+
+// ---- Body Parsing ---- //
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 // ---- Serve Static Files ---- //
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
 
 // ---- Routes ---- //
 
@@ -51,7 +57,8 @@ app.use('/register', registerRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/manageUsers', manageUsersRouter);
 app.use('/profile', profileRouter);
-app.use('/exercises', myWorkoutRouter);
+app.use('/myWorkouts', myWorkoutRouter);
+app.use('/createWorkouts', createWorkoutRouter);
 
 // ---- Start Server ---- //
 
