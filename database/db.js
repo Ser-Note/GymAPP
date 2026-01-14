@@ -128,12 +128,11 @@ const userDB = {
 
 const my_workoutsDB = {
     // -- Get Workouts by Username -- //
-    async getWorkoutsByUsernameandID(username, workoutID) {
+    async getWorkoutsByUsername(username) {
         const { data, error } = await supabase
             .from('my_workouts')
             .select('*')
             .eq('username', username)
-            .eq('workout_id', workoutID);
 
         if (error) throw error;
         return data || [];
@@ -172,6 +171,15 @@ const my_workoutsDB = {
             .maybeSingle();
         if (error && error.code !== 'PGRST116') throw error; // ignore no-match
         return data ? data.workout_id : null;
+    },
+    async getWorkoutById(workoutId) {
+        const { data, error } = await supabase
+            .from('my_workouts')
+            .select('*')
+            .eq('workout_id', workoutId)
+            .maybeSingle();
+        if (error && error.code !== 'PGRST116') throw error; // ignore no-match
+        return data || null;
     }
 };
 
