@@ -27,7 +27,10 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false}
+    cookie: { 
+        secure: false,
+        sameSite: 'strict'
+    }
 }));
 
 // ---- View Engine Setup ---- //
