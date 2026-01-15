@@ -16,31 +16,30 @@ router.get('/', async function(req, res, next)  {
         if (!workouts || workouts.length === 0) {
             return res.status(404).json({ success: false, message: 'Workout not found' });
         }
-
-        const workout = workouts[0];
-        console.log('Selected workout:', workout);
-
-        if (!workout.exercises) {
-            return res.status(404).json({ success: false, message: 'Workout not found' });
-        }
-
-        const exercises = workout.exercises.map(ex => ({
-            workoutname: workout.workout_name,
-            name: ex.name,
-            sets: ex.sets,                    // Array of {id, reps, weight, setNumber}
-            subtype: ex.subType,              // Note: subType (capital T)
-            targetReps: ex.targetReps,
-            targetSets: ex.targetSets,
-            exerciseType: ex.exerciseType,
-            authenticated: ex.authenticated
-        }));
+        const exercises = [];
+        
+        workouts.forEach(workout => {
+            if (workout.exercises && Array.isArray(workout.exercises)) {
+                const workoutExercises = workout.exercises.map(ex => ({
+                    workoutname: workout.workout_name,
+                    name: ex.name,
+                    sets: ex.sets,                    // Array of {id, reps, weight, setNumber}
+                    subtype: ex.subType,              // Note: subType (capital T)
+                    targetReps: ex.targetReps,
+                    targetSets: ex.targetSets,
+                    exerciseType: ex.exerciseType,
+                    authenticated: ex.authenticated
+                }));
+                exercises.push(...workoutExercises);
+            }
+        });
 
         console.log('Exercises to render:', exercises);
 
-        res.render('editWorkouts', {
+        res.render('editDashboard', {
             title: 'Edit Workout',
             user: user,
-            exercises: exercises
+            workouts: workouts
         });
     } catch (err) {
         console.error('Edit workout error:', err);

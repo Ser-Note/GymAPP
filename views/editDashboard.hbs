@@ -14,28 +14,38 @@
     <main class="dashboard">
         <h1>{{title}}</h1>
         {{#if user.isAuthenticated}}
-            {{#each exercises}}
-                <div class="edit-workout-form">
-                    <form id="workoutEditForm" method="POST" action="/editWorkouts?_method=PUT">
-                        <label for="workout_name">Workout Name:</label>
-                        <input type="text" id="workout_name" name="workout_name" value="{{this.workoutname}}" required>
+            {{#each workouts}}
+                <div class="workout-section">
+                    <h2>{{workout_name}}</h2>
+                    {{#each exercises}}
+                        <div class="edit-workout-form">
+                            <form class="workoutEditForm" method="POST" action="/editWorkouts?_method=PUT">
+                                <input type="hidden" name="exerciseId" value="{{_id}}">
+                                
+                                <label for="exercise_name_{{@index}}">Exercise Name:</label>
+                                <input type="text" id="exercise_name_{{@index}}" name="exercise_name" value="{{name}}" required>
 
-                        <label for="exercise_name">Exercise Name:</label>
-                        <input type="text" id="exercise_name" name="exercise_name" value="{{this.name}}" required>
+                                {{#each sets}}
+                                    <div class="set">
+                                        <p>Set {{setNumber}}: {{reps}} reps @ {{weight}}lbs</p>
+                                    </div>
+                                {{/each}}
 
-                        <label for="sets">Sets:</label>
-                        <input type="number" id="sets" name="sets" value="{{this.targetSets}}" required>
+                                <label for="reps_{{@index}}">Reps:</label>
+                                <input type="number" id="reps_{{@index}}" name="reps" value="{{targetReps}}" required>
 
-                        <label for="reps">Reps:</label>
-                        <input type="number" id="reps" name="reps" value="{{this.targetReps}}" required>
+                                <label for="type_{{@index}}">Muscle Targeted:</label>
+                                <input type="text" id="type_{{@index}}" name="type" value="{{exerciseType}}" required>
 
-                        <button type="submit">Save Changes</button>
-                    </form>
+                                <button type="submit">Save Changes</button>
+                            </form>
+                        </div>
+                    {{/each}}
                 </div>
             {{/each}}
         {{else}}
                <div class="notAuthenticated-form">
-                    <p>You must be authetnicated to edit workouts.</p>
+                    <p>You must be authenticated to edit workouts.</p>
                </div>
         {{/if}}
     </main>
