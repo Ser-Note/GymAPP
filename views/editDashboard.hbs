@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Workouts</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/createWorkout.css">
+    <link rel="stylesheet" href="/css/theme.css">
     <script src="./js/authHelper.js" defer></script>
     <script src="./js/frontEditWorkout.js" defer></script>
 </head>
@@ -16,7 +19,8 @@
         {{#if user.isAuthenticated}}
             {{#each workouts}}
                 <div class="workout-section">
-                    <h2>{{workout_name}}</h2>
+                    <button><h2>{{workout_name}}</h2></button>
+                    
                     {{#each exercises}}
                         <div class="edit-workout-form">
                             <form class="workoutEditForm" method="POST" action="/editWorkouts?_method=PUT">
@@ -24,22 +28,6 @@
                                 
                                 <label for="exercise_name_{{@index}}">Exercise Name:</label>
                                 <input type="text" id="exercise_name_{{@index}}" name="exercise_name" value="{{name}}" required>
-
-                                {{#each sets}}
-                                    <div class="set">
-                                        <p>Set {{setNumber}}: {{reps}} reps @ {{weight}}lbs</p>
-                                    </div>
-                                {{/each}}
-
-                                <label for="reps_{{@index}}">Reps:</label>
-                                <input type="number" id="reps_{{@index}}" name="reps" value="{{targetReps}}" required>
-
-                                <label for="type_{{@index}}">Muscle Targeted:</label>
-                                <input type="text" id="type_{{@index}}" name="type" value="{{exerciseType}}" required>
-
-                                <button type="submit">Save Changes</button>
-                            </form>
-                        </div>
                     {{/each}}
                 </div>
             {{/each}}
