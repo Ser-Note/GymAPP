@@ -1,9 +1,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/manageUsers.css">
     <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/manageUsers.css">
     <script src="./js/frontManageUsers.js" defer></script>
     <title>Manage Users</title>
 </head>
@@ -35,26 +35,27 @@
                     <button id="btnDeleteUser">Delete</button>
                 </li>
             {{/each}}
+        </ul>
 
-    <nav class="nav-bar">
+        <nav class="nav-bar">
             <div class="nav-track">
                 <a class="nav-link nav-profile" href="/profile">
                     <img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
                     <span>Profile</span>
                 </a>
-                    <a class="nav-link" href="/manageUsers">
-                        <img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
-                        <span>Manage Users</span>
-                    </a>
+                <a class="nav-link" href="/manageUsers">
+                    <img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
+                    <span>Manage Users</span>
+                </a>
                 <a class="nav-link nav-home" href="/dashboard">
                     <img class="nav-icon" src="/photos/home.svg" alt="Home">
                     <span>Home</span>
                 </a>
-                    <a class="nav-link nav-workout" href="/myWorkouts">
-                        <img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
-                        <span>My Workout</span>
-                    </a>
+                <a class="nav-link nav-workout" href="/myWorkouts">
+                    <img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
+                    <span>My Workout</span>
+                </a>
             </div>
         </nav>
-        </ul>
+</body>
 </body>

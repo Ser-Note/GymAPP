@@ -1,10 +1,12 @@
 /* Shared bottom nav styling (from manageUsers) */
 .nav-bar {
+  --navbar-spacing-sm: 1rem;
+  --navbar-spacing-xs: 0.5rem;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: var(--spacing-sm) var(--spacing-sm);
+  padding: var(--navbar-spacing-sm) var(--navbar-spacing-sm);
   margin: 0;
   display: flex;
   justify-content: center;
@@ -16,7 +18,7 @@
 .nav-track {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--navbar-spacing-sm);
   padding: 0.75rem 1rem;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 999px;
@@ -125,7 +127,7 @@
 /* Mobile tweaks */
 @media (max-width: 767px) {
   .nav-bar {
-    padding: var(--spacing-xs, 0.5rem) var(--spacing-sm, 1rem);
+    padding: var(--navbar-spacing-xs, 0.5rem) var(--navbar-spacing-sm, 1rem);
   }
 
   .nav-track {

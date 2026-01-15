@@ -35,7 +35,7 @@ body {
     color: var(--color-text);
     line-height: 1.6;
     padding: var(--spacing-md);
-    padding-bottom: calc(var(--spacing-xl) + 72px);
+    padding-bottom: 180px;
 }
 
 .logo {
@@ -64,6 +64,7 @@ h1 {
     list-style: none;
     max-width: 900px;
     margin: 0 auto;
+    margin-bottom: 180px;
     border-radius: 24px;
     z-index: 1200;
     position: relative;
@@ -254,26 +255,6 @@ button:focus {
         font-size: 2.75rem;
         margin-bottom: var(--spacing-xl);
     }
-
-    .nav-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: 0;
-        padding: var(--spacing-md) var(--spacing-lg);
-        z-index: 10;
-    }
-
-    .nav-track {
-        padding: 1rem 1.75rem;
-        gap: 1rem;
-    }
-
-    /* Nudge polar bear icon up without moving label */
-    .nav-workout .nav-icon {
-        transform: translateY(-6px);
-    }
 }
 
 /* ===== MOBILE STYLES (under 768px) ===== */
@@ -281,7 +262,7 @@ button:focus {
     body {
         padding: var(--spacing-sm);
         padding-top: var(--spacing-sm);
-        padding-bottom: calc(var(--spacing-lg) + 64px);
+        padding-bottom: 180px;
     }
 
     h1 {
@@ -330,74 +311,13 @@ button:focus {
     .info li:last-child {
         margin-bottom: 0;
     }
-
-    .nav-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: var(--spacing-xs) var(--spacing-sm);
-        margin: 0;
-        z-index: 10;
-    }
-
-    .nav-track {
-        width: 100%;
-        justify-content: space-evenly;
-        gap: 0.25rem;
-        padding: 0.4rem 0.5rem;
-    }
-
-    .nav-link {
-        flex: 0 0 auto;
-        padding: 0.15rem 0.35rem;
-        font-size: 0.9rem;
-    }
-
-    .nav-home,
-    .nav-profile,
-    .nav-workout,
-    .nav-link[href="/manageUsers"] {
-        width: 72px;
-        height: auto;
-    }
-
-    /* Nav icon sizing on mobile */
-    .nav-home .nav-icon,
-    .nav-profile .nav-icon,
-    .nav-workout .nav-icon,
-    .nav-link[href="/manageUsers"] .nav-icon {
-        width: 36px;
-        height: 36px;
-    }
-
-    .nav-workout .nav-icon {
-        width: 46px;
-        height: 46px;
-    }
-
-    .nav-home span,
-    .nav-profile span,
-    .nav-workout span,
-    .nav-link[href="/manageUsers"] span {
-        font-size: 0.75rem;
-    }
-
-    .nav-workout span {
-        margin-top: -0.1rem;
-    }
-
-    /* On the Manage Users page, hide the Manage Users link on mobile */
-    .nav-link[href="/manageUsers"] {
-        display: none;
-    }
 }
 
 /* ===== SMALL MOBILE STYLES (under 480px) ===== */
 @media (max-width: 479px) {
     body {
+        padding-bottom: 180px;
         padding: var(--spacing-sm);
-        padding-bottom: calc(var(--spacing-lg) + 64px);
     }
 
     h1 {
@@ -417,55 +337,6 @@ button:focus {
     .avatar {
         width: 24px;
         height: 24px;
-    }
-
-    .nav-home,
-    .nav-profile,
-    .nav-workout,
-    .nav-link[href="/manageUsers"] {
-        width: 72px;
-        height: auto;
-    }
-
-    .nav-home .nav-icon,
-    .nav-profile .nav-icon,
-    .nav-workout .nav-icon,
-    .nav-link[href="/manageUsers"] .nav-icon {
-        width: 36px;
-        height: 36px;
-    }
-
-    .nav-workout .nav-icon {
-        width: 46px;
-        height: 46px;
-    }
-
-    .nav-home span,
-    .nav-profile span,
-    .nav-workout span,
-    .nav-link[href="/manageUsers"] span {
-        font-size: 0.75rem;
-    }
-
-    .nav-workout span {
-        margin-top: -0.08rem;
-    }
-
-    /* Also hide on very small screens */
-    .nav-link[href="/manageUsers"] {
-        display: none;
-    }
-
-    /* Even spacing for 4 items on very small screens */
-    .nav-track {
-        width: 100%;
-        justify-content: space-evenly;
-        gap: 0.2rem;
-        padding: 0.35rem 0.5rem;
-    }
-
-    .nav-link {
-        padding: 0.1rem 0.25rem;
     }
 
     .info li {
