@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Workouts</title>
     <link rel="stylesheet" href="/css/navbar.css">
-    <link rel="stylesheet" href="/css/createWorkout.css">
+    <link rel="stylesheet" href="/css/editDashboard.css">
     <link rel="stylesheet" href="/css/theme.css">
-    <script src="./js/authHelper.js" defer></script>
     <script src="./js/frontEditWorkout.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+
 </head>
 <body>
     
@@ -19,16 +20,10 @@
         {{#if user.isAuthenticated}}
             {{#each workouts}}
                 <div class="workout-section">
-                    <button><h2>{{workout_name}}</h2></button>
-                    
-                    {{#each exercises}}
-                        <div class="edit-workout-form">
-                            <form class="workoutEditForm" method="POST" action="/editWorkouts?_method=PUT">
-                                <input type="hidden" name="exerciseId" value="{{_id}}">
-                                
-                                <label for="exercise_name_{{@index}}">Exercise Name:</label>
-                                <input type="text" id="exercise_name_{{@index}}" name="exercise_name" value="{{name}}" required>
-                    {{/each}}
+                    <form class="workoutEditForm" method="POST" action="/editWorkouts">
+                        <input type="hidden" name="workoutID" id="workoutID" value="{{this.id}}">
+                        <button type="submit"><h2>{{workout_name}}</h2></button>
+                    </form>
                 </div>
             {{/each}}
         {{else}}
@@ -38,9 +33,42 @@
         {{/if}}
     </main>
 
+    {{#if user.isAuthenticated}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
 
+				{{#if user.isAdmin}}
+				<a class="nav-link" href="/manageUsers">
+					<img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
+					<span>Manage Users</span>
+				</a>
+				{{/if}}
 
+				<a class="nav-link nav-home" href="/dashboard">
+					<img class="nav-icon" src="/photos/home.svg" alt="Home">
+					<span>Home</span>
+				</a>
 
+				<a class="nav-link nav-workout" href="/myWorkouts">
+					<img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
+					<span>My Workout</span>
+				</a>
+			</div>
+		</nav>
+		{{else}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
+			</div>
+		</nav>
+	{{/if}}
 
 </body>
 </html>

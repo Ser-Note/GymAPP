@@ -4,14 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Workouts</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/editWorkout.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <script src="./js/frontEditWorkout.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+
 </head>
 <body>
     
     
 
+    <main class="dashboard">
+        
+        <h1>{{title}}</h1>
+        <div id="winterSnoweContainer"></div>
+        {{#if user.isAuthenticated}}
+                <div class="workout-section">
+                    <form class="workoutEditForm" method="POST" action="/edit">
+                        <label for="workoutName">Workout Name:</label>
+                        <input type="text" id="workoutName" name="workoutName" value="{{myWorkout.workout_name}}" required>
+                    
+                    <!-- Exercise Tabs -->
+                    <div class="exercise-tabs-wrapper">
+                        <div class="exercise-tabs">
+                            {{#each myWorkout.exercises}}
+                                <button type="button" class="exercise-tab {{#if (eq @index 0)}}active{{/if}}" data-exercise-index="{{@index}}">
+                                    {{this.name}}
+                                    {{#if (and (gt ../myWorkout.exercises.length 1) (gt @index 0))}}
+                                        <span class="tab-delete" data-exercise-index="{{@index}}">−</span>
+                                    {{/if}}
+                                </button>
+                            {{/each}}
+                        </div>
+                        <button type="button" class="btn-add-exercise-tab">+ Add</button>
+                    </div>
 
+                    <!-- Exercise Content -->
+                    {{#each myWorkout.exercises}}
+                        <div class="exercise-content {{#if (eq @index 0)}}active{{/if}}" data-exercise-index="{{@index}}">
+                            <div class="exercise-name-section">
+                                <label for="exerciseName{{@index}}">Exercise Name</label>
+                                <input type="text" id="exerciseName{{@index}}" name="exerciseName[{{@index}}]" value="{{this.name}}" required>
+                            </div>
 
+                            <button type="button" class="toggle-sets" data-exercise-index="{{@index}}">
+                                <span class="toggle-text">Show Sets</span>
+                                <span class="toggle-icon">▼</span>
+                            </button>
 
+                            <div class="sets-container collapsed" data-exercise-index="{{@index}}">
+                                {{#each this.sets}}
+                                    <div class="set-item" data-set-index="{{@index}}">
+                                        <div class="set-header">
+                                            <div class="set-fields">
+                                                <label for="reps">Set {{this.setNumber}} - Reps:</label>
+                                                <input type="number" id="reps{{@../index}}_{{@index}}" name="reps[{{@../index}}][{{@index}}]" value="{{this.reps}}" required>
 
+                                                <label for="weight">Set {{this.setNumber}} - Weight (lbs):</label>
+                                                <input type="number" id="weight{{@../index}}_{{@index}}" name="weight[{{@../index}}][{{@index}}]" value="{{this.weight}}" required>
+                                            </div>
+                                            {{#if (and (gt ../this.sets.length 1) (gt @index 0))}}
+                                                <button type="button" class="btn-delete-set" data-exercise-index="{{@../index}}" data-set-index="{{@index}}" title="Delete set">−</button>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                {{/each}}
+                                <button type="button" class="btn-add-set" data-exercise-index="{{@index}}">+ Add Set</button>
+                            </div>
+                        </div>
+                    {{/each}}
+                    
+                        <button type="submit">Save Changes</button>
+                    </form>
+                </div>
+        {{else}}
+               <div class="notAuthenticated-form">
+                    <p>You must be authenticated to edit workouts.</p>
+               </div>
+        {{/if}}
+    </main>
+     {{#if user.isAuthenticated}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
+
+				{{#if user.isAdmin}}
+				<a class="nav-link" href="/manageUsers">
+					<img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
+					<span>Manage Users</span>
+				</a>
+				{{/if}}
+
+				<a class="nav-link nav-home" href="/dashboard">
+					<img class="nav-icon" src="/photos/home.svg" alt="Home">
+					<span>Home</span>
+				</a>
+
+				<a class="nav-link nav-workout" href="/myWorkouts">
+					<img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
+					<span>My Workout</span>
+				</a>
+			</div>
+		</nav>
+		{{else}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
+			</div>
+		</nav>
+	{{/if}}
 </body>
 </html>

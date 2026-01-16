@@ -450,6 +450,15 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .info {
+    padding-bottom: 20px;
+    margin-bottom: 120px;
+  }
+
+  .btn-add {
+    margin-bottom: 15px;
+  }
+
   /* Wizard controls fixed to bottom for phones */
   .wizard-actions {
     position: sticky;
@@ -515,7 +524,7 @@
   .exercise-header {
     cursor: pointer;
   }
-
+}
 
 /* Ultra-small phones: tighten layout further */
 @media (max-width: 380px) {
@@ -580,11 +589,6 @@
     justify-self: stretch;
     align-self: center;
     margin-top: 6px;
-  }
-}
-  .info {
-    margin: 15px;
-    padding: 20px;
   }
 }
 

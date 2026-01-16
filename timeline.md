@@ -1,22 +1,36 @@
 # Gym App Development Timeline
 
+## January 17, 2026
+
+### Tab-Based Exercise View & Form Data Fixes
+- **Implemented tab navigation** for edit workouts page to reduce scrolling on mobile
+  - Converted from stacked card layout to horizontal tabs with scrollable content
+  - Add button positioned below tabs on mobile
+  
+- **Fixed form data structure** with indexed input names for proper server parsing
+  - Changed to `exerciseName[index]`, `reps[exerciseIndex][setIndex]`, `weight[exerciseIndex][setIndex]`
+  
+- **Fixed JavaScript event handling** - rewrote to use event delegation
+  - Resolved issue where adding first new exercise created duplicates
+  - Old listeners on button were firing alongside new logic
+  - All handlers now use document event delegation
+  - Replaced `insertBefore` with `appendChild` since button no longer direct child
+  - Used `cloneNode` to ensure single listener on add button
+  
+- **Files Modified**: `editWorkouts.hbs`, `editWorkout.css`, `frontEditWorkout.js`
+
+## January 16, 2026
+
+### Fixed Navbar Inconsistency on Profile & Manage Users Pages (Mobile)
+- Resolved navbar sizing, spacing, and positioning inconsistencies
+- Added proper `box-sizing: border-box` and HTML5 document structure
+- Standardized navbar styling and isolated CSS variables
+- Ensured consistent font families and icon sizing
+
 ## January 15, 2026
 
 ### Fixed Navbar Inconsistency on Profile & Manage Users Pages (Mobile)
-- **Issue**: Navbar sizing, spacing, and positioning inconsistent across pages; navbar expanded on profile page, button accessibility issues
-- **Root Causes**: 
-  - Missing `* { box-sizing: border-box; }` in profile.css causing padding to expand elements
-  - Profile.hbs missing HTML5 document structure (DOCTYPE, html tag)
-  - Profile.css missing `html, body { height: 100%; }` rule
-  - Duplicate navbar styles in profile.css and manageUsers.css with conflicting values
-  - Font-family inconsistency (Inter vs Segoe UI)
-  - Navbar variables not isolated from page-level :root variables
-- **Solutions**: 
-  - Added `* { box-sizing: border-box; }` to profile.css
-  - Fixed profile.hbs HTML5 structure and CSS import order
-  - Removed duplicate navbar styles from all page-specific CSS files
-  - Created isolated navbar CSS variables (`--navbar-spacing-sm`, `--navbar-spacing-xs`)
-  - Standardized font-family to Segoe UI across all pages
-  - Reduced navbar icon sizes (40px regular, 50px workout) and made navbar more compact
-  - Added 180px bottom padding and margin to allow scrolling past fixed navbar
-  - All pages now have consistent navbar styling and spacing
+- **Issues**: Navbar expanded on profile page, button accessibility issues, inconsistent spacing
+- **Root Causes**: Missing `box-sizing: border-box`, missing HTML5 structure, duplicate navbar styles, font inconsistencies
+- **Solutions**: Added box-sizing, fixed HTML5 structure, removed duplicates, standardized fonts, reduced navbar icon sizes
+- **Result**: Consistent navbar styling across all pages with proper scrolling past fixed navbar

@@ -18,6 +18,7 @@ const profileRouter = require('./routes/backProfile.js');
 const myWorkoutRouter = require('./routes/backMyWorkouts.js');
 const createWorkoutRouter = require('./routes/backCreateWorkout.js');
 const editDashboardRouter = require('./routes/backEditDash.js');
+const editWorkoutsRouter = require('./routes/backEditWorkout.js');
 
 // ---- Initialize express ---- //
 
@@ -44,6 +45,22 @@ hbs.registerHelper('stringify', function(obj) {
     return JSON.stringify(obj);
 });
 
+hbs.registerHelper('gt', function(a, b) {
+    return a > b;
+});
+
+hbs.registerHelper('isLast', function(index, length) {
+    return index === length - 1;
+});
+
+hbs.registerHelper('and', function(a, b) {
+    return a && b;
+});
+
+hbs.registerHelper('eq', function(a, b) {
+    return a === b;
+});
+
 // ---- Body Parsing ---- //
 
 app.use(express.urlencoded({ extended: true }));
@@ -64,6 +81,7 @@ app.use('/profile', profileRouter);
 app.use('/myWorkouts', myWorkoutRouter);
 app.use('/createWorkouts', createWorkoutRouter);
 app.use('/editDashboard', editDashboardRouter);
+app.use('/editWorkouts', editWorkoutsRouter)
 
 // ---- Start Server ---- //
 

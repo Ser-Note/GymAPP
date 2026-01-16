@@ -139,10 +139,10 @@ const my_workoutsDB = {
     },
 
     // -- Add New Workout -- //
-    async addWorkout(userID, username, workoutID, workoutName, exercises, restTime) {
+    async addWorkout(userID, username, workoutName, exercises, restTime) {
         const { data, error } = await supabase
             .from('my_workouts')
-            .insert([{ user_id: userID, username: username, workout_id: workoutID, workout_name: workoutName, exercises: exercises, rest_time: restTime }])
+            .insert([{ user_id: userID, username: username, workout_name: workoutName, exercises: exercises, rest_time: restTime }])
             .select()
             .single();
         if (error) throw error;
@@ -176,7 +176,7 @@ const my_workoutsDB = {
         const { data, error } = await supabase
             .from('my_workouts')
             .select('*')
-            .eq('workout_id', workoutId)
+            .eq('id', workoutId)
             .maybeSingle();
         if (error && error.code !== 'PGRST116') throw error; // ignore no-match
         return data || null;

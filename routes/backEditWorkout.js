@@ -5,23 +5,43 @@ const { my_workoutsDB } = require('../database/db');
 
 // ---- Edit Workout Router ---- //
 
-router.get('/:workoutId', async function(req, res, next)  {
-    if(!req.session || !req.session.username)
-    {
-        return res.status(401).json({ success: false, message: 'Unauthorized' });
+router.post('/', async function(req, res, next)  {
+    const workoutID = req.body.workoutID;
+    const username = await userDB.getUserByName(req.session.username);
+
+    console.log("Received request to edit workout ID: " + workoutID);
+    if(!workoutID) {
+        return res.status(400).json({ success: false, message: workoutID + ' is an Invalid Workout ID' });
     }
     else
     {
-        const user = await userDB.getUserByName(req.session.username);
-        const workoutId = req.params.workoutId;
-        const workout = await my_workoutsDB.getWorkoutById(workoutId);
-        if (!workout || workout.user_id !== user.id) {
+        const myWorkout = await my_workoutsDB.getWorkoutById(workoutID);
+
+        if(!myWorkout) {
             return res.status(404).json({ success: false, message: 'Workout not found' });
         }
+
+        const exercises = [];
+        myWorkout.exercises.forEach(ex => {
+            exercises.push({
+                workoutname: myWorkout.workout_name,
+                workoutID: myWorkout.id,
+                name: ex.name,
+                sets: ex.sets,                    // Array of {id, reps, weight, setNumber}
+                subtype: ex.subType,              // Note: subType (capital T)
+                targetReps: ex.targetReps,
+                exerciseType: ex.exerciseType,
+                authenticated: ex.authenticated
+            });
+        });
+
+        myWorkout.exercises = exercises;
+
+        console.log("Workout found: ", myWorkout);
         res.render('editWorkouts', {
             title: 'Edit Workout',
-            user: user,
-            workout: workout
+            myWorkout: myWorkout,
+            user: username
         });
     }
 });

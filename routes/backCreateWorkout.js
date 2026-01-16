@@ -33,13 +33,10 @@ router.post('/create', async function(req, res, next) {
         console.log('Received workout data:', workoutData);
         const user = await userDB.getUserByName(req.session.username);
         try {
-            const lastWorkoutID = await my_workoutsDB.lastWorkoutID(user.user_name);
-            const nextWorkoutID = lastWorkoutID !== null ? lastWorkoutID + 1 : 1;
 
             const newWorkout = await my_workoutsDB.addWorkout(
                 user.id,
                 user.user_name,
-                nextWorkoutID,
                 workoutData.workoutName,
                 workoutData.exercises,
                 workoutData.restTime

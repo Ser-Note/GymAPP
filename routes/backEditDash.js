@@ -22,6 +22,7 @@ router.get('/', async function(req, res, next)  {
             if (workout.exercises && Array.isArray(workout.exercises)) {
                 const workoutExercises = workout.exercises.map(ex => ({
                     workoutname: workout.workout_name,
+                    workoutID: workout.id,
                     name: ex.name,
                     sets: ex.sets,                    // Array of {id, reps, weight, setNumber}
                     subtype: ex.subType,              // Note: subType (capital T)
@@ -46,5 +47,6 @@ router.get('/', async function(req, res, next)  {
         return res.status(500).json({ success: false, message: 'Server error' });
     }
 });
+
 
 module.exports = router;
