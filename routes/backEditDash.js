@@ -48,5 +48,23 @@ router.get('/', async function(req, res, next)  {
     }
 });
 
-
+router.post('/delete', async function(req, res, next)  {
+    const workoutID = req.body.workoutID;
+    console.log("Received request to delete workout ID: " + workoutID);
+    if(!workoutID) {
+        return res.status(400).json({ success: false, message: workoutID + ' is an Invalid Workout ID' });
+    }
+    
+    try {
+        const deletedWorkout = await my_workoutsDB.deleteWorkoutById(workoutID);
+        if(!deletedWorkout) {
+            return res.status(404).json({ success: false, message: 'Workout not found or could not be deleted' });
+        }
+        console.log("Workout deleted: ", deletedWorkout);
+        return res.status(200).json({ success: true, message: 'Workout deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting workout:', error);
+        return res.status(500).json({ success: false, message: 'Error deleting workout: ' + error.message });
+    }
+});
 module.exports = router;

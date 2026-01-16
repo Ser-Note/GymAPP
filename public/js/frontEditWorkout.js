@@ -171,3 +171,82 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial attachment
     attachAddExerciseListener();
 });
+
+// Form submission handler
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.workoutEditForm');
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get all form data
+        const formData = new FormData(form);
+        
+        // Construct the workout data object
+        const workoutName = formData.get('workoutName');
+        const restTime = formData.get('restTime');
+        const exercises = [];
+        
+        // Get all exercise indices
+        const exerciseTabs = document.querySelectorAll('.exercise-tab');
+        
+        exerciseTabs.forEach((tab, exerciseIndex) => {
+            const exerciseName = formData.get(`exerciseName[${exerciseIndex}]`);
+            const targetReps = formData.get(`targetReps[${exerciseIndex}]`);
+            
+            const sets = [];
+            const setItems = document.querySelectorAll(
+                `.sets-container[data-exercise-index="${exerciseIndex}"] .set-item`
+            );
+            
+            setItems.forEach((setItem, setIndex) => {
+                const reps = formData.get(`reps[${exerciseIndex}][${setIndex}]`);
+                const weight = formData.get(`weight[${exerciseIndex}][${setIndex}]`);
+                
+                if (reps && weight) {
+                    sets.push({
+                        setNumber: setIndex + 1,
+                        reps: parseInt(reps),
+                        weight: parseFloat(weight)
+                    });
+                }
+            });
+            
+            if (exerciseName && sets.length > 0) {
+                exercises.push({
+                    name: exerciseName,
+                    targetReps: targetReps ? parseInt(targetReps) : null,
+                    sets: sets
+                });
+            }
+        });
+        
+        // Send to backend
+        try {
+            const response = await fetch('/editWorkouts/edit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    workoutID: document.querySelector('input[name="workoutID"]')?.value,
+                    workoutName: workoutName,
+                    restTime: restTime ? parseInt(restTime) : 0,
+                    exercises: exercises
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('Workout updated successfully!');
+                window.location.href = '/myWorkouts';
+            } else {
+                alert('Error: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while saving the workout.');
+        }
+    });
+});

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/editDashboard.css">
     <link rel="stylesheet" href="/css/theme.css">
-    <script src="./js/frontEditWorkout.js" defer></script>
+    <script src="./js/frontEditDash.js" defer></script>
     <script src="/js/theme.js" defer></script>
 
 </head>
@@ -21,8 +21,9 @@
             {{#each workouts}}
                 <div class="workout-section">
                     <form class="workoutEditForm" method="POST" action="/editWorkouts">
-                        <input type="hidden" name="workoutID" id="workoutID" value="{{this.id}}">
+                        <input type="hidden" name="workoutID" class="workoutID" value="{{this.id}}">
                         <button type="submit"><h2>{{workout_name}}</h2></button>
+						<button type="button" class="deleteWorkoutButton">Delete</button>
                     </form>
                 </div>
             {{/each}}

@@ -77,3 +77,41 @@
 body:not(.Winter) #winterBackground {
   display: none;
 }
+
+.Flowers body {
+
+  background: linear-gradient(180deg, #ffb6c1, #a5e3a8); /* Soft pink to soft green */
+
+}
+
+.Summer body {
+  background-image: url("/photos/beach.webp") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.Fall body {
+  background-image: url("/photos/fall.png") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+.sun {
+  animation: spin 30s infinite linear;
+  
+  position: absolute;
+  top: 30;
+  right: 30;
+
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

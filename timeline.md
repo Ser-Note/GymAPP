@@ -2,6 +2,36 @@
 
 ## January 17, 2026
 
+### Added Seasonal Themes
+- **Implemented four seasonal themes** that change automatically based on current month:
+  - **Winter** (Jan, Nov, Dec): Falling snowflakes with polar bear mascot waving animation
+  - **Flowers** (Feb, Mar, Apr): Falling flower petals (🌸)
+  - **Summer** (May, Jun, Jul): Sun graphic display
+  - **Fall** (Aug, Sep, Oct): Falling maple leaves with decorative maple leaf images
+- **Theme detection**: Uses Eastern Time to determine current month and applies theme
+- **Files Modified**: `theme.js`, `theme.css`
+
+### Added Delete Workout Button with Confirmation
+- **Added delete button** on edit dashboard page (one per workout in list)
+- **Confirmation dialog** appears to prevent accidental deletion
+  - Shows workout name in confirmation message
+  - Confirms deletion cannot be undone
+- **Fixed ID conflicts**: Changed from `id` to `class` for delete button and workoutID input (multiple buttons in loop)
+- **Frontend implementation**: Uses event delegation with `querySelectorAll` to handle all delete buttons
+- **Backend implementation**: POST endpoint at `/editDashboard/delete` with error handling
+- **Bug fix**: Updated editDashboard.hbs to load correct script (frontEditDash.js instead of frontEditWorkout.js)
+- **Files Modified**: `editDashboard.hbs`, `frontEditDash.js`, `backEditDash.js`
+
+### Added Target Reps and Rest Time Fields to Edit Workout
+- **Added target reps input** for each exercise (displayed before sets section)
+- **Added rest time input** for workout (displayed after workout name, value in seconds)
+- **Fixed form submission issues**:
+  - Added hidden `workoutID` input field
+  - Corrected form action and fetch URL from `/edit` to `/editWorkouts/edit`
+  - Fixed `updateWorkoutById()` function call with proper parameters
+  - Added try-catch error handling in backend POST handler
+- **Files Modified**: `editWorkouts.hbs`, `frontEditWorkout.js`, `backEditWorkout.js`
+
 ### Tab-Based Exercise View & Form Data Fixes
 - **Implemented tab navigation** for edit workouts page to reduce scrolling on mobile
   - Converted from stacked card layout to horizontal tabs with scrollable content

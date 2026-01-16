@@ -21,9 +21,13 @@
         <div id="winterSnoweContainer"></div>
         {{#if user.isAuthenticated}}
                 <div class="workout-section">
-                    <form class="workoutEditForm" method="POST" action="/edit">
+                    <form class="workoutEditForm" method="POST" action="/editWorkouts/edit">
+                        <input type="hidden" name="workoutID" value="{{myWorkout.id}}">
                         <label for="workoutName">Workout Name:</label>
                         <input type="text" id="workoutName" name="workoutName" value="{{myWorkout.workout_name}}" required>
+                    
+                        <label for="restTime">Rest Time (minutes):</label>
+                        <input type="number" id="restTime" name="restTime" value="{{myWorkout.rest_time}}" required>
                     
                     <!-- Exercise Tabs -->
                     <div class="exercise-tabs-wrapper">
@@ -46,6 +50,11 @@
                             <div class="exercise-name-section">
                                 <label for="exerciseName{{@index}}">Exercise Name</label>
                                 <input type="text" id="exerciseName{{@index}}" name="exerciseName[{{@index}}]" value="{{this.name}}" required>
+                            </div>
+
+                            <div class="target-reps-section">
+                                <label for="targetReps{{@index}}">Target Reps:</label>
+                                <input type="number" id="targetReps{{@index}}" name="targetReps[{{@index}}]" value="{{this.targetReps}}" required>
                             </div>
 
                             <button type="button" class="toggle-sets" data-exercise-index="{{@index}}">

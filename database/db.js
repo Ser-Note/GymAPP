@@ -180,6 +180,28 @@ const my_workoutsDB = {
             .maybeSingle();
         if (error && error.code !== 'PGRST116') throw error; // ignore no-match
         return data || null;
+    },
+
+    async updateWorkoutById(workoutId, workoutName, exercises, restTime) {
+        const { data, error } = await supabase
+            .from('my_workouts')
+            .update({ workout_name: workoutName, exercises: exercises, rest_time: restTime })
+            .eq('id', workoutId)
+            .select()
+            .single();
+        if (error) throw error;
+        return data || null;
+    },
+
+    async deleteWorkoutById(workoutId) {
+        const { data, error } = await supabase
+            .from('my_workouts')
+            .delete()
+            .eq('id', workoutId)
+            .select()
+            .single();
+        if (error) throw error;
+        return data || null;
     }
 };
 
