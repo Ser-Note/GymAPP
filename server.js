@@ -94,6 +94,9 @@ const workoutRouter = require('./routes/backWorkingout.js');
 
 const app = express();
 
+
+app.set('trust proxy', 1);
+
 app.use(session({
     store: new SupabaseSessionStore(),
     secret: process.env.SESSION_SECRET,
