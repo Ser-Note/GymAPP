@@ -32,11 +32,8 @@ const { my_workoutsDB } = require('../database/db');
                 exercises.push(...workoutExercises);
             }
         });
-
-
-
        
-            res.render('myWorkouts', {
+            res.render('myworkouts', {
                 title: 'My Workouts',
                 user: user,
                 workouts: workouts
