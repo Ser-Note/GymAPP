@@ -2,7 +2,7 @@
   "name": "Gym Workout Tracker",
   "short_name": "Workouts",
   "description": "Track your workouts and exercises on the go",
-  "start_url": "/dashboard",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
