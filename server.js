@@ -11,25 +11,33 @@ const supabase = require('./config/supabase');
 class SupabaseSessionStore extends session.Store {
     async get(sid, callback) {
         try {
+            console.log('Session Store: Retrieving session', sid);
             const { data, error } = await supabase
                 .from('sessions')
                 .select('sess')
                 .eq('sid', sid)
                 .single();
             
-            if (error && error.code !== 'PGRST116') throw error;
+            if (error && error.code !== 'PGRST116') {
+                console.error('Session Store Error on get:', error);
+                throw error;
+            }
             if (data) {
+                console.log('Session Store: Retrieved session data');
                 callback(null, JSON.parse(data.sess));
             } else {
+                console.log('Session Store: No session found');
                 callback(null, null);
             }
         } catch (err) {
+            console.error('Session Store Exception on get:', err);
             callback(err);
         }
     }
 
     async set(sid, sess, callback) {
         try {
+            console.log('Session Store: Saving session', sid);
             const { error } = await supabase
                 .from('sessions')
                 .upsert(
@@ -41,9 +49,14 @@ class SupabaseSessionStore extends session.Store {
                     { onConflict: 'sid' }
                 );
             
-            if (error) throw error;
+            if (error) {
+                console.error('Session Store Error on set:', error);
+                throw error;
+            }
+            console.log('Session Store: Saved successfully');
             callback();
         } catch (err) {
+            console.error('Session Store Exception:', err);
             callback(err);
         }
     }
@@ -89,7 +102,7 @@ app.use(session({
     cookie: { 
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        sameSite: 'none',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
 }));
@@ -155,5 +168,3 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = app;
-
-
