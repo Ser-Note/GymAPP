@@ -20,7 +20,7 @@ const createWorkoutRouter = require('./routes/backCreateWorkout.js');
 const editDashboardRouter = require('./routes/backEditDash.js');
 const editWorkoutsRouter = require('./routes/backEditWorkout.js');
 const adminEditDashRouter = require('./routes/backAdminEditDash.js');
-
+const workoutRouter = require('./routes/backWorkingout.js');
 // ---- Initialize express ---- //
 
 const app = express();
@@ -84,7 +84,7 @@ app.use('/createWorkouts', createWorkoutRouter);
 app.use('/editDashboard', editDashboardRouter);
 app.use('/editWorkouts', editWorkoutsRouter);
 app.use('/adminEditDash', adminEditDashRouter);
-
+app.use('/workingout', workoutRouter);
 // ---- Start Server ---- //
 
 app.listen(3000, () => {

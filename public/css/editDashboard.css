@@ -44,6 +44,26 @@ main.dashboard h1 {
   margin-bottom: 1.5rem;
 }
 
+.admin-info {
+  background: white;
+  border-radius: var(--card-radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.admin-info p {
+  font-size: 1rem;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.admin-info p strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
 .workoutEditForm {
   margin: 0;
 }
@@ -52,7 +72,7 @@ main.dashboard h1 {
   width: 100%;
   padding: 1rem 1.5rem;
   border: none;
-  background: #808080;
+  background: #2563eb;
   border-radius: 10px;
   color: white;
   font-size: 1.1rem;
@@ -65,6 +85,7 @@ main.dashboard h1 {
 .workoutEditForm button:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  background: #1d4ed8;
 }
 
 .workoutEditForm button:active {
@@ -77,6 +98,15 @@ main.dashboard h1 {
   font-size: 1.3rem;
 }
 
+.deleteWorkoutButton {
+  background: #e74c3c !important;
+  margin-top: 0.5rem !important;
+}
+
+.deleteWorkoutButton:hover {
+  background: #c0392b !important;
+}
+
 .notAuthenticated-form {
   background: white;
   border-radius: var(--card-radius);
@@ -87,6 +117,22 @@ main.dashboard h1 {
 }
 
 .notAuthenticated-form p {
+  font-size: 1.1rem;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.no-workouts {
+  background: white;
+  border-radius: var(--card-radius);
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.no-workouts p {
   font-size: 1.1rem;
   color: #1f2937;
   margin: 0;

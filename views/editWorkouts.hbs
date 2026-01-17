@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/photos/polarbear_head.ico">
     <title>Edit Workouts</title>
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/editWorkout.css">
@@ -21,7 +22,7 @@
         <div id="winterSnoweContainer"></div>
         {{#if user.isAuthenticated}}
                 <div class="workout-section">
-                    <form class="workoutEditForm" method="POST" action="/editWorkouts/edit">
+                    <form class="workoutEditForm" method="POST" action="/editWorkouts/edit" data-is-admin="{{user.isAdmin}}">
                         <input type="hidden" name="workoutID" value="{{myWorkout.id}}">
                         <label for="workoutName">Workout Name:</label>
                         <input type="text" id="workoutName" name="workoutName" value="{{myWorkout.workout_name}}" required>

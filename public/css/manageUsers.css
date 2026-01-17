@@ -59,6 +59,64 @@ h1 {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
 }
 
+/* Search Section */
+label[for="userSearchInput"] {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+    color: var(--color-primary);
+    text-align: center;
+}
+
+#userSearchInput {
+    width: 100%;
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--color-primary);
+    background-color: white;
+    transition: var(--transition);
+}
+
+#userSearchInput::placeholder {
+    color: var(--color-text-light);
+}
+
+#userSearchInput:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+#userSearchButton {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    background-color: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#userSearchButton:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+#userSearchButton:active {
+    transform: translateY(0);
+}
+
 /* Users List Container */
 .info {
     list-style: none;
@@ -80,8 +138,7 @@ h1 {
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    flex-direction: column;
     gap: var(--spacing-sm);
 }
 
@@ -90,12 +147,61 @@ h1 {
     transform: translateY(-2px);
 }
 
+/* User Item Header */
+.user-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+}
+
+/* User Options Container */
+.user-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    max-height: 500px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.user-options.collapsed {
+    max-height: 0;
+    gap: 0;
+}
+
+/* Toggle Button */
+.btn-toggle-options {
+    background-color: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    padding: var(--spacing-xs);
+    min-width: auto;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.btn-toggle-options:hover {
+    background-color: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
+}
+
+/* User Action Buttons */
+.btn-user-action {
+    flex: 1 1 auto;
+}
+
 /* Username Styling */
 .info li strong {
     font-size: 1.1rem;
     color: var(--color-primary);
-    flex: 1 1 100%;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 0;
     word-break: break-word;
 }
 
@@ -152,21 +258,21 @@ button:focus {
 }
 
 /* Authentication Status Buttons */
-#btnAuthActive {
+.btnAuthActive {
     background-color: var(--color-success);
     color: white;
 }
 
-#btnAuthActive:hover {
+.btnAuthActive:hover {
     background-color: #229954;
 }
 
-#btnAuthPending {
+.btnAuthPending {
     background-color: var(--color-warning);
     color: white;
 }
 
-#btnAuthPending:hover {
+.btnAuthPending:hover {
     background-color: #d68910;
 }
 
@@ -189,14 +295,23 @@ button:focus {
     background-color: #5a6c7d;
 }
 
-/* Delete Button */
-#btnDeleteUser {
-    background-color: var(--color-danger);
+/* Edit/Authenticate Exercises Button */
+.btnEditWorkout {
+    background-color: var(--color-accent);
     color: white;
-    margin-left: auto;
 }
 
-#btnDeleteUser:hover {
+.btnEditWorkout:hover {
+    background-color: #2980b9;
+}
+
+/* Delete Button */
+.btnDeleteUser {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btnDeleteUser:hover {
     background-color: #c0392b;
 }
 
@@ -284,22 +399,43 @@ button:focus {
     }
 
     .info li {
-        flex-direction: column;
-        align-items: stretch;
         padding: var(--spacing-md);
         gap: var(--spacing-xs);
     }
 
+    .user-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .user-options {
+        display: flex;
+        flex-direction: column;
+        max-height: 500px;
+    }
+
+    .user-options.collapsed {
+        max-height: 0;
+        gap: 0;
+    }
+
+    .btn-toggle-options {
+        width: 32px;
+        height: 32px;
+        padding: var(--spacing-xs);
+        min-width: auto;
+    }
+
     .info li strong {
-        margin-bottom: var(--spacing-xs);
+        margin-bottom: 0;
         font-size: 1rem;
     }
 
-    button {
+    .btn-user-action {
         width: 100%;
         padding: var(--spacing-sm) var(--spacing-xs);
         font-size: 0.8rem;
-        margin-left: 0;
     }
 
     #btnDeleteUser {

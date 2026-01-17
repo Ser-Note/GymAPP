@@ -127,11 +127,22 @@ router.post('/authenticateExercise', async function(req, res, next) {
 
         const { exerciseUuid, isAuthenticated } = req.body;
 
+        const exerciseData = await my_workoutsDB.getExerciseByUuid(exerciseUuid);
+
+        if (!exerciseData || !exerciseData.exercises || exerciseData.exercises.length === 0) {
+            return res.status(404).json({ success: false, message: 'Exercise not found' });
+        }
+
+        let subType = exerciseData.exercises[0].subType;
+        let exerciseType = exerciseData.exercises[0].exerciseType;
+
+        console.log('Exercise Data Retrieved:', exerciseData);
+
         if(!exerciseUuid) {
             return res.status(400).json({ success: false, message: 'Exercise UUID is required' });
         }
 
-        const updatedExercise = await exerciseDB.updateExerciseAuthentication(exerciseUuid, isAuthenticated);
+        const updatedExercise = await exerciseDB.updateExerciseAuthentication(exerciseUuid, isAuthenticated, subType, exerciseType);
         
         if(!updatedExercise) {
             return res.status(404).json({ success: false, message: 'Exercise not found' });

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/photos/polarbear_head.ico">
+    <title>Workout</title>
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/workout.css">
+    <script src="./js/frontWorkout.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+</head>
+<body>
+    <div id="winterSnowContainer"></div>
+
+    <main class="workout-container">
+        <!-- Exercise Screen -->
+        <div id="exerciseScreen" class="screen active">
+            <div class="exercise-card">
+                <h1 id="exerciseName" class="exercise-title">Exercise Name</h1>
+                
+                <div class="set-info">
+                    <p id="setCounter" class="set-counter">Set 1 of 4</p>
+                </div>
+
+                <div class="exercise-details">
+                    <div class="detail-box">
+                        <label>Weight</label>
+                        <p id="exerciseWeight" class="detail-value">225 lbs</p>
+                    </div>
+                    <div class="detail-box">
+                        <label>Target Reps</label>
+                        <p id="targetReps" class="detail-value">10</p>
+                    </div>
+                </div>
+
+                <div class="reps-input-section">
+                    <label for="actualReps">Actual Reps Completed</label>
+                    <input 
+                        type="number" 
+                        id="actualReps" 
+                        min="0" 
+                        placeholder="Enter reps" 
+                        class="reps-input"
+                    >
+                </div>
+
+                <button id="completeSetBtn" class="btn btn-primary">Complete Set</button>
+                <button id="endWorkoutBtn" class="btn btn-secondary">End Workout</button>
+            </div>
+        </div>
+
+        <!-- Rest Timer Screen -->
+        <div id="restScreen" class="screen">
+            <div class="rest-card">
+                <h2>Rest Time</h2>
+                
+                <div class="timer-display">
+                    <div class="timer" id="timerDisplay">03:00</div>
+                    <p class="timer-label">Time Remaining</p>
+                </div>
+
+                <!-- Carousel for Reminders -->
+                <div class="reminder-carousel">
+                    <div class="reminder-content">
+                        <p id="reminderText" class="reminder-text">Drink water to stay hydrated!</p>
+                    </div>
+                    <div class="carousel-indicators">
+                        <span class="indicator active" id="indicator0"></span>
+                        <span class="indicator" id="indicator1"></span>
+                        <span class="indicator" id="indicator2"></span>
+                        <span class="indicator" id="indicator3"></span>
+                    </div>
+                </div>
+
+                <div class="rest-actions">
+                    <button id="skipRestBtn" class="btn btn-secondary">Skip Rest</button>
+                    <button id="nextBtn" class="btn btn-primary" disabled>Next (00:00)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weight Recommendation Screen -->
+        <div id="weightScreen" class="screen">
+            <div class="weight-card">
+                <h2>Weight Recommendation</h2>
+                
+                <div class="recommendation-content">
+                    <p id="recommendationText" class="recommendation-text">
+                        Great job! You hit your target reps.
+                    </p>
+                    
+                    <div class="weight-options">
+                        <div class="weight-suggestion">
+                            <label>Recommended Increase</label>
+                            <p id="suggestedWeight" class="weight-value">+5 lbs</p>
+                        </div>
+                        
+                        <div class="custom-weight">
+                            <label for="customWeightIncrease">Custom Increase (optional)</label>
+                            <input 
+                                type="number" 
+                                id="customWeightIncrease" 
+                                placeholder="e.g., 5, 10, -5" 
+                                class="weight-input"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="weight-actions">
+                    <button id="acceptWeightBtn" class="btn btn-primary">Accept & Continue</button>
+                    <button id="skipWeightBtn" class="btn btn-secondary">Keep Current Weight</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workout Complete Screen -->
+        <div id="completeScreen" class="screen">
+            <div class="complete-card">
+                <h2>Workout Complete!</h2>
+                <p class="complete-message">Great work! You've finished your workout.</p>
+                
+                <div class="workout-summary">
+                    <p id="summaryText">Summary data will appear here</p>
+                </div>
+
+                <button id="homeBtn" class="btn btn-primary">Back to Home</button>
+            </div>
+        </div>
+    </main>
+
+    {{#if user.isAuthenticated}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
+
+				{{#if user.isAdmin}}
+				<a class="nav-link" href="/manageUsers">
+					<img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
+					<span>Manage Users</span>
+				</a>
+				{{/if}}
+
+				<a class="nav-link nav-home" href="/dashboard">
+					<img class="nav-icon" src="/photos/home.svg" alt="Home">
+					<span>Home</span>
+				</a>
+
+				<a class="nav-link nav-workout" href="/myWorkouts">
+					<img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
+					<span>My Workout</span>
+				</a>
+			</div>
+		</nav>
+		{{else}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
+			</div>
+		</nav>
+	{{/if}}
+</body>
+</html>

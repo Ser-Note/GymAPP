@@ -1,11 +1,13 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/x-icon" href="/photos/polarbear_head.ico">
 	<title>{{title}}</title>
 	<link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/navbar.css">
-	<script src="./js/frontNotAuthorized.js" defer></script>
+	<link rel="stylesheet" href="/css/myWorkouts.css">
+	<script src="./js/frontMyWorkouts.js" defer></script>
 	<script src="/js/theme.js" defer></script>
 </head>
 <body>
@@ -23,14 +25,13 @@
         </div>
         <h1>{{title}} </h1>
         
-        {{#each user.workouts}}
+        {{#each workouts}}
             <li>
                 <div class="workout-id">
                     <strong>{{this.workout_name}}</strong>
                 </div> - 
                 <p>{{this.description}}</p>
-                <button id="btnViewWorkout">View</button>
-                <button id="btnDeleteWorkout">Delete</button>
+                <button id="btnWorkout{{this.id}}">Workout</button>
             </li>
         {{/each}}
         {{#if user.isAuthenticated}}

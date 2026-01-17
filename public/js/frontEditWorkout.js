@@ -116,23 +116,62 @@ document.addEventListener('DOMContentLoaded', () => {
             const existingExercises = document.querySelectorAll('.exercise-tab');
             const exerciseIndex = existingExercises.length;
             
+            // Prompt user for exercise name
+            const exerciseName = prompt('Enter exercise name:');
+            if (!exerciseName || exerciseName.trim() === '') {
+                return; // User cancelled or entered nothing
+            }
+            
+            // Check for duplicate exercise names
+            const existingNames = Array.from(existingExercises).map(tab => {
+                const index = tab.getAttribute('data-exercise-index');
+                const inputField = document.querySelector(`#exerciseName${index}`);
+                return inputField ? inputField.value.trim().toLowerCase() : '';
+            });
+            
+            if (existingNames.includes(exerciseName.trim().toLowerCase())) {
+                alert(`An exercise named "${exerciseName}" already exists. Please use a different name.`);
+                return;
+            }
+            
             // Create new tab
             const newTab = document.createElement('button');
             newTab.type = 'button';
             newTab.className = 'exercise-tab active';
             newTab.setAttribute('data-exercise-index', exerciseIndex);
-            newTab.innerHTML = `New Exercise ${exerciseIndex + 1}
+            newTab.innerHTML = `${exerciseName}
                 <span class="tab-delete" data-exercise-index="${exerciseIndex}">−</span>`;
             
             // Create new content
             const newContent = document.createElement('div');
             newContent.className = 'exercise-content active';
             newContent.setAttribute('data-exercise-index', exerciseIndex);
+            
+            // Build the target reps section
+            let targetRepsHtml = `
+                <div class="target-reps-section">
+                    <label for="targetReps${exerciseIndex}">Target Reps:</label>
+                    <input type="number" id="targetReps${exerciseIndex}" name="targetReps[${exerciseIndex}]" value="" required>
+                </div>
+            `;
+            
+            // Build the authentication section (for admin users)
+            const isAdmin = document.querySelector('.workoutEditForm').getAttribute('data-is-admin') === 'true';
+            let authHtml = '';
+            if (isAdmin) {
+                authHtml = `
+                    <div class="exercise-auth-section">
+                        <button type="button" class="btn-auth-pending authenticateExerciseBtn" data-exercise-uuid="" data-exercise-name="${exerciseName}">✗ Pending</button>
+                    </div>
+                `;
+            }
+            
             newContent.innerHTML = `
                 <div class="exercise-name-section">
                     <label for="exerciseName${exerciseIndex}">Exercise Name</label>
-                    <input type="text" id="exerciseName${exerciseIndex}" name="exerciseName[${exerciseIndex}]" value="" required>
+                    <input type="text" id="exerciseName${exerciseIndex}" name="exerciseName[${exerciseIndex}]" value="${exerciseName}" required>
                 </div>
+                ${targetRepsHtml}
                 <button type="button" class="toggle-sets" data-exercise-index="${exerciseIndex}">
                     <span class="toggle-text">Show Sets</span>
                     <span class="toggle-icon">▼</span>
@@ -150,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <button type="button" class="btn-add-set" data-exercise-index="${exerciseIndex}">+ Add Set</button>
                 </div>
+                ${authHtml}
             `;
             
             // Remove active from other tabs/contents
@@ -264,6 +304,21 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Exercise Name:', exerciseName);
             console.log('Current Auth Status:', isCurrentlyAuthenticated);
             console.log('New Auth Status:', newAuthStatus);
+            
+            // Check for duplicate authenticated exercises with same name
+            if (newAuthStatus) {
+                const allAuthButtons = document.querySelectorAll('.authenticateExerciseBtn.btn-auth-active');
+                const isDuplicate = Array.from(allAuthButtons).some(btn => {
+                    const btnName = btn.getAttribute('data-exercise-name');
+                    const btnUuid = btn.getAttribute('data-exercise-uuid');
+                    return btnName === exerciseName && btnUuid !== exerciseUuid;
+                });
+                
+                if (isDuplicate) {
+                    alert(`An exercise named "${exerciseName}" is already authenticated. You cannot authenticate another exercise with the same name.`);
+                    return;
+                }
+            }
             
             (async () => {
                 try {

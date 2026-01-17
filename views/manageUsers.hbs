@@ -1,6 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/photos/polarbear_head.ico">
     <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/manageUsers.css">
@@ -17,25 +18,38 @@
                 <img src="./photos/polarbear_dumbellCurl.svg" alt="Polar Bear Logo" class="logo">
             </div>
             <h1>{{title}}</h1>
+            <label for="userSearchInput">Search Users</label>
+            <input type="text" id="userSearchInput" placeholder="Search users..." aria-label="Search users">
+            <button id="userSearchButton" aria-label="Search users">Search</button>
+
             {{#each users}}
-                <li>
-                    <div class="user-id">
-                        <img src="./photos/avatar.svg" alt="{{this.user_name}} avatar" class="avatar">
-                        <strong>{{this.user_name}}</strong>
-                    </div> - 
-                    {{#if this.isAuthenticated}}
-                    <button id="btnAuthActive">Active</button>
-                    {{else}}
-                    <button id="btnAuthPending">Pending</button>
-                    {{/if}} - 
-                    {{#if this.isAdmin}}
-                    <button  id="btnAdminActive" class="admin-badge">Admin</button>
-                    {{else}}
-                    <button id="btnAdminPending" class="user-badge">User</button>
-                    {{/if}} -
-                    <button id="btnDeleteUser">Delete</button>
-                    <button id="btnEditWorkout">Edit/Authenticate Workouts</button>
-                </li>
+                {{#unless this.isAdmin}}
+                    <li class="user-item">
+                        <div class="user-header">
+                            <div class="user-id">
+                                <img src="./photos/avatar.svg" alt="{{this.user_name}} avatar" class="avatar">
+                                <strong>{{this.user_name}}</strong>
+                            </div>
+                            <button class="btn-toggle-options" aria-expanded="true" aria-label="Toggle options for {{this.user_name}}">
+                                <span>⋮</span>
+                            </button>
+                        </div>
+                        <div class="user-options collapsed">
+                            {{#if this.isAuthenticated}}
+                            <button class="btn-user-action btnAuthActive">Active</button>
+                            {{else}}
+                            <button class="btn-user-action btnAuthPending">Pending</button>
+                            {{/if}}
+                            {{#if this.isAdmin}}
+                            <button class="btn-user-action admin-badge">Admin</button>
+                            {{else}}
+                            <button class="btn-user-action user-badge">User</button>
+                            {{/if}}
+                            <button class="btn-user-action btnDeleteUser">Delete</button>
+                            <button class="btn-user-action btnEditWorkout">Edit/Auth</button>
+                        </div>
+                    </li>
+                {{/unless}}
             {{/each}}
         </ul>
 
@@ -60,4 +74,4 @@
             </div>
         </nav>
 </body>
-</body>
+</html>

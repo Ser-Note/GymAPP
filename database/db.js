@@ -202,6 +202,25 @@ const my_workoutsDB = {
             .single();
         if (error) throw error;
         return data || null;
+    },
+    async getExerciseByUuid(exerciseUuid) {
+        const { data, error } = await supabase
+            .from('my_workouts')
+            .select('exercises');
+        if (error && error.code !== 'PGRST116') throw error; // ignore no-match
+        
+        // Filter client-side to find the matching exercise
+        if (data) {
+            for (const workout of data) {
+                if (workout.exercises && Array.isArray(workout.exercises)) {
+                    const foundExercise = workout.exercises.find(ex => ex.uuid === exerciseUuid);
+                    if (foundExercise) {
+                        return { exercises: [foundExercise] };
+                    }
+                }
+            }
+        }
+        return null;
     }
 };
 
@@ -253,10 +272,10 @@ const exerciseDB = {
     },
 
     // -- Update Exercise Authentication Status -- //
-    async updateExerciseAuthentication(exerciseUuid, isAuthenticated) {
+    async updateExerciseAuthentication(exerciseUuid, isAuthenticated, subType, exerciseType) {
         const { data, error } = await supabase
             .from('exercise')
-            .update({ isAuthenticated: isAuthenticated })
+            .update({ isAuthenticated: isAuthenticated, specificMuscle: subType, targetMuscle: exerciseType })
             .eq('id', exerciseUuid)
             .select()
             .single();

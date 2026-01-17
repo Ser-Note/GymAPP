@@ -1,0 +1,310 @@
+/* ===== My Workouts Page Styles ===== */
+
+:root {
+    --color-primary: #2c3e50;
+    --color-accent: #3498db;
+    --color-success: #27ae60;
+    --color-danger: #e74c3c;
+    --color-bg: #ecf0f1;
+    --color-border: #bdc3c7;
+    --color-text: #2c3e50;
+    --color-text-light: #7f8c8d;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --border-radius: 16px;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: auto;
+    overflow-y: auto;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    padding: 0.5rem;
+    padding-bottom: 300px;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.logo {
+    max-width: 80px;
+    height: auto;
+    transition: var(--transition);
+    background: transparent !important;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+/* Main Heading */
+h1 {
+    text-align: center;
+    color: var(--color-primary);
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure workout actions are visible */
+.workout-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.action-link {
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.75rem;
+}
+
+.action-create {
+    background-color: var(--color-success);
+    color: white;
+}
+
+.action-create:hover {
+    background-color: #229954;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.action-edit {
+    background-color: var(--color-accent);
+    color: white;
+}
+
+.action-edit:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Workouts List */
+.info {
+    list-style: none;
+    max-width: 900px;
+    margin: 0 auto;
+    margin-bottom: 40px;
+    padding-bottom: 300px;
+    border-radius: 24px;
+    z-index: 1200;
+    position: relative;
+}
+
+/* Individual Workout Item */
+.info li {
+    background-color: white;
+    border-left: 5px solid var(--color-accent);
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info li:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* Workout Name */
+.info li strong {
+    font-size: 1.1rem;
+    color: var(--color-primary);
+    flex: 1 1 100%;
+    margin-bottom: var(--spacing-xs);
+    word-break: break-word;
+}
+
+/* Workout Description */
+.info li p {
+    flex: 1 1 auto;
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.workout-id {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.header-margin {
+    background: transparent !important;
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Workout Button */
+button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 100px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+[id^="btnWorkout"] {
+    background-color: var(--color-accent);
+    color: white;
+    margin-left: auto;
+}
+
+[id^="btnWorkout"]:hover {
+    background-color: #2980b9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 0.5rem;
+        padding-bottom: 100px;
+    }
+
+    h1 {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .workout-actions {
+        gap: 0.5rem;
+    }
+
+    .action-link {
+        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .info li {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .info li strong {
+        font-size: 1rem;
+    }
+
+    .info li p {
+        font-size: 0.95rem;
+    }
+
+    button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+        margin-left: 0;
+    }
+
+    [id^="btnWorkout"] {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 0.25rem;
+        padding-bottom: 300px;
+    }
+
+    h1 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        margin-top: 0.25rem;
+    }
+
+    .header-margin {
+        margin-bottom: 0.5rem;
+    }
+
+    .logo {
+        max-width: 70px;
+    }
+
+    .workout-actions {
+        gap: 0.25rem;
+        margin-bottom: 0.5rem;
+        margin-top: 0.25rem;
+    }
+
+    .action-link {
+        font-size: 0.65rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .info {
+        margin-bottom: 40px;
+        padding-bottom: 300px;
+    }
+
+    .info li {
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .info li strong {
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .info li p {
+        font-size: 0.8rem;
+    }
+
+    button {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.65rem;
+        min-width: 80px;
+    }
+}

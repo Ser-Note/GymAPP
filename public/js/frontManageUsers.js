@@ -1,13 +1,27 @@
-var authenticatedButtons = document.querySelectorAll('#btnAuthActive, #btnAuthPending');
+// Toggle Options Visibility
+var toggleButtons = document.querySelectorAll('.btn-toggle-options');
+toggleButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const userItem = button.closest('.user-item');
+        const userOptions = userItem.querySelector('.user-options');
+        const isCollapsed = userOptions.classList.contains('collapsed');
+        
+        userOptions.classList.toggle('collapsed');
+        button.setAttribute('aria-expanded', isCollapsed);
+    });
+});
+
+var authenticatedButtons = document.querySelectorAll('.btnAuthActive, .btnAuthPending');
 
 authenticatedButtons.forEach(button => {
     button.addEventListener('click', async () => {
-        if (button.id === 'btnAuthActive') {
-            button.id = 'btnAuthPending';
+        if (button.classList.contains('btnAuthActive')) {
+            button.classList.remove('btnAuthActive');
+            button.classList.add('btnAuthPending');
             alert('User deactivation process initiated.');
-        } else
-     {
-            button.id = 'btnAuthActive';
+        } else {
+            button.classList.remove('btnAuthPending');
+            button.classList.add('btnAuthActive');
             alert('User activation process initiated.');
         }
 
@@ -18,8 +32,8 @@ authenticatedButtons.forEach(button => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
-                    buttonId: button.id,
-                    username: button.parentElement.querySelector('strong').innerText
+                    buttonClass: button.className,
+                    username: button.closest('.user-item').querySelector('strong').innerText
                  })
             });
 
@@ -80,7 +94,7 @@ adminButtons.forEach(button => {
 });
 
 
-var deleteButtons = document.querySelectorAll('#btnDeleteUser');
+var deleteButtons = document.querySelectorAll('.btnDeleteUser');
 
 deleteButtons.forEach(button => {
     button.addEventListener('click', async () => {
@@ -92,7 +106,7 @@ deleteButtons.forEach(button => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: button.parentElement.querySelector('strong').innerText
+                    username: button.closest('.user-item').querySelector('strong').innerText
                  })
             });
 
@@ -113,10 +127,10 @@ deleteButtons.forEach(button => {
     });
 });
 
-var editWorkoutButtons = document.querySelectorAll('#btnEditWorkout');
+var editWorkoutButtons = document.querySelectorAll('.btnEditWorkout');
 editWorkoutButtons.forEach(button => {
     button.addEventListener('click', async () => {
-        const username = button.parentElement.querySelector('strong').innerText;
+        const username = button.closest('.user-item').querySelector('strong').innerText;
         
         try {
             const response = await fetch('/manageUsers/editWorkouts', {
@@ -141,4 +155,28 @@ editWorkoutButtons.forEach(button => {
             alert('Unable to reach the server. Please try again.');
         }
     });
+});
+
+// User Search Functionality
+document.getElementById('userSearchButton').addEventListener('click', () => {
+    const query = document.getElementById('userSearchInput').value.toLowerCase();
+    const userItems = document.querySelectorAll('.user-item');
+
+    if (!query) {
+        userItems.forEach(item => {
+            item.style.display = '';
+        });
+        return;
+    }
+    else
+    {
+        userItems.forEach(item => {
+        const username = item.querySelector('strong').innerText.toLowerCase();
+        if (username.includes(query)) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
 });

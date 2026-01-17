@@ -1,0 +1,541 @@
+/* ===== Workout Execution Styles ===== */
+
+:root {
+    --color-primary: #2563eb;
+    --color-secondary: #6b7280;
+    --color-success: #27ae60;
+    --color-danger: #e74c3c;
+    --color-warning: #f39c12;
+    --color-bg: #ecf0f1;
+    --color-border: #bdc3c7;
+    --color-text: #2c3e50;
+    --color-text-light: #7f8c8d;
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --border-radius: 16px;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    padding: var(--spacing-md);
+    padding-bottom: 180px;
+    min-height: 100vh;
+}
+
+/* Main Container */
+.workout-container {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1200;
+}
+
+/* Screen Management */
+.screen {
+    display: none;
+    animation: slideIn 0.3s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card Styles */
+.exercise-card,
+.rest-card,
+.weight-card,
+.complete-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Exercise Screen Styles */
+.exercise-title {
+    font-size: 2rem;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+}
+
+.set-info {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.set-counter {
+    font-size: 1.2rem;
+    color: var(--color-text-light);
+    font-weight: 600;
+}
+
+.exercise-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.detail-box {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: var(--spacing-md);
+    text-align: center;
+    border: 2px solid var(--color-border);
+}
+
+.detail-box label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.reps-input-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.reps-input-section label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.reps-input {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 2px solid var(--color-border);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--color-text);
+    transition: var(--transition);
+}
+
+.reps-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.reps-input::placeholder {
+    color: var(--color-text-light);
+}
+
+/* Rest Timer Screen Styles */
+.rest-card h2 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-primary);
+}
+
+.timer-display {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: #f9fafb;
+    border-radius: 12px;
+}
+
+.timer {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    font-family: 'Courier New', monospace;
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 0.2em;
+}
+
+.timer-label {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Reminder Carousel */
+.reminder-carousel {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    color: white;
+}
+
+.reminder-content {
+    margin-bottom: var(--spacing-md);
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reminder-text {
+    font-size: 1.2rem;
+    text-align: center;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.indicator.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* Rest Actions */
+.rest-actions,
+.weight-actions {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+/* Button Styles */
+.btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex: 1;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: #4b5563;
+}
+
+/* Weight Recommendation Screen */
+.weight-card h2 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-primary);
+}
+
+.recommendation-content {
+    margin-bottom: var(--spacing-lg);
+}
+
+.recommendation-text {
+    font-size: 1.1rem;
+    text-align: center;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-lg);
+}
+
+.weight-options {
+    display: grid;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.weight-suggestion {
+    background: #f0fdf4;
+    border: 2px solid var(--color-success);
+    border-radius: 12px;
+    padding: var(--spacing-md);
+    text-align: center;
+}
+
+.weight-suggestion label {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.weight-value {
+    font-size: 1.8rem;
+    color: var(--color-success);
+    font-weight: 700;
+}
+
+.custom-weight {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: var(--spacing-md);
+}
+
+.custom-weight label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text);
+}
+
+.weight-input {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 2px solid var(--color-border);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--color-text);
+    transition: var(--transition);
+}
+
+.weight-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.weight-input::placeholder {
+    color: var(--color-text-light);
+}
+
+/* Complete Screen Styles */
+.complete-card h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-success);
+}
+
+.complete-message {
+    font-size: 1.1rem;
+    text-align: center;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-lg);
+}
+
+.workout-summary {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+    color: var(--color-text-light);
+}
+
+/* Responsive Design */
+@media (max-width: 725px) {
+    body {
+        padding: 0.5rem;
+        padding-bottom: 100px;
+    }
+
+    .workout-container {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .exercise-card,
+    .rest-card,
+    .weight-card,
+    .complete-card {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .exercise-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .set-counter {
+        font-size: 1rem;
+    }
+
+    .timer {
+        font-size: 2rem;
+    }
+
+    .exercise-details {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .detail-box {
+        padding: 0.5rem;
+    }
+
+    .detail-box label {
+        font-size: 0.8rem;
+    }
+
+    .detail-box .detail-value {
+        font-size: 1.1rem;
+    }
+
+    .rest-actions,
+    .weight-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        width: 100%;
+    }
+
+    .reminder-text {
+        font-size: 0.9rem;
+    }
+
+    .reps-input-section {
+        margin-bottom: 0.75rem;
+    }
+
+    .reps-input {
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-sm);
+        padding-bottom: 180px;
+    }
+
+    .exercise-card,
+    .rest-card,
+    .weight-card,
+    .complete-card {
+        padding: var(--spacing-md);
+    }
+
+    .exercise-title {
+        font-size: 1.5rem;
+    }
+
+    .timer {
+        font-size: 3rem;
+    }
+
+    .exercise-details {
+        grid-template-columns: 1fr;
+    }
+
+    .rest-actions,
+    .weight-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .workout-container {
+        margin: 0 auto;
+    }
+
+    .exercise-card,
+    .rest-card,
+    .weight-card,
+    .complete-card {
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .exercise-title {
+        font-size: 1.3rem;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .timer {
+        font-size: 2.5rem;
+    }
+
+    .reminder-text {
+        font-size: 1rem;
+    }
+
+    .btn {
+        padding: var(--spacing-sm) var(--spacing-xs);
+        font-size: 0.85rem;
+    }
+}
