@@ -82,7 +82,7 @@ app.use('/register', registerRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/manageUsers', manageUsersRouter);
 app.use('/profile', profileRouter);
-app.use('/myworkouts', myWorkoutRouter);
+app.use('/myWorkouts', myWorkoutRouter);
 app.use('/createWorkouts', createWorkoutRouter);
 app.use('/editDashboard', editDashboardRouter);
 app.use('/editWorkouts', editWorkoutsRouter);
