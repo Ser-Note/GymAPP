@@ -6,6 +6,61 @@ const express= require('express');
 const path = require('path');
 const axios = require('axios');
 const session = require('express-session');
+const supabase = require('./config/supabase');
+
+// ---- Session Store for Vercel ---- //
+class SupabaseSessionStore extends session.Store {
+    async get(sid, callback) {
+        try {
+            const { data, error } = await supabase
+                .from('sessions')
+                .select('sess')
+                .eq('sid', sid)
+                .single();
+            
+            if (error && error.code !== 'PGRST116') throw error;
+            if (data) {
+                callback(null, JSON.parse(data.sess));
+            } else {
+                callback(null, null);
+            }
+        } catch (err) {
+            callback(err);
+        }
+    }
+
+    async set(sid, sess, callback) {
+        try {
+            const { error } = await supabase
+                .from('sessions')
+                .upsert({
+                    sid: sid,
+                    sess: JSON.stringify(sess),
+                    expire: new Date(Date.now() + 24 * 60 * 60 * 1000)
+                })
+                .eq('sid', sid);
+            
+            if (error) throw error;
+            callback();
+        } catch (err) {
+            callback(err);
+        }
+    }
+
+    async destroy(sid, callback) {
+        try {
+            const { error } = await supabase
+                .from('sessions')
+                .delete()
+                .eq('sid', sid);
+            
+            if (error) throw error;
+            callback();
+        } catch (err) {
+            callback(err);
+        }
+    }
+}
 
 // ---- Initialize Routes ---- //
 
@@ -26,6 +81,7 @@ const workoutRouter = require('./routes/backWorkingout.js');
 const app = express();
 
 app.use(session({
+    store: new SupabaseSessionStore(),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -33,6 +89,7 @@ app.use(session({
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
         sameSite: 'none',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
 }));
 
