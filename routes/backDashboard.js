@@ -9,7 +9,7 @@ const {userDB} = require('../database/db');
     router.get('/', async function(req, res, next)  {
         if(!req.session || !req.session.username) 
         {
-            return res.status(401).json({ success: false, message: 'Unauthorized' });
+            return res.status(401).json({ success: false, message: req.session.username + ' is Unauthorized' });
         }
         else
         {
