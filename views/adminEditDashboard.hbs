@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Workouts</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/editDashboard.css">
+    <link rel="stylesheet" href="/css/theme.css">
+    <script src="./js/frontAdminEditDash.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+
+</head>
+<body>
+    
+    <div id="winterSnoweContainer"></div>
+
+    <main class="dashboard">
+        <h1>{{title}}</h1>
+        {{#if user.isAuthenticated}}
+            <div class="admin-info">
+                <p>Editing workouts for: <strong>{{targetUsername}}</strong></p>
+            </div>
+            {{#if workouts.length}}
+                {{#each workouts}}
+                    <div class="workout-section">
+                        <form class="workoutEditForm" method="POST" action="/editWorkouts">
+                            <input type="hidden" name="workoutID" class="workoutID" value="{{this.id}}">
+                            <input type="hidden" name="username" class="targetUsername" value="{{../targetUsername}}">
+                            <button type="submit"><h2>{{workout_name}}</h2></button>
+                            <button type="button" class="deleteWorkoutButton">Delete</button>
+                        </form>
+                    </div>
+                {{/each}}
+            {{else}}
+                <div class="no-workouts">
+                    <p>No workouts found for this user.</p>
+                </div>
+            {{/if}}
+        {{else}}
+               <div class="notAuthenticated-form">
+                    <p>You must be authenticated to edit workouts.</p>
+               </div>
+        {{/if}}
+    </main>
+
+    {{#if user.isAuthenticated}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
+
+				{{#if user.isAdmin}}
+				<a class="nav-link" href="/manageUsers">
+					<img class="nav-icon" src="/photos/admin.svg" alt="Manage Users">
+					<span>Manage Users</span>
+				</a>
+				{{/if}}
+
+				<a class="nav-link nav-home" href="/dashboard">
+					<img class="nav-icon" src="/photos/home.svg" alt="Home">
+					<span>Home</span>
+				</a>
+
+				<a class="nav-link nav-workout" href="/myWorkouts">
+					<img class="nav-icon" src="/photos/polarbear_head.svg" alt="My Workout">
+					<span>My Workout</span>
+				</a>
+			</div>
+		</nav>
+		{{else}}
+		<nav class="nav-bar">
+			<div class="nav-track">
+				<a class="nav-link nav-profile" href="/profile">
+					<img class="nav-icon" src="/photos/avatar.svg" alt="Profile">
+					<span>Profile</span>
+				</a>
+			</div>
+		</nav>
+	{{/if}}
+
+</body>
+</html>

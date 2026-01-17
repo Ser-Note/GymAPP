@@ -206,4 +206,77 @@ const my_workoutsDB = {
 };
 
 
-module.exports = { userDB, my_workoutsDB };
+const exerciseDB = {
+    // -- Get All Exercises -- //
+    async getAllExercises() {
+        const { data, error } = await supabase
+            .from('exercise')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+    },
+
+    // -- Get Exercises by Authentication Status -- //
+    async getExercisesByAuthenticated(isAuthenticated) {
+        const { data, error } = await supabase
+            .from('exercise')
+            .select('*')
+            .eq('isAuthenticated', isAuthenticated)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+    },
+
+    // -- Create Exercise -- //
+    async createExercise(exerciseName, targetMuscle, specificMuscle = null) {
+        const { data, error } = await supabase
+            .from('exercise')
+            .insert([{
+                exercise: exerciseName,
+                targetMuscle: targetMuscle,
+                specificMuscle: specificMuscle,
+                isAuthenticated: false
+            }])
+            .select()
+            .single();
+
+        if (error) throw error;
+        
+        // Map the Supabase response to include uuid field
+        return {
+            ...data,
+            uuid: data.id  // Supabase returns 'id', map it to 'uuid'
+        };
+    },
+
+    // -- Update Exercise Authentication Status -- //
+    async updateExerciseAuthentication(exerciseUuid, isAuthenticated) {
+        const { data, error } = await supabase
+            .from('exercise')
+            .update({ isAuthenticated: isAuthenticated })
+            .eq('id', exerciseUuid)
+            .select()
+            .single();
+
+        if (error) throw error;
+        return data || null;
+    },
+
+    // -- Get Exercise by UUID -- //
+    async getExerciseByUuid(uuid) {
+        const { data, error } = await supabase
+            .from('exercise')
+            .select('*')
+            .eq('id', uuid)
+            .maybeSingle();
+
+        if (error && error.code !== 'PGRST116') throw error;
+        return data || null;
+    }
+};
+
+
+module.exports = { userDB, my_workoutsDB, exerciseDB };

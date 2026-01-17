@@ -2,6 +2,7 @@ express = require('express');
 var router = express.Router();
 const { userDB } = require('../database/db');
 const { my_workoutsDB } = require('../database/db');
+const { exerciseDB } = require('../database/db');
 
 // ---- Edit Workout Router ---- //
 
@@ -22,18 +23,61 @@ router.post('/', async function(req, res, next)  {
         }
 
         const exercises = [];
-        myWorkout.exercises.forEach(ex => {
+        let needsUpdate = false;
+
+        for (const ex of myWorkout.exercises) {
+            let uuid = ex.uuid;
+            let isAuthenticated = ex.isAuthenticated;
+
+            // If exercise doesn't have a UUID, create it in the exercise table
+            if (!uuid) {
+                try {
+                    const createdExercise = await exerciseDB.createExercise(
+                        ex.name,
+                        ex.exerciseType || null,
+                        ex.subtype || null
+                    );
+                    uuid = createdExercise.uuid;
+                    isAuthenticated = createdExercise.isAuthenticated;
+                    needsUpdate = true;
+                    console.log('Created exercise:', createdExercise);
+                    console.log('UUID from created exercise:', uuid);
+                } catch (error) {
+                    console.error('Error creating exercise:', error);
+                    // Continue without UUID if creation fails
+                }
+            }
+
             exercises.push({
                 workoutname: myWorkout.workout_name,
                 workoutID: myWorkout.id,
                 name: ex.name,
-                sets: ex.sets,                    // Array of {id, reps, weight, setNumber}
-                subtype: ex.subType,              // Note: subType (capital T)
+                sets: ex.sets,
+                subtype: ex.subType,
                 targetReps: ex.targetReps,
                 exerciseType: ex.exerciseType,
-                authenticated: ex.authenticated
+                authenticated: ex.authenticated,
+                uuid: uuid,
+                isAuthenticated: isAuthenticated
             });
-        });
+        }
+
+        console.log('Exercises before rendering:', exercises);
+
+        // Update workout with UUIDs if they were missing
+        if (needsUpdate) {
+            const updatedExercises = exercises.map(ex => ({
+                name: ex.name,
+                sets: ex.sets,
+                subType: ex.subtype,
+                targetReps: ex.targetReps,
+                exerciseType: ex.exerciseType,
+                authenticated: ex.authenticated,
+                uuid: ex.uuid,
+                isAuthenticated: ex.isAuthenticated
+            }));
+            await my_workoutsDB.updateWorkoutById(workoutID, myWorkout.workout_name, updatedExercises, myWorkout.rest_time);
+        }
 
         myWorkout.exercises = exercises;
 

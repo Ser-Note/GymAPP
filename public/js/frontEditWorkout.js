@@ -249,4 +249,58 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('An error occurred while saving the workout.');
         }
     });
+
+    // Exercise authentication handler
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('authenticateExerciseBtn')) {
+            e.preventDefault();
+            const button = e.target;
+            const exerciseUuid = button.getAttribute('data-exercise-uuid');
+            const exerciseName = button.getAttribute('data-exercise-name');
+            const isCurrentlyAuthenticated = button.classList.contains('btn-auth-active');
+            const newAuthStatus = !isCurrentlyAuthenticated;
+            
+            console.log('Exercise UUID:', exerciseUuid);
+            console.log('Exercise Name:', exerciseName);
+            console.log('Current Auth Status:', isCurrentlyAuthenticated);
+            console.log('New Auth Status:', newAuthStatus);
+            
+            (async () => {
+                try {
+                    const response = await fetch('/adminEditDash/authenticateExercise', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            exerciseUuid: exerciseUuid,
+                            isAuthenticated: newAuthStatus
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data?.success) {
+                        console.log('Exercise authentication updated');
+                        // Update button UI
+                        if (newAuthStatus) {
+                            button.classList.remove('btn-auth-pending');
+                            button.classList.add('btn-auth-active');
+                            button.textContent = '✓ Authenticated';
+                        } else {
+                            button.classList.remove('btn-auth-active');
+                            button.classList.add('btn-auth-pending');
+                            button.textContent = '✗ Pending';
+                        }
+                    } else {
+                        console.error('Failed to update exercise authentication:', data?.message);
+                        alert(data?.message || 'Failed to update exercise authentication.');
+                    }
+                } catch (err) {
+                    console.error('Request to authenticate exercise failed', err);
+                    alert('Unable to reach the server. Please try again.');
+                }
+            })();
+        }
+    });
 });

@@ -112,3 +112,33 @@ deleteButtons.forEach(button => {
         }
     });
 });
+
+var editWorkoutButtons = document.querySelectorAll('#btnEditWorkout');
+editWorkoutButtons.forEach(button => {
+    button.addEventListener('click', async () => {
+        const username = button.parentElement.querySelector('strong').innerText;
+        
+        try {
+            const response = await fetch('/manageUsers/editWorkouts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username })
+            });
+
+            const data = await response.json();
+
+            if (data?.success) {
+                console.log('Redirecting to admin edit dashboard');
+                window.location.href = data.redirectUrl;
+            } else {
+                console.error('Failed to load edit workouts page:', data?.message);
+                alert(data?.message || 'Failed to load edit workouts page. Please try again.');
+            }
+        } catch (err) {
+            console.error('Edit workouts request failed', err);
+            alert('Unable to reach the server. Please try again.');
+        }
+    });
+});

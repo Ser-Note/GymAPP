@@ -81,6 +81,16 @@
                                 {{/each}}
                                 <button type="button" class="btn-add-set" data-exercise-index="{{@index}}">+ Add Set</button>
                             </div>
+                            
+                            {{#if ../user.isAdmin}}
+                                <div class="exercise-auth-section">
+                                    {{#if this.isAuthenticated}}
+                                        <button type="button" class="btn-auth-active authenticateExerciseBtn" data-exercise-uuid="{{this.uuid}}" data-exercise-name="{{this.name}}">✓ Authenticated</button>
+                                    {{else}}
+                                        <button type="button" class="btn-auth-pending authenticateExerciseBtn" data-exercise-uuid="{{this.uuid}}" data-exercise-name="{{this.name}}">✗ Pending</button>
+                                    {{/if}}
+                                </div>
+                            {{/if}}
                         </div>
                     {{/each}}
                     

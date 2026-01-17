@@ -143,4 +143,30 @@ const {userDB} = require('../database/db');
         }
     });
 
+    router.post('/editWorkouts', async function(req, res, next) {
+        if(!req.session || !req.session.username)
+        {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
+        }
+        else
+        {
+            const isAdmin = await userDB.getIsAdmin(req.session.username);
+            if(!isAdmin)
+            {
+                return res.status(403).json({ success: false, message: 'Forbidden' });
+            }
+            else
+            {
+                if(!req.body || !req.body.username)
+                {
+                    return res.status(400).json({ success: false, message: 'Bad Request' });
+                }
+                else
+                {
+                    return res.status(200).json({ success: true, redirectUrl: '/adminEditDash?username=' + encodeURIComponent(req.body.username) });
+                }
+            }
+        }
+    });
+
 module.exports = router;

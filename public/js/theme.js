@@ -89,13 +89,18 @@ function setWinterTheme() {
     // Add snowflake animation
     createFallingEffect('❄');
 
-    // Show polar bear mascot
-    document.getElementById('winterBear').style.display = 'block';
+    // Show polar bear mascot if it exists
+    const winterBear = document.getElementById('winterBear');
+    if (!winterBear) {
+        return; // Element doesn't exist, exit gracefully
+    }
+
+    winterBear.style.display = 'block';
 
     // Animate polar bear hand waving
-    const winterBear = document.getElementById('winterBear');
     winterBear.addEventListener('load', () => {
         const svgDoc = winterBear.contentDocument;
+        if (!svgDoc) return; // Ensure content document is available
         const hand = svgDoc.getElementById('hand');
         if (hand) {
             let angle = 0;
