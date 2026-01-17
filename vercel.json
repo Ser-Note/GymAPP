@@ -1,7 +1,4 @@
 {
-    "version": 2,
-    "buildCommand": "npm install",
-    "env": {
-    "NODE_ENV": "production"
-  }
+  "version": 2,
+    "buildCommand": "npm install"
 }

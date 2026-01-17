@@ -5,76 +5,6 @@ const express= require('express');
 const path = require('path');
 const axios = require('axios');
 const session = require('express-session');
-const supabase = require('./config/supabase');
-
-// ---- Session Store for Vercel ---- //
-class SupabaseSessionStore extends session.Store {
-    async get(sid, callback) {
-        try {
-            console.log('Session Store: Retrieving session', sid);
-            const { data, error } = await supabase
-                .from('sessions')
-                .select('sess')
-                .eq('sid', sid)
-                .single();
-            
-            if (error && error.code !== 'PGRST116') {
-                console.error('Session Store Error on get:', error);
-                throw error;
-            }
-            if (data) {
-                console.log('Session Store: Retrieved session data');
-                callback(null, JSON.parse(data.sess));
-            } else {
-                console.log('Session Store: No session found');
-                callback(null, null);
-            }
-        } catch (err) {
-            console.error('Session Store Exception on get:', err);
-            callback(err);
-        }
-    }
-
-    async set(sid, sess, callback) {
-        try {
-            console.log('Session Store: Saving session', sid);
-            const { error } = await supabase
-                .from('sessions')
-                .upsert(
-                    {
-                        sid: sid,
-                        sess: JSON.stringify(sess),
-                        expire: new Date(Date.now() + 24 * 60 * 60 * 1000)
-                    },
-                    { onConflict: 'sid' }
-                );
-            
-            if (error) {
-                console.error('Session Store Error on set:', error);
-                throw error;
-            }
-            console.log('Session Store: Saved successfully');
-            callback();
-        } catch (err) {
-            console.error('Session Store Exception:', err);
-            callback(err);
-        }
-    }
-
-    async destroy(sid, callback) {
-        try {
-            const { error } = await supabase
-                .from('sessions')
-                .delete()
-                .eq('sid', sid);
-            
-            if (error) throw error;
-            callback();
-        } catch (err) {
-            callback(err);
-        }
-    }
-}
 
 // ---- Initialize Routes ---- //
 
@@ -94,14 +24,12 @@ const workoutRouter = require('./routes/backWorkingout.js');
 
 const app = express();
 
-
 app.set('trust proxy', 1);
 
 app.use(session({
-    store: new SupabaseSessionStore(),
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { 
         secure: true,
         httpOnly: true,
@@ -162,12 +90,6 @@ app.use('/adminEditDash', adminEditDashRouter);
 app.use('/workingout', workoutRouter);
 // ---- Start Server ---- //
 
-const PORT = process.env.PORT || 3000;
-
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
-}
-
-module.exports = app;
+app.listen(3000, () => {
+    console.log(`Server is running on http://localhost:3000`);
+});
