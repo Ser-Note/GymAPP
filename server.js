@@ -32,12 +32,14 @@ class SupabaseSessionStore extends session.Store {
         try {
             const { error } = await supabase
                 .from('sessions')
-                .upsert({
-                    sid: sid,
-                    sess: JSON.stringify(sess),
-                    expire: new Date(Date.now() + 24 * 60 * 60 * 1000)
-                })
-                .eq('sid', sid);
+                .upsert(
+                    {
+                        sid: sid,
+                        sess: JSON.stringify(sess),
+                        expire: new Date(Date.now() + 24 * 60 * 60 * 1000)
+                    },
+                    { onConflict: 'sid' }
+                );
             
             if (error) throw error;
             callback();
