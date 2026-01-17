@@ -1,4 +1,3 @@
-
 // ---- require modules ---- //
 
 require('dotenv').config();
@@ -145,8 +144,14 @@ app.use('/adminEditDash', adminEditDashRouter);
 app.use('/workingout', workoutRouter);
 // ---- Start Server ---- //
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
-})
+const PORT = process.env.PORT || 3000;
+
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}
+
+module.exports = app;
 
 

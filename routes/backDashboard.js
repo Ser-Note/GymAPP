@@ -11,7 +11,7 @@ const {userDB} = require('../database/db');
         {
             return res.status(401).json({ success: false, message: req.session.username + ' is Unauthorized' });
         }
-        else
+        else 
         {
             const isAuthenticated = await userDB.getIsAuthenticated(req.session.username);
             const isAdmin = await userDB.getIsAdmin(req.session.username);
