@@ -44,11 +44,11 @@ const {userDB} = require('../database/db');
             {
                 if(!req.body || !req.body.buttonId)
                 {
-                    return res.status(400).json({ success: false, message: 'Bad Request' });
+                    return res.status(400).json({ success: false, message: 'Bad Request: Missing buttonId' });
                 }
                 else if(!req.body.username)
                 {
-                    return res.status(400).json({ success: false, message: 'Bad Request' });
+                    return res.status(400).json({ success: false, message: 'Bad Request: Missing username' });
                 }
                 else
                 {
@@ -64,7 +64,7 @@ const {userDB} = require('../database/db');
                     }
                     else
                     {
-                        return res.status(400).json({ success: false, message: 'Bad Request' });
+                        return res.status(400).json({ success: false, message: 'Bad Request: Invalid buttonId' });
                     }
                     return res.status(200).json({ success: true, message: 'User authentication status updated' });
                 }
