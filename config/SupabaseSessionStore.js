@@ -5,7 +5,7 @@ class SupabaseSessionStore extends session.Store {
   constructor(options = {}) {
     super();
     this.supabase = options.supabase || supabase;
-    this.tableName = options.tableName || 'session';
+    this.tableName = options.tableName || 'sessions';
     this.ttl = options.ttl || 24 * 60 * 60 * 1000; // default 24 hours
   }
 
@@ -13,7 +13,7 @@ class SupabaseSessionStore extends session.Store {
     try {
       const { data, error } = await this.supabase
         .from(this.tableName)
-        .select('session')
+        .select('sessions')
         .eq('sid', sid)
         .maybeSingle();
 
@@ -22,7 +22,7 @@ class SupabaseSessionStore extends session.Store {
       if (!data) return callback(null, null);
 
       // Return the JSON session object
-      return callback(null, data.session || null);
+      return callback(null, data.sessions || null);
     } catch (err) {
       return callback(err);
     }
@@ -31,7 +31,7 @@ class SupabaseSessionStore extends session.Store {
   async set(sid, sess, callback) {
     try {
       const expires = this._computeExpiry(sess);
-      const payload = { sid, session: sess, expire: expires.toISOString() };
+      const payload = { sid, sessions: sess, expire: expires.toISOString() };
 
       const { error } = await this.supabase
         .from(this.tableName)
@@ -63,7 +63,7 @@ class SupabaseSessionStore extends session.Store {
       const expires = this._computeExpiry(sess);
       const { error } = await this.supabase
         .from(this.tableName)
-        .update({ expire: expires.toISOString(), session: sess })
+        .update({ expire: expires.toISOString(), sessions: sess })
         .eq('sid', sid);
 
       if (error) return callback(error);
