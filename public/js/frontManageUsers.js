@@ -26,13 +26,14 @@ authenticatedButtons.forEach(button => {
         }
 
          try {
+                const buttonId = button.classList.contains('btnAuthActive') ? 'btnAuthActive' : 'btnAuthPending';
                 const response = await fetch('/manageUsers/authentication', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
-                    buttonClass: button.className,
+                    buttonId: buttonId,
                     username: button.closest('.user-item').querySelector('strong').innerText
                  })
             });

@@ -42,18 +42,22 @@ const {userDB} = require('../database/db');
             }
             else
             {
-                if(!req.body || !req.body.buttonId)
+                if(!req.body)
                 {
+                    console.error('Missing request body');
+                    return res.status(400).json({ success: false, message: 'Bad Request: Missing body' });
+                }
+                if(!req.body.buttonId)
+                {
+                    console.error('Missing buttonId in request body:', req.body);
                     return res.status(400).json({ success: false, message: 'Bad Request: Missing buttonId' });
                 }
-                else if(!req.body.username)
+                if(!req.body.username)
                 {
+                    console.error('Missing username in request body');
                     return res.status(400).json({ success: false, message: 'Bad Request: Missing username' });
                 }
-                else
-                {
-                    const buttonId = req.body.buttonId;
-
+                const buttonId = req.body.buttonId;
                     if(buttonId === 'btnAuthActive')
                     {
                         await userDB.setIsAuthenticated(req.body.username, true);
@@ -69,7 +73,6 @@ const {userDB} = require('../database/db');
                     return res.status(200).json({ success: true, message: 'User authentication status updated' });
                 }
             }
-        }
     });
 
     router.post('/admin', async function(req, res, next) {
