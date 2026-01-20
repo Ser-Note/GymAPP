@@ -29,7 +29,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(session({
-    store: new SupabaseSessionStore({ supabase, tableName: 'session', ttl: 24 * 60 * 60 * 1000 }),
+    store: new SupabaseSessionStore({ supabase, tableName: 'sessions', ttl: 24 * 60 * 60 * 1000 }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
