@@ -145,11 +145,57 @@ function completeSet(exIdx, setIdx) {
   const ex = currentWorkout.exercises[exIdx];
   const set = ex.sets[setIdx];
   set.completedReps = reps;
-  // Refresh detail and overview summaries
-  openExerciseDetail(exIdx);
-  renderOverview();
-  // Optional: start rest
-  startRestTimer();
+  
+  // Check if user hit target reps
+  if (reps >= ex.targetReps) {
+    // Show weight recommendation
+    showWeightRecommendation(exIdx, setIdx, set);
+  } else {
+    // No weight rec; check if more sets remain
+    const nextSetIdx = setIdx + 1;
+    if (nextSetIdx < ex.sets.length) {
+      // More sets; show rest then return to detail
+      startRestTimerAndReturn(exIdx);
+    } else {
+      // Exercise done; refresh overview and detail
+      renderOverview();
+      openExerciseDetail(exIdx);
+    }
+  }
+}
+
+function showWeightRecommendation(exIdx, setIdx, set) {
+  const ex = currentWorkout.exercises[exIdx];
+  const suggestedIncrease = 5;
+  document.getElementById('suggestedWeight').textContent = `+${suggestedIncrease} lbs`;
+  document.getElementById('recommendationText').textContent = 
+    `Excellent! You hit your target of ${ex.targetReps} reps. Consider increasing the weight!`;
+  document.getElementById('customWeightIncrease').value = '';
+
+  document.getElementById('acceptWeightBtn').onclick = () => {
+    const customIncrease = parseInt(document.getElementById('customWeightIncrease').value) || suggestedIncrease;
+    set.weight += customIncrease;
+    proceedAfterWeightRec(exIdx, setIdx);
+  };
+
+  document.getElementById('skipWeightBtn').onclick = () => {
+    proceedAfterWeightRec(exIdx, setIdx);
+  };
+
+  showScreen('weightScreen');
+}
+
+function proceedAfterWeightRec(exIdx, setIdx) {
+  const ex = currentWorkout.exercises[exIdx];
+  const nextSetIdx = setIdx + 1;
+  if (nextSetIdx < ex.sets.length) {
+    // More sets remain; show rest then return to exercise detail
+    startRestTimerAndReturn(exIdx);
+  } else {
+    // Exercise done; refresh overview and return to exercise detail
+    renderOverview();
+    openExerciseDetail(exIdx);
+  }
 }
 
 backToOverviewBtn.addEventListener('click', () => {
@@ -201,6 +247,42 @@ function startRestTimer() {
       enableNextButton();
     }
   }, 1000);
+}
+
+function startRestTimerAndReturn(exIdx) {
+  currentReminderIndex = 0;
+  timeRemaining = (currentWorkout.restTime || 0) * 60; // seconds
+  if (!timeRemaining || timeRemaining <= 0) {
+    // No rest configured; go straight back to detail
+    renderOverview();
+    openExerciseDetail(exIdx);
+    return;
+  }
+  showScreen('restScreen');
+  updateTimerDisplay();
+  updateReminder();
+
+  carouselInterval = setInterval(() => {
+    currentReminderIndex = (currentReminderIndex + 1) % reminders.length;
+    updateReminder();
+  }, 5000);
+
+  timerInterval = setInterval(() => {
+    timeRemaining--;
+    updateTimerDisplay();
+    if (timeRemaining <= 0) {
+      clearInterval(timerInterval);
+      enableNextButton();
+    }
+  }, 1000);
+
+  // Store the exercise index so we can return to it
+  nextBtn.onclick = () => {
+    clearInterval(timerInterval);
+    clearInterval(carouselInterval);
+    renderOverview();
+    openExerciseDetail(exIdx);
+  };
 }
 
 function updateTimerDisplay() {
