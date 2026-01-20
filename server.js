@@ -91,6 +91,11 @@ app.use('/editDashboard', editDashboardRouter);
 app.use('/editWorkouts', editWorkoutsRouter);
 app.use('/adminEditDash', adminEditDashRouter);
 app.use('/workingout', workoutRouter);
+// Quick session test route
+app.get('/session-test', (req, res) => {
+    req.session.views = (req.session.views || 0) + 1;
+    res.json({ sid: req.sessionID, views: req.session.views });
+});
 // ---- Start Server ---- //
 
 app.listen(3000, () => {
