@@ -28,13 +28,15 @@ const app = express();
 
 app.set('trust proxy', 1);
 
+const isProd = process.env.NODE_ENV === 'production';
+
 app.use(session({
     store: new SupabaseSessionStore({ supabase, tableName: 'sessions', ttl: 24 * 60 * 60 * 1000 }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: true,
+        secure: isProd,
         httpOnly: true,
         sameSite: 'none',
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
@@ -95,6 +97,15 @@ app.use('/workingout', workoutRouter);
 app.get('/session-test', (req, res) => {
     req.session.views = (req.session.views || 0) + 1;
     res.json({ sid: req.sessionID, views: req.session.views });
+});
+// Global error handler for cleaner 500s
+app.use((err, req, res, next) => {
+    console.error('Unhandled error:', {
+        message: err && err.message,
+        name: err && err.name,
+        stack: isProd ? undefined : err && err.stack
+    });
+    res.status(500).json({ error: 'Internal Server Error' });
 });
 // ---- Start Server ---- //
 
