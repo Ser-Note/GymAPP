@@ -166,6 +166,7 @@ function completeSet(exIdx, setIdx) {
 
 function showWeightRecommendation(exIdx, setIdx, set) {
   const ex = currentWorkout.exercises[exIdx];
+  const nextSetIdx = setIdx + 1;
   const suggestedIncrease = 5;
   document.getElementById('suggestedWeight').textContent = `+${suggestedIncrease} lbs`;
   document.getElementById('recommendationText').textContent = 
@@ -174,7 +175,10 @@ function showWeightRecommendation(exIdx, setIdx, set) {
 
   document.getElementById('acceptWeightBtn').onclick = () => {
     const customIncrease = parseInt(document.getElementById('customWeightIncrease').value) || suggestedIncrease;
-    set.weight += customIncrease;
+    // Update the NEXT set's weight, not the current one
+    if (nextSetIdx < ex.sets.length) {
+      ex.sets[nextSetIdx].weight += customIncrease;
+    }
     proceedAfterWeightRec(exIdx, setIdx);
   };
 
