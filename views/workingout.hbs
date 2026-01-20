@@ -13,15 +13,37 @@
     <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/navbar.css">
     <link rel="stylesheet" href="/css/workout.css">
-    <script src="./js/frontWorkout.js" defer></script>
+    <script src="/js/frontWorkoutOverview.js" defer></script>
     <script src="/js/theme.js" defer></script>
 </head>
 <body>
     <div id="winterSnowContainer"></div>
 
     <main class="workout-container">
+        <!-- Overview Screen -->
+        <div id="overviewScreen" class="screen active">
+            <div class="exercise-card">
+                <h1 class="exercise-title">Workout Overview</h1>
+                <ul id="exerciseList" class="exercise-list"></ul>
+                <div class="rest-actions">
+                    <button id="completeWorkoutBtn" class="btn btn-primary">Complete Workout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise Detail -->
+        <div id="exerciseDetail" class="screen">
+            <div class="exercise-card">
+                <h2 id="detailExerciseName" class="exercise-title">Select an exercise</h2>
+                <div id="setList" class="set-list"></div>
+                <div class="rest-actions">
+                    <button id="backToOverviewBtn" class="btn btn-secondary">Back to Overview</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Exercise Screen -->
-        <div id="exerciseScreen" class="screen active">
+        <div id="exerciseScreen" class="screen">
             <div class="exercise-card">
                 <h1 id="exerciseName" class="exercise-title">Exercise Name</h1>
                 
