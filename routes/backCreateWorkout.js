@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { userDB } = require('../database/db');
-const { my_workoutsDB } = require('../database/db');
-const { exerciseDB } = require('../database/db');
+const { userDB, my_workoutsDB, exerciseTemplatesDB, workoutExercisesDB } = require('../database/db');
 
     // ---- User My Workouts Router ---- //
 
@@ -34,31 +32,56 @@ router.post('/create', async function(req, res, next) {
         console.log('Received workout data:', workoutData);
         const user = await userDB.getUserByName(req.session.username);
         try {
-            // Create exercises in the exercise table and get their UUIDs
-            const exercisesWithUuids = [];
+            // First, ensure all exercise templates exist or create them
+            const exercisesToAdd = [];
             
             for (const exercise of workoutData.exercises) {
-                const createdExercise = await exerciseDB.createExercise(
-                    exercise.name,
-                    exercise.targetMuscle || null,
-                    exercise.specificMuscle || null
-                );
+                let templateId = exercise.templateId;
                 
-                exercisesWithUuids.push({
-                    ...exercise,
-                    uuid: createdExercise.uuid
+                // If no templateId provided, create a new template
+                if (!templateId) {
+                    const template = await exerciseTemplatesDB.createTemplate(
+                        exercise.name,
+                        exercise.exerciseType || exercise.targetMuscle || null,
+                        exercise.subType || exercise.specificMuscle || null,
+                        user.id
+                    );
+                    templateId = template.id;
+                }
+                
+                // Count the number of sets to determine plannedSets
+                const numSets = exercise.sets ? exercise.sets.length : exercise.targetSets || exercise.sets || 3;
+                
+                exercisesToAdd.push({
+                    templateId: templateId,
+                    plannedSets: numSets,
+                    plannedReps: exercise.targetReps || exercise.reps || '10',
+                    notes: exercise.notes || null
                 });
             }
 
+            // Create the workout (no longer storing exercises in JSONB)
             const newWorkout = await my_workoutsDB.addWorkout(
                 user.id,
                 user.user_name,
                 workoutData.workoutName,
-                exercisesWithUuids,
+                null, // No exercises in JSONB anymore
                 workoutData.restTime
             );
+
+            // Link exercises to the workout via workout_exercises table
+            await workoutExercisesDB.addExercisesToWorkout(
+                newWorkout.id,
+                user.id,
+                exercisesToAdd
+            );
+
             console.log('Workout saved:', newWorkout);
-            res.status(200).json({ success: true, message: 'Workout created successfully' });
+            res.status(200).json({ 
+                success: true, 
+                message: 'Workout created successfully',
+                workoutId: newWorkout.id
+            });
         } catch (error) {
             console.error('Error saving workout:', error);
             res.status(500).json({ success: false, message: 'Error creating workout' });

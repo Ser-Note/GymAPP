@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { userDB } = require('../database/db');
-const { my_workoutsDB } = require('../database/db');
-const { exerciseDB } = require('../database/db');
+const { userDB, my_workoutsDB, exerciseTemplatesDB } = require('../database/db');
 
 // ---- Admin Edit Dashboard Router ---- //
 
@@ -142,7 +140,7 @@ router.post('/authenticateExercise', async function(req, res, next) {
             return res.status(400).json({ success: false, message: 'Exercise UUID is required' });
         }
 
-        const updatedExercise = await exerciseDB.updateExerciseAuthentication(exerciseUuid, isAuthenticated, subType, exerciseType);
+        const updatedExercise = await exerciseTemplatesDB.updateTemplateStatus(exerciseUuid, isAuthenticated);
         
         if(!updatedExercise) {
             return res.status(404).json({ success: false, message: 'Exercise not found' });

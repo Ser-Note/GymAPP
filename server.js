@@ -22,6 +22,7 @@ const editDashboardRouter = require('./routes/backEditDash.js');
 const editWorkoutsRouter = require('./routes/backEditWorkout.js');
 const adminEditDashRouter = require('./routes/backAdminEditDash.js');
 const workoutRouter = require('./routes/backWorkingout.js');
+const workoutSessionRouter = require('./routes/backWorkoutSession.js');
 // ---- Initialize express ---- //
 
 const app = express();
@@ -93,6 +94,7 @@ app.use('/editDashboard', editDashboardRouter);
 app.use('/editWorkouts', editWorkoutsRouter);
 app.use('/adminEditDash', adminEditDashRouter);
 app.use('/workingout', workoutRouter);
+app.use('/workoutSession', workoutSessionRouter);
 
 // Global error handler for cleaner 500s
 app.use((err, req, res, next) => {

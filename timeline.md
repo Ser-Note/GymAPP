@@ -1,6 +1,52 @@
 # Gym App Development Timeline
 
+## January 21, 2026
+
+### Database Schema Redesign: Normalized Exercise & Session Tracking
+- **Replaced flat exercise table** with normalized structure for exercise progress tracking
+- **New tables created**:
+  - `exercise_templates` - Master exercise definitions (replaces old exercise table)
+  - `workout_exercises` - Junction table linking exercises to specific workouts with set/rep config
+  - `workout_sessions` - Records each time a user starts a workout
+  - `exercise_logs` - Logs individual sets with reps, weight, notes
+- **RLS (Row Level Security)** policies added to all tables for data isolation
+- **Solves**:
+  - Users can now use same exercise in multiple workouts with different set/rep counts
+  - Complete exercise performance history with last performance lookup
+  - Easier admin exercise approval via `is_public` field
+  - Supports progressive overload tracking across all workouts
+
+### Backend Route Updates
+- **`backCreateWorkout.js`** - Creates exercise templates on-demand, links via `workout_exercises`
+- **`backMyWorkouts.js`** - Fetches workouts with exercise joins, supports both new/legacy structures
+- **`backEditWorkout.js`** - Updated to use `exerciseTemplatesDB`, fixed logging typo
+- **`backAdminEditDash.js`** - Updated to use `exerciseTemplatesDB.updateTemplateStatus()`
+- **`backWorkoutSession.js`** (new) - 6 endpoints for session management:
+  - POST `/workoutSession/start` - Begin workout
+  - POST `/workoutSession/logSet` - Log completed set
+  - GET `/workoutSession/lastPerformance` - Get previous performance
+  - POST `/workoutSession/complete` - End workout
+  - GET `/workoutSession/history` - User's workout history
+  - GET `/workoutSession/session/:id` - Detailed session with all logs
+- **`server.js`** - Registered new workoutSessionRouter
+
+### Database Layer (db.js)
+- **Added 4 new DB operation objects**:
+  - `exerciseTemplatesDB` - Template CRUD + public status updates
+  - `workoutExercisesDB` - Exercise-workout linking + fetching with joins
+  - `workoutSessionsDB` - Session lifecycle management
+  - `exerciseLogsDB` - Set logging + performance history queries
+- **Updated `addWorkout()`** - Now includes `uses_new_structure` flag for backward compatibility
+- **Backward compatibility** - Old `exerciseDB` kept as compatibility layer
+
+### Field Name Handling
+- Updated `backCreateWorkout.js` to handle both field naming conventions:
+  - `exerciseType` / `targetMuscle` (frontend)
+  - `targetMuscle` / `specificMuscle` (database)
+- Set counting fixed to count `exercise.sets.length` instead of using fallback values
+
 ## January 17, 2026
+
 
 ### Added Admin Exercise Authentication System
 - **Created exercise database table** with fields: uuid (id), exercise, targetMuscle, specificMuscle, isAuthenticated, created_at

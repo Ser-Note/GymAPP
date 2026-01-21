@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { userDB } = require('../database/db');
-const { my_workoutsDB } = require('../database/db');
+const { userDB, my_workoutsDB, workoutExercisesDB } = require('../database/db');
 
     // ---- User My Workouts Router ---- //
 
@@ -14,29 +13,36 @@ const { my_workoutsDB } = require('../database/db');
         {
             const user = await userDB.getUserByName(req.session.username);
             const workouts = await my_workoutsDB.getWorkoutsByUsername(user.user_name);
-            const exercises = [];
-        
-            workouts.forEach(workout => {
-            if (workout.exercises && Array.isArray(workout.exercises)) {
-                const workoutExercises = workout.exercises.map(ex => ({
-                    workoutname: workout.workout_name,
-                    workoutID: workout.id,
-                    name: ex.name,
-                    sets: ex.sets,                    // Array of {id, reps, weight, setNumber}
-                    subtype: ex.subType,              // Note: subType (capital T)
-                    targetReps: ex.targetReps,
-                    targetSets: ex.targetSets,
-                    exerciseType: ex.exerciseType,
-                    authenticated: ex.authenticated
-                }));
-                exercises.push(...workoutExercises);
-            }
-        });
+            
+            // Fetch exercises for each workout from the new structure
+            const workoutsWithExercises = await Promise.all(
+                workouts.map(async (workout) => {
+                    // Check if workout uses new structure
+                    if (workout.uses_new_structure) {
+                        const exercises = await workoutExercisesDB.getWorkoutExercises(workout.id, user.id);
+                        return {
+                            ...workout,
+                            exercisesData: exercises.map(we => ({
+                                id: we.id,
+                                name: we.exercise_templates.exercise_name,
+                                targetMuscle: we.exercise_templates.target_muscle,
+                                specificMuscle: we.exercise_templates.specific_muscle,
+                                plannedSets: we.planned_sets,
+                                plannedReps: we.planned_reps,
+                                notes: we.notes
+                            }))
+                        };
+                    } else {
+                        // Legacy JSONB structure
+                        return workout;
+                    }
+                })
+            );
        
             res.render('myworkouts', {
                 title: 'My Workouts',
                 user: user,
-                workouts: workouts
+                workouts: workoutsWithExercises
             });
 
         }
@@ -54,9 +60,29 @@ const { my_workoutsDB } = require('../database/db');
                 return res.status(400).json({ success: false, message: 'Workout ID required' });
             }
 
+            const user = await userDB.getUserByName(req.session.username);
             const workout = await my_workoutsDB.getWorkoutById(workoutId);
             if (!workout) {
                 return res.status(404).json({ success: false, message: 'Workout not found' });
+            }
+
+            let exercises = [];
+            
+            // Check if using new structure
+            if (workout.uses_new_structure) {
+                const workoutExercises = await workoutExercisesDB.getWorkoutExercises(workoutId, user.id);
+                exercises = workoutExercises.map(we => ({
+                    id: we.id,
+                    name: we.exercise_templates.exercise_name,
+                    targetMuscle: we.exercise_templates.target_muscle,
+                    specificMuscle: we.exercise_templates.specific_muscle,
+                    plannedSets: we.planned_sets,
+                    plannedReps: we.planned_reps,
+                    notes: we.notes
+                }));
+            } else {
+                // Legacy JSONB structure
+                exercises = workout.exercises || [];
             }
 
             return res.status(200).json({ 
@@ -64,8 +90,9 @@ const { my_workoutsDB } = require('../database/db');
                 workout: {
                     id: workout.id,
                     name: workout.workout_name,
-                    exercises: workout.exercises || [],
-                    restTime: workout.rest_time || 3
+                    exercises: exercises,
+                    restTime: workout.rest_time || 3,
+                    usesNewStructure: workout.uses_new_structure
                 }
             });
         } catch (err) {

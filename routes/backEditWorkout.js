@@ -1,8 +1,6 @@
 express = require('express');
 var router = express.Router();
-const { userDB } = require('../database/db');
-const { my_workoutsDB } = require('../database/db');
-const { exerciseDB } = require('../database/db');
+const { userDB, my_workoutsDB, exerciseTemplatesDB } = require('../database/db');
 
 // ---- Edit Workout Router ---- //
 
@@ -29,19 +27,20 @@ router.post('/', async function(req, res, next)  {
             let uuid = ex.uuid;
             let isAuthenticated = ex.isAuthenticated;
 
-            // If exercise doesn't have a UUID, create it in the exercise table
+            // If exercise doesn't have a UUID, create it in the exercise_templates table
             if (!uuid) {
                 try {
-                    const createdExercise = await exerciseDB.createExercise(
+                    const createdTemplate = await exerciseTemplatesDB.createTemplate(
                         ex.name,
                         ex.exerciseType || null,
-                        ex.subtype || null
+                        ex.subtype || null,
+                        username.id
                     );
-                    uuid = createdExercise.uuid;
-                    isAuthenticated = createdExercise.isAuthenticated;
+                    uuid = createdTemplate.id;
+                    isAuthenticated = createdTemplate.is_public;
                     needsUpdate = true;
-                    console.log('Created exercise:', createdExercise);
-                    console.log('UUID from created exercise:', uuid);
+                    console.log('Created template:', createdTemplate);
+                    console.log('UUID from created template:', uuid);
                 } catch (error) {
                     console.error('Error creating exercise:', error);
                     // Continue without UUID if creation fails
