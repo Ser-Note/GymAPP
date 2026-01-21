@@ -56,4 +56,13 @@ router.post('/update', async function(req, res, next) {
     }
 });
 
+router.get('/logout', function(req, res, next) {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Logout failed' });
+        }
+        res.redirect('/');
+    });
+});
+
 module.exports = router;
