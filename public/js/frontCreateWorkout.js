@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function fetchAvailableExercises() {
         try {
-            const response = await fetch('/createWorkout/getExercises');
+            const response = await fetch('/createWorkouts/getExercises');
             const data = await response.json();
             
             if (data.success) {
