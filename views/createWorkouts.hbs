@@ -57,17 +57,21 @@
 					<!-- Section 3: Exercises -->
 					<div class="form-section">
 						<h2>Exercises</h2>
-						<p class="exercise-note">Note: Your exercises will be pending admin authentication before they're fully active.</p>
+						<p class="exercise-note">Browse public exercises or create your own custom exercise.</p>
                     
 						<div class="form-group">
-							<label for="exerciseInput">Exercise Name:</label>
+							<button type="button" id="browseExercisesBtn" class="btn-browse">Browse Available Exercises</button>
+						</div>
+
+						<div class="form-group">
+							<label for="exerciseInput">Or Create Custom Exercise:</label>
 							<input 
 								type="text" 
 								id="exerciseInput" 
 								name="exerciseInput" 
 								placeholder="e.g., Bench Press, Barbell Curl, Deadlifts"
 							>
-							<button type="button" id="addExerciseBtn" class="btn-add">Add Exercise</button>
+							<button type="button" id="addExerciseBtn" class="btn-add">Add Custom Exercise</button>
 						</div>
 
 						<!-- Exercises Container -->
@@ -95,6 +99,44 @@
 					</div>
 				</div>
 			</form>
+	</div>
+
+	<!-- Exercise Browser Modal -->
+	<div id="exerciseBrowserModal" class="modal" aria-labelledby="exerciseBrowserTitle" role="dialog" aria-modal="true">
+		<div class="modal-content exercise-browser-modal">
+			<div class="modal-header">
+				<h2 id="exerciseBrowserTitle">Browse Exercises</h2>
+				<button id="closeExerciseBrowserBtn" class="btn-close" aria-label="Close exercise browser">&times;</button>
+			</div>
+			<div class="modal-body exercise-browser-body">
+				<div class="browser-controls">
+					<input 
+						type="text" 
+						id="exerciseBrowserSearch" 
+						placeholder="Search exercises..." 
+						class="search-input"
+						aria-label="Search exercises"
+					>
+					<select id="exerciseBrowserFilter" class="filter-select" aria-label="Filter by muscle group">
+						<option value="">All Muscle Groups</option>
+						<option value="Chest">Chest</option>
+						<option value="Back">Back</option>
+						<option value="Shoulders">Shoulders</option>
+						<option value="Biceps">Biceps</option>
+						<option value="Triceps">Triceps</option>
+						<option value="Legs">Legs</option>
+						<option value="Abs">Abs</option>
+						<option value="Forearms">Forearms</option>
+					</select>
+				</div>
+				<ul id="exerciseBrowserList" class="exercise-browser-list">
+					<!-- Exercises will be populated here -->
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<button id="cancelBrowserBtn" class="btn btn-secondary">Cancel</button>
+			</div>
+		</div>
 	</div>
 
 	<!-- Overview Modal -->

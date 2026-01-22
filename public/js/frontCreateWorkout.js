@@ -23,6 +23,133 @@ document.addEventListener('DOMContentLoaded', function() {
     const wizardNext = document.getElementById('wizardNext');
     const wizardBack = document.getElementById('wizardBack');
 
+    // ===== Exercise Browser =====
+    const browseExercisesBtn = document.getElementById('browseExercisesBtn');
+    const exerciseBrowserModal = document.getElementById('exerciseBrowserModal');
+    const closeExerciseBrowserBtn = document.getElementById('closeExerciseBrowserBtn');
+    const cancelBrowserBtn = document.getElementById('cancelBrowserBtn');
+    const exerciseBrowserSearch = document.getElementById('exerciseBrowserSearch');
+    const exerciseBrowserFilter = document.getElementById('exerciseBrowserFilter');
+    let allAvailableExercises = [];
+
+    browseExercisesBtn.addEventListener('click', openExerciseBrowser);
+    closeExerciseBrowserBtn.addEventListener('click', closeExerciseBrowser);
+    cancelBrowserBtn.addEventListener('click', closeExerciseBrowser);
+
+    exerciseBrowserSearch.addEventListener('input', filterExercises);
+    exerciseBrowserFilter.addEventListener('change', filterExercises);
+
+    function openExerciseBrowser() {
+        exerciseBrowserModal.classList.add('active');
+        exerciseBrowserSearch.value = '';
+        exerciseBrowserFilter.value = '';
+        fetchAvailableExercises();
+    }
+
+    function closeExerciseBrowser() {
+        exerciseBrowserModal.classList.remove('active');
+    }
+
+    async function fetchAvailableExercises() {
+        try {
+            const response = await fetch('/createWorkout/getExercises');
+            const data = await response.json();
+            
+            if (data.success) {
+                allAvailableExercises = data.exercises || [];
+                renderAvailableExercises(allAvailableExercises);
+            } else {
+                alert('Failed to fetch exercises');
+            }
+        } catch (err) {
+            console.error('Error fetching exercises:', err);
+            alert('Unable to fetch exercises');
+        }
+    }
+
+    function renderAvailableExercises(exercises) {
+        const exerciseBrowserList = document.getElementById('exerciseBrowserList');
+        exerciseBrowserList.innerHTML = '';
+
+        if (!exercises || exercises.length === 0) {
+            exerciseBrowserList.innerHTML = '<li class="no-exercises-found">No exercises found</li>';
+            return;
+        }
+
+        exercises.forEach(exercise => {
+            const li = document.createElement('li');
+            li.className = 'exercise-browser-item';
+            li.innerHTML = `
+                <div class="exercise-browser-info">
+                    <div class="exercise-browser-name">${exercise.exercise_name}</div>
+                    <div class="exercise-browser-muscle">
+                        <span class="exercise-browser-muscle-tag">${exercise.target_muscle}</span>
+                        ${exercise.specific_muscle ? `<span class="exercise-browser-muscle-tag">${exercise.specific_muscle}</span>` : ''}
+                    </div>
+                </div>
+                <button type="button" class="exercise-browser-select-btn" data-exercise-id="${exercise.id}" data-exercise-name="${exercise.exercise_name}" data-target-muscle="${exercise.target_muscle}" data-specific-muscle="${exercise.specific_muscle || ''}">Select</button>
+            `;
+            exerciseBrowserList.appendChild(li);
+
+            // Add click handler to select button
+            const selectBtn = li.querySelector('.exercise-browser-select-btn');
+            selectBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                addExerciseFromBrowser(
+                    exercise.id,
+                    exercise.exercise_name,
+                    exercise.target_muscle,
+                    exercise.specific_muscle
+                );
+                closeExerciseBrowser();
+            });
+        });
+    }
+
+    function filterExercises() {
+        const searchQuery = exerciseBrowserSearch.value.toLowerCase();
+        const selectedMuscle = exerciseBrowserFilter.value;
+
+        const filtered = allAvailableExercises.filter(exercise => {
+            const nameMatch = exercise.exercise_name.toLowerCase().includes(searchQuery);
+            const muscleMatch = !selectedMuscle || exercise.target_muscle === selectedMuscle;
+            return nameMatch && muscleMatch;
+        });
+
+        renderAvailableExercises(filtered);
+    }
+
+    function addExerciseFromBrowser(templateId, exerciseName, targetMuscle, specificMuscle) {
+        // Check if exercise already added
+        if (workoutExercises.find(ex => ex.name.toLowerCase() === exerciseName.toLowerCase())) {
+            alert('This exercise is already in your plan. Add multiple sets to the existing exercise instead.');
+            return;
+        }
+
+        const exercise = {
+            id: Date.now(),
+            name: exerciseName,
+            templateId: templateId,
+            authenticated: true, // Exercises from library are already authenticated
+            exerciseType: targetMuscle,
+            subType: specificMuscle || '',
+            targetReps: 12,
+            collapsed: true,
+            sets: [
+                {
+                    id: 1,
+                    setNumber: 1,
+                    reps: '',
+                    weight: ''
+                }
+            ]
+        };
+
+        workoutExercises.push(exercise);
+        renderExercise(exercise);
+        switchToExercise(exercise.id);
+    }
+
     // Add exercise button click handler
     addExerciseBtn.addEventListener('click', addExercise);
 

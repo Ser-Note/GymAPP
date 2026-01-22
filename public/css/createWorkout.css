@@ -835,3 +835,177 @@
     height: 420px;
   }
 }
+
+/* ===== EXERCISE BROWSER STYLES ===== */
+.btn-browse {
+  background-color: #10b981;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-browse:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.exercise-browser-modal {
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.exercise-browser-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.browser-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #f3f4f6;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.filter-select {
+  padding: 10px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+.exercise-browser-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exercise-browser-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exercise-browser-item:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+  background-color: #f0f9ff;
+}
+
+.exercise-browser-info {
+  flex: 1;
+}
+
+.exercise-browser-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1f2937;
+  margin-bottom: 5px;
+}
+
+.exercise-browser-muscle {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.exercise-browser-muscle-tag {
+  display: inline-block;
+  background-color: #dbeafe;
+  color: #1e40af;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  margin-right: 5px;
+}
+
+.exercise-browser-select-btn {
+  background-color: #3b82f6;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.exercise-browser-select-btn:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}
+
+.no-exercises-found {
+  text-align: center;
+  padding: 40px 20px;
+  color: #9ca3af;
+  font-size: 1.1rem;
+}
+
+/* Mobile responsiveness for exercise browser */
+@media (max-width: 768px) {
+  .exercise-browser-modal {
+    width: 95%;
+    max-height: 85vh;
+  }
+
+  .browser-controls {
+    flex-direction: column;
+  }
+
+  .search-input {
+    min-width: 100%;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .exercise-browser-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .exercise-browser-info {
+    width: 100%;
+  }
+
+  .exercise-browser-select-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

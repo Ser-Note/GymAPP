@@ -12,11 +12,35 @@ router.get('/', async function(req, res, next)  {
     else
     {
         const user = await userDB.getUserByName(req.session.username);
+        const availableExercises = await exerciseTemplatesDB.getAvailableTemplates(user.id);
         
         res.render('createWorkouts', {
             title: 'Create Workouts',
-            user: user
+            user: user,
+            availableExercises: availableExercises
         });
+    }
+});
+
+router.get('/getExercises', async function(req, res, next) {
+    if(!req.session || !req.session.username)
+    {
+        return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+    else
+    {
+        try {
+            const user = await userDB.getUserByName(req.session.username);
+            const availableExercises = await exerciseTemplatesDB.getAvailableTemplates(user.id);
+            
+            return res.status(200).json({ 
+                success: true, 
+                exercises: availableExercises
+            });
+        } catch (error) {
+            console.error('Error fetching exercises:', error);
+            return res.status(500).json({ success: false, message: 'Server error' });
+        }
     }
 });
 
