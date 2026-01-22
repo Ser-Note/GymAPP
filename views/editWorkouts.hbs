@@ -26,7 +26,7 @@
         <div id="winterSnoweContainer"></div>
         {{#if user.isAuthenticated}}
                 <div class="workout-section">
-                    <form class="workoutEditForm" method="POST" action="/editWorkouts/edit" data-is-admin="{{user.isAdmin}}">
+                    <form class="workoutEditForm" method="POST" action="/editWorkouts/edit" data-is-admin="{{user.isAdmin}}" data-uses-new-structure="{{myWorkout.uses_new_structure}}">
                         <input type="hidden" name="workoutID" value="{{myWorkout.id}}">
                         <label for="workoutName">Workout Name:</label>
                         <input type="text" id="workoutName" name="workoutName" value="{{myWorkout.workout_name}}" required>
@@ -37,67 +37,107 @@
                     <!-- Exercise Tabs -->
                     <div class="exercise-tabs-wrapper">
                         <div class="exercise-tabs">
-                            {{#each myWorkout.exercises}}
-                                <button type="button" class="exercise-tab {{#if (eq @index 0)}}active{{/if}}" data-exercise-index="{{@index}}">
-                                    {{this.name}}
-                                    {{#if (and (gt ../myWorkout.exercises.length 1) (gt @index 0))}}
-                                        <span class="tab-delete" data-exercise-index="{{@index}}">−</span>
-                                    {{/if}}
-                                </button>
-                            {{/each}}
-                        </div>
-                        <button type="button" class="btn-add-exercise-tab">+ Add</button>
-                    </div>
-
-                    <!-- Exercise Content -->
-                    {{#each myWorkout.exercises}}
-                        <div class="exercise-content {{#if (eq @index 0)}}active{{/if}}" data-exercise-index="{{@index}}">
-                            <div class="exercise-name-section">
-                                <label for="exerciseName{{@index}}">Exercise Name</label>
-                                <input type="text" id="exerciseName{{@index}}" name="exerciseName[{{@index}}]" value="{{this.name}}" required>
-                            </div>
-
-                            <div class="target-reps-section">
-                                <label for="targetReps{{@index}}">Target Reps:</label>
-                                <input type="number" id="targetReps{{@index}}" name="targetReps[{{@index}}]" value="{{this.targetReps}}" required>
-                            </div>
-
-                            <button type="button" class="toggle-sets" data-exercise-index="{{@index}}">
-                                <span class="toggle-text">Show Sets</span>
-                                <span class="toggle-icon">▼</span>
-                            </button>
-
-                            <div class="sets-container collapsed" data-exercise-index="{{@index}}">
-                                {{#each this.sets}}
-                                    <div class="set-item" data-set-index="{{@index}}">
-                                        <div class="set-header">
-                                            <div class="set-fields">
-                                                <label for="reps">Set {{this.setNumber}} - Reps:</label>
-                                                <input type="number" id="reps{{@../index}}_{{@index}}" name="reps[{{@../index}}][{{@index}}]" value="{{this.reps}}" required>
-
-                                                <label for="weight">Set {{this.setNumber}} - Weight (lbs):</label>
-                                                <input type="number" id="weight{{@../index}}_{{@index}}" name="weight[{{@../index}}][{{@index}}]" value="{{this.weight}}" required>
-                                            </div>
-                                            {{#if (and (gt ../this.sets.length 1) (gt @index 0))}}
-                                                <button type="button" class="btn-delete-set" data-exercise-index="{{@../index}}" data-set-index="{{@index}}" title="Delete set">−</button>
-                                            {{/if}}
-                                        </div>
-                                    </div>
+                            {{#if myWorkout.uses_new_structure}}
+                                {{#each exercises}}
+                                    <button type="button" class="exercise-tab {{#if (eq @index 0)}}active{{/if}}" data-exercise-index="{{@index}}">
+                                        {{this.name}}
+                                    </button>
                                 {{/each}}
-                                <button type="button" class="btn-add-set" data-exercise-index="{{@index}}">+ Add Set</button>
-                            </div>
-                            
-                            {{#if ../user.isAdmin}}
-                                <div class="exercise-auth-section">
-                                    {{#if this.isAuthenticated}}
-                                        <button type="button" class="btn-auth-active authenticateExerciseBtn" data-exercise-uuid="{{this.uuid}}" data-exercise-name="{{this.name}}">✓ Authenticated</button>
-                                    {{else}}
-                                        <button type="button" class="btn-auth-pending authenticateExerciseBtn" data-exercise-uuid="{{this.uuid}}" data-exercise-name="{{this.name}}">✗ Pending</button>
-                                    {{/if}}
-                                </div>
+                            {{else}}
+                                {{#each myWorkout.exercises}}
+                                    <button type="button" class="exercise-tab {{#if (eq @index 0)}}active{{/if}}" data-exercise-index="{{@index}}">
+                                        {{this.name}}
+                                        {{#if (and (gt ../myWorkout.exercises.length 1) (gt @index 0))}}
+                                            <span class="tab-delete" data-exercise-index="{{@index}}">−</span>
+                                        {{/if}}
+                                    </button>
+                                {{/each}}
                             {{/if}}
                         </div>
-                    {{/each}}
+                    </div>
+
+                    <!-- Exercise Content - New Structure -->
+                    {{#if myWorkout.uses_new_structure}}
+                        {{#each exercises}}
+                            <div class="exercise-content {{#if (eq @index 0)}}active{{/if}}" data-exercise-index="{{@index}}">
+                                <div class="exercise-name-section">
+                                    <label for="exerciseName{{@index}}">Exercise Name</label>
+                                    <input type="text" id="exerciseName{{@index}}" name="exerciseName[{{@index}}]" value="{{this.name}}" disabled style="background-color: #f0f0f0;">
+                                    <small style="color: #666;">Exercise name cannot be changed after creation</small>
+                                </div>
+
+                                <div class="exercise-config-section">
+                                    <label for="plannedSets{{@index}}">Planned Sets:</label>
+                                    <input type="number" id="plannedSets{{@index}}" name="plannedSets[{{@index}}]" min="1" max="20" value="{{this.plannedSets}}" required data-exercise-id="{{this.id}}">
+                                </div>
+
+                                <div class="exercise-config-section">
+                                    <label for="plannedReps{{@index}}">Target Reps:</label>
+                                    <input type="text" id="plannedReps{{@index}}" name="plannedReps[{{@index}}]" placeholder="e.g., 10 or 8-12" value="{{this.plannedReps}}" required data-exercise-id="{{this.id}}">
+                                </div>
+
+                                <div class="exercise-config-section">
+                                    <label for="notes{{@index}}">Notes:</label>
+                                    <textarea id="notes{{@index}}" name="notes[{{@index}}]" placeholder="Add exercise notes..." data-exercise-id="{{this.id}}">{{this.notes}}</textarea>
+                                </div>
+
+                                <div class="exercise-info-section">
+                                    <p><strong>Muscle Group:</strong> {{this.targetMuscle}}</p>
+                                    {{#if this.specificMuscle}}<p><strong>Specific Muscle:</strong> {{this.specificMuscle}}</p>{{/if}}
+                                </div>
+                            </div>
+                        {{/each}}
+                    {{else}}
+                        <!-- Exercise Content - Legacy Structure -->
+                        {{#each myWorkout.exercises}}
+                            <div class="exercise-content {{#if (eq @index 0)}}active{{/if}}" data-exercise-index="{{@index}}">
+                                <div class="exercise-name-section">
+                                    <label for="exerciseName{{@index}}">Exercise Name</label>
+                                    <input type="text" id="exerciseName{{@index}}" name="exerciseName[{{@index}}]" value="{{this.name}}" required>
+                                </div>
+
+                                <div class="target-reps-section">
+                                    <label for="targetReps{{@index}}">Target Reps:</label>
+                                    <input type="number" id="targetReps{{@index}}" name="targetReps[{{@index}}]" value="{{this.targetReps}}" required>
+                                </div>
+
+                                <button type="button" class="toggle-sets" data-exercise-index="{{@index}}">
+                                    <span class="toggle-text">Show Sets</span>
+                                    <span class="toggle-icon">▼</span>
+                                </button>
+
+                                <div class="sets-container collapsed" data-exercise-index="{{@index}}">
+                                    {{#each this.sets}}
+                                        <div class="set-item" data-set-index="{{@index}}">
+                                            <div class="set-header">
+                                                <div class="set-fields">
+                                                    <label for="reps">Set {{this.setNumber}} - Reps:</label>
+                                                    <input type="number" id="reps{{@../index}}_{{@index}}" name="reps[{{@../index}}][{{@index}}]" value="{{this.reps}}" required>
+
+                                                    <label for="weight">Set {{this.setNumber}} - Weight (lbs):</label>
+                                                    <input type="number" id="weight{{@../index}}_{{@index}}" name="weight[{{@../index}}][{{@index}}]" value="{{this.weight}}" required>
+                                                </div>
+                                                {{#if (and (gt ../this.sets.length 1) (gt @index 0))}}
+                                                    <button type="button" class="btn-delete-set" data-exercise-index="{{@../index}}" data-set-index="{{@index}}" title="Delete set">−</button>
+                                                {{/if}}
+                                            </div>
+                                        </div>
+                                    {{/each}}
+                                    <button type="button" class="btn-add-set" data-exercise-index="{{@index}}">+ Add Set</button>
+                                </div>
+                                
+                                {{#if ../user.isAdmin}}
+                                    <div class="exercise-auth-section">
+                                        {{#if this.isAuthenticated}}
+                                            <button type="button" class="btn-auth-active authenticateExerciseBtn" data-exercise-uuid="{{this.uuid}}" data-exercise-name="{{this.name}}">✓ Authenticated</button>
+                                        {{else}}
+                                            <button type="button" class="btn-auth-pending authenticateExerciseBtn" data-exercise-uuid="{{this.uuid}}" data-exercise-name="{{this.name}}">✗ Pending</button>
+                                        {{/if}}
+                                    </div>
+                                {{/if}}
+                            </div>
+                        {{/each}}
+                    {{/if}}
                     
                         <button type="submit">Save Changes</button>
                     </form>
