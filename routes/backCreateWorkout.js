@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { userDB, my_workoutsDB, exerciseTemplatesDB, workoutExercisesDB } = require('../database/db');
+const { userDB, my_workoutsDB, exerciseTemplatesDB, workoutExercisesDB, workoutExerciseSetsDB } = require('../database/db');
 
     // ---- User My Workouts Router ---- //
 
@@ -94,11 +94,27 @@ router.post('/create', async function(req, res, next) {
             );
 
             // Link exercises to the workout via workout_exercises table
-            await workoutExercisesDB.addExercisesToWorkout(
+            const workoutExercises = await workoutExercisesDB.addExercisesToWorkout(
                 newWorkout.id,
                 user.id,
                 exercisesToAdd
             );
+
+            // Save set details for each exercise
+            for (const workoutExercise of workoutExercises) {
+                const exerciseData = exercisesToAdd.find(ex => ex.templateId === workoutExercise.exercise_template_id);
+                if (exerciseData && exerciseData.sets && exerciseData.sets.length > 0) {
+                    await workoutExerciseSetsDB.addExerciseSets(
+                        workoutExercise.id,
+                        exerciseData.sets.map(set => ({
+                            setNumber: set.setNumber,
+                            plannedWeight: set.weight || null,
+                            plannedReps: set.reps || null,
+                            notes: set.notes || null
+                        }))
+                    );
+                }
+            }
 
             console.log('Workout saved:', newWorkout);
             res.status(200).json({ 

@@ -1,6 +1,7 @@
 // ===== Workout Overview Logic =====
 
 let currentWorkout = null;
+let currentSessionId = null;
 let selectedExerciseIndex = null;
 let timerInterval = null;
 let timeRemaining = 0;
@@ -60,12 +61,43 @@ async function initializeWorkout() {
       return;
     }
     currentWorkout = data.workout;
+    
+    // Resume active session if exists; otherwise start a new one
+    if (currentWorkout.activeSessionId) {
+      currentSessionId = currentWorkout.activeSessionId;
+      console.log('Resumed active workout session:', currentSessionId);
+    } else {
+      await startWorkoutSession(workoutId);
+    }
+    
     renderOverview();
     showScreen('overviewScreen');
   } catch (err) {
     console.error('Error loading workout:', err);
     alert('Unable to load workout');
     window.location.href = '/myWorkouts';
+  }
+}
+
+async function startWorkoutSession(workoutId) {
+  try {
+    const response = await fetch('/workoutSession/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        workoutId: workoutId,
+        notes: 'Workout session started'
+      })
+    });
+    const data = await response.json();
+    if (data.success && data.session) {
+      currentSessionId = data.session.id;
+      console.log('Workout session started:', currentSessionId);
+    } else {
+      console.error('Failed to start session:', data.message);
+    }
+  } catch (err) {
+    console.error('Error starting workout session:', err);
   }
 }
 
@@ -108,16 +140,40 @@ function openExerciseDetail(idx) {
     const wrapper = document.createElement('div');
     wrapper.className = 'detail-box';
     const existing = (typeof set.completedReps === 'number');
+    
+    // Check if this set is disabled (previous set not completed)
+    let isDisabled = false;
+    if (sIdx > 0) {
+      const previousSet = ex.sets[sIdx - 1];
+      isDisabled = !(typeof previousSet.completedReps === 'number');
+    }
+    
+    // Build display text for weight and previous reps
+    const hasWeight = set.weight || set.previousWeight;
+    const weightDisplay = hasWeight ? `${set.weight || set.previousWeight} lbs` : 'No previous weight';
+    const previousRepsText = set.previousReps ? ` (Previous: ${set.previousReps} reps)` : '';
+    
+    // Style for disabled sets
+    const disabledStyle = isDisabled ? 'opacity: 0.5; pointer-events: none;' : '';
+    const completedStyle = existing ? 'background-color: #f0fdf4; opacity: 0.7;' : '';
+    
     wrapper.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
-        <div>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; ${disabledStyle}${completedStyle}">
+        <div style="flex: 1;">
           <div style="font-size:1rem; color:#6b7280;">Set ${sIdx + 1} of ${ex.sets.length}</div>
-          <div style="font-size:1.2rem; font-weight:700; color:#2563eb;">${set.weight} lbs • Target ${ex.targetReps} reps</div>
-          <div style="font-size:0.9rem; color:#6b7280;">${existing ? `Completed: ${set.completedReps} reps` : 'Not completed'}</div>
+          <div style="font-size:1.2rem; font-weight:700; color:#2563eb;">${weightDisplay} • Target ${ex.targetReps} reps${previousRepsText}</div>
+          <div style="font-size:0.9rem; color:#6b7280;">${existing ? `✓ Completed: ${set.completedReps} reps` : 'Not completed'}</div>
         </div>
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <input type="number" min="0" placeholder="Actual reps" class="reps-input" id="reps-${idx}-${sIdx}" value="${existing ? set.completedReps : ''}">
-          <button class="btn btn-primary" data-action="complete-set" data-ex="${idx}" data-set="${sIdx}">Complete Set</button>
+        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap: wrap; justify-content: flex-end;">
+          <div style="display:flex; align-items:center; gap:0.3rem;">
+            <input type="number" min="0" step="0.5" placeholder="Weight (lbs)" class="reps-input" id="weight-${idx}-${sIdx}" value="${set.weight || set.previousWeight || ''}" style="width: 100px;" ${existing ? 'disabled' : ''} ${isDisabled ? 'disabled' : ''}>
+          </div>
+          <div style="display:flex; align-items:center; gap:0.3rem;">
+            <input type="number" min="0" placeholder="Reps" class="reps-input" id="reps-${idx}-${sIdx}" value="${existing ? set.completedReps : ''}" style="width: 80px;" ${existing ? 'disabled' : ''} ${isDisabled ? 'disabled' : ''}>
+          </div>
+          <button class="btn btn-primary" data-action="complete-set" data-ex="${idx}" data-set="${sIdx}" ${existing ? 'disabled' : ''} ${isDisabled ? 'disabled' : ''}>
+            ${existing ? '✓ Done' : 'Complete Set'}
+          </button>
         </div>
       </div>
     `;
@@ -137,15 +193,24 @@ function openExerciseDetail(idx) {
 }
 
 function completeSet(exIdx, setIdx) {
-  const input = document.getElementById(`reps-${exIdx}-${setIdx}`);
-  const reps = parseInt(input.value) || 0;
+  const repsInput = document.getElementById(`reps-${exIdx}-${setIdx}`);
+  const weightInput = document.getElementById(`weight-${exIdx}-${setIdx}`);
+  
+  const reps = parseInt(repsInput.value) || 0;
+  const weight = parseFloat(weightInput.value) || 0;
+  
   if (reps < 0) {
     alert('Please enter a valid number of reps');
     return;
   }
+  
   const ex = currentWorkout.exercises[exIdx];
   const set = ex.sets[setIdx];
   set.completedReps = reps;
+  set.weight = weight;
+  
+  // Log the set to the workout session
+  logSetToSession(exIdx, setIdx, reps, weight);
   
   // Check if user hit target reps
   if (reps >= ex.targetReps) {
@@ -165,6 +230,39 @@ function completeSet(exIdx, setIdx) {
   }
 }
 
+async function logSetToSession(exIdx, setIdx, reps, weight) {
+  if (!currentSessionId) {
+    console.warn('No active session to log set to');
+    return;
+  }
+  
+  try {
+    const ex = currentWorkout.exercises[exIdx];
+    
+    const response = await fetch('/workoutSession/logSet', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: currentSessionId,
+        workoutExerciseId: ex.id,
+        setNumber: setIdx + 1,
+        reps: reps,
+        weight: weight || 0,
+        notes: ''
+      })
+    });
+    
+    const data = await response.json();
+    if (!data.success) {
+      console.error('Failed to log set:', data.message);
+    } else {
+      console.log('Set logged successfully');
+    }
+  } catch (err) {
+    console.error('Error logging set:', err);
+  }
+}
+
 function showWeightRecommendation(exIdx, setIdx, set) {
   const ex = currentWorkout.exercises[exIdx];
   const nextSetIdx = setIdx + 1;
@@ -178,7 +276,15 @@ function showWeightRecommendation(exIdx, setIdx, set) {
     const customIncrease = parseInt(document.getElementById('customWeightIncrease').value) || suggestedIncrease;
     // Update the NEXT set's weight, not the current one
     if (nextSetIdx < ex.sets.length) {
-      ex.sets[nextSetIdx].weight += customIncrease;
+      // Get the current set's weight
+      const currentWeight = set.weight || 0;
+      // Set next set's weight to current + increase (don't add if already has weight)
+      if (!ex.sets[nextSetIdx].weight) {
+        ex.sets[nextSetIdx].weight = currentWeight + customIncrease;
+      } else {
+        // If it already has a weight, just add the increase
+        ex.sets[nextSetIdx].weight = ex.sets[nextSetIdx].weight + customIncrease;
+      }
     }
     proceedAfterWeightRec(exIdx, setIdx);
   };
@@ -209,21 +315,25 @@ backToOverviewBtn.addEventListener('click', () => {
 
 completeWorkoutBtn.addEventListener('click', async () => {
   try {
-    const response = await fetch('/myWorkouts/saveProgress', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        workoutId: currentWorkout.id,
-        exercises: currentWorkout.exercises
-      })
-    });
-    const data = await response.json();
-    if (!data.success) {
-      console.error('Failed to save progress:', data.message);
+    // Complete the workout session in database
+    if (currentSessionId) {
+      const response = await fetch('/workoutSession/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: currentSessionId
+        })
+      });
+      const data = await response.json();
+      if (!data.success) {
+        console.error('Failed to complete session:', data.message);
+      } else {
+        console.log('Workout session completed successfully');
+      }
     }
     showScreen('completeScreen');
   } catch (err) {
-    console.error('Error saving progress:', err);
+    console.error('Error completing workout:', err);
   }
 });
 

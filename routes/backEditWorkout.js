@@ -1,6 +1,6 @@
 express = require('express');
 var router = express.Router();
-const { userDB, my_workoutsDB, workoutExercisesDB, exerciseTemplateDB } = require('../database/db');
+const { userDB, my_workoutsDB, workoutExercisesDB, exerciseTemplateDB, workoutExerciseSetsDB } = require('../database/db');
 
 // ---- Edit Workout Router ---- //
 
@@ -27,16 +27,27 @@ router.post('/', async function(req, res, next)  {
         if (myWorkout.uses_new_structure) {
             // Fetch from workout_exercises with joins
             exercises = await workoutExercisesDB.getWorkoutExercises(workoutID, username.id);
-            exercises = exercises.map(we => ({
-                id: we.id,
-                workoutID: myWorkout.id,
-                templateId: we.exercise_template_id,
-                name: we.exercise_templates.exercise_name,
-                targetMuscle: we.exercise_templates.target_muscle,
-                specificMuscle: we.exercise_templates.specific_muscle,
-                plannedSets: we.planned_sets,
-                plannedReps: we.planned_reps,
-                notes: we.notes
+            exercises = await Promise.all(exercises.map(async (we) => {
+                // Fetch set details for this exercise
+                let sets = [];
+                try {
+                    sets = await workoutExerciseSetsDB.getExerciseSets(we.id);
+                } catch (err) {
+                    console.warn(`Could not fetch sets for exercise ${we.id}:`, err.message);
+                }
+                
+                return {
+                    id: we.id,
+                    workoutID: myWorkout.id,
+                    templateId: we.exercise_template_id,
+                    name: we.exercise_templates.exercise_name,
+                    targetMuscle: we.exercise_templates.target_muscle,
+                    specificMuscle: we.exercise_templates.specific_muscle,
+                    plannedSets: we.planned_sets,
+                    plannedReps: we.planned_reps,
+                    notes: we.notes,
+                    sets: sets
+                };
             }));
         } else {
             // Legacy JSONB structure - still editable for backward compatibility

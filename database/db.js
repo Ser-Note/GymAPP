@@ -456,7 +456,23 @@ const workoutSessionsDB = {
 
         if (error && error.code !== 'PGRST116') throw error;
         return data || null;
-    }
+    },
+
+    // Get active (incomplete) session for a workout
+    async getActiveSessionForWorkout(workoutId, userId) {
+            const { data, error } = await supabase
+                .from('workout_sessions')
+                .select('*')
+                .eq('workout_id', workoutId)
+                .eq('user_id', userId)
+                .is('completed_at', null)
+                .order('started_at', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+            if (error && error.code !== 'PGRST116') throw error;
+            return data || null;
+        }
 };
 
 // ---- Exercise Logs Operations ---- //
@@ -505,19 +521,34 @@ const exerciseLogsDB = {
         const { data, error } = await supabase
             .from('exercise_logs')
             .select(`
-                *,
+                id,
+                set_number,
+                reps_completed,
+                weight_used,
+                completed_at,
+                notes,
                 workout_sessions!inner (
-                    started_at,
                     user_id
-                )
+                ),
+                workout_session_id
             `)
             .eq('workout_exercise_id', workoutExerciseId)
             .eq('workout_sessions.user_id', userId)
-            .order('workout_sessions.started_at', { ascending: false })
+            .order('completed_at', { ascending: false })
             .limit(10);
 
         if (error) throw error;
-        return data || [];
+        
+        // Map to expected format
+        return (data || []).map(log => ({
+            id: log.id,
+            set_number: log.set_number,
+            reps: log.reps_completed,
+            weight: log.weight_used,
+            completed_at: log.completed_at,
+            notes: log.notes,
+            workout_session_id: log.workout_session_id
+        }));
     },
 
     // Update a logged set
@@ -590,6 +621,77 @@ const exerciseDB = {
     }
 };
 
+// ---- Workout Exercise Sets Operations ---- //
+const workoutExerciseSetsDB = {
+    // Add sets for a workout exercise
+    async addExerciseSets(workoutExerciseId, sets) {
+        const setsToInsert = sets.map(set => ({
+            workout_exercise_id: workoutExerciseId,
+            set_number: set.setNumber,
+            planned_weight: set.plannedWeight || null,
+            planned_reps: set.plannedReps || null,
+            notes: set.notes || null
+        }));
+
+        const { data, error } = await supabase
+            .from('workout_exercise_sets')
+            .insert(setsToInsert)
+            .select();
+
+        if (error) throw error;
+        return data;
+    },
+
+    // Get sets for a workout exercise
+    async getExerciseSets(workoutExerciseId) {
+        const { data, error } = await supabase
+            .from('workout_exercise_sets')
+            .select('*')
+            .eq('workout_exercise_id', workoutExerciseId)
+            .order('set_number', { ascending: true });
+
+        if (error) throw error;
+        return data || [];
+    },
+
+    // Update a set
+    async updateSet(setId, updates) {
+        const { data, error } = await supabase
+            .from('workout_exercise_sets')
+            .update(updates)
+            .eq('id', setId)
+            .select()
+            .single();
+
+        if (error) throw error;
+        return data;
+    },
+
+    // Delete sets for a workout exercise
+    async deleteExerciseSets(workoutExerciseId) {
+        const { data, error } = await supabase
+            .from('workout_exercise_sets')
+            .delete()
+            .eq('workout_exercise_id', workoutExerciseId);
+
+        if (error) throw error;
+        return data;
+    },
+
+    // Delete a specific set
+    async deleteSet(setId) {
+        const { data, error } = await supabase
+            .from('workout_exercise_sets')
+            .delete()
+            .eq('id', setId)
+            .select()
+            .single();
+
+        if (error) throw error;
+        return data;
+    }
+};
+
 
 module.exports = { 
     userDB, 
@@ -598,5 +700,7 @@ module.exports = {
     exerciseTemplatesDB,
     workoutExercisesDB,
     workoutSessionsDB,
-    exerciseLogsDB
+    exerciseLogsDB,
+    workoutExerciseSetsDB,
+    supabase
 };

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { userDB, my_workoutsDB, workoutExercisesDB } = require('../database/db');
+const { userDB, my_workoutsDB, workoutExercisesDB, exerciseLogsDB, workoutSessionsDB } = require('../database/db');
 
     // ---- User My Workouts Router ---- //
 
@@ -66,26 +66,78 @@ const { userDB, my_workoutsDB, workoutExercisesDB } = require('../database/db');
                 return res.status(404).json({ success: false, message: 'Workout not found' });
             }
 
+            // Look for an active (incomplete) session to resume progress
+            let activeSession = null;
+            let sessionLogsByExercise = {};
+            try {
+                activeSession = await workoutSessionsDB.getActiveSessionForWorkout(workoutId, user.id);
+                if (activeSession) {
+                    const sessionLogs = await exerciseLogsDB.getSessionLogs(activeSession.id);
+                    sessionLogs.forEach(log => {
+                        const exId = log.workout_exercise_id;
+                        if (!sessionLogsByExercise[exId]) sessionLogsByExercise[exId] = [];
+                        sessionLogsByExercise[exId].push(log);
+                    });
+                }
+            } catch (err) {
+                console.warn('Could not fetch active session:', err.message);
+            }
+
             let exercises = [];
             
             // Check if using new structure
             if (workout.uses_new_structure) {
                 const workoutExercises = await workoutExercisesDB.getWorkoutExercises(workoutId, user.id);
-                exercises = workoutExercises.map(we => ({
-                    id: we.id,
-                    name: we.exercise_templates.exercise_name,
-                    targetMuscle: we.exercise_templates.target_muscle,
-                    specificMuscle: we.exercise_templates.specific_muscle,
-                    targetSets: we.planned_sets,
-                    targetReps: we.planned_reps,
-                    notes: we.notes,
-                    sets: Array.from({ length: we.planned_sets }, (_, i) => ({
-                        id: i + 1,
-                        setNumber: i + 1,
-                        reps: '',
-                        weight: '',
-                        completedReps: null
-                    }))
+                exercises = await Promise.all(workoutExercises.map(async (we) => {
+                    // Fetch last performance (historical) to show previous reps/weight
+                    let lastPerformance = [];
+                    try {
+                        lastPerformance = await exerciseLogsDB.getLastPerformance(we.id, user.id);
+                    } catch (err) {
+                        console.warn(`Could not fetch last performance for exercise ${we.id}:`, err.message);
+                    }
+
+                    // Exclude logs from the active session when showing historical "previous" values
+                    const filteredPerformance = activeSession
+                        ? lastPerformance.filter(log => log.workout_session_id !== activeSession.id)
+                        : lastPerformance;
+                    const limitedPerformance = filteredPerformance.slice(0, we.planned_sets);
+
+                    // If we have an active session, use its logs to mark completed sets
+                    const sessionLogs = sessionLogsByExercise[we.id] || [];
+                    const sessionLogBySet = {};
+                    sessionLogs.forEach(log => {
+                        sessionLogBySet[log.set_number] = log;
+                    });
+
+                    const sets = Array.from({ length: we.planned_sets }, (_, i) => {
+                        const setNumber = i + 1;
+                        const sessionLog = sessionLogBySet[setNumber];
+                        const prevPerf = limitedPerformance[i];
+                        return {
+                            id: sessionLog ? sessionLog.id : setNumber,
+                            setNumber: setNumber,
+                            reps: '',
+                            weight: sessionLog ? sessionLog.weight_used : null,
+                            completedReps: sessionLog ? sessionLog.reps_completed : null,
+                            previousReps: sessionLog ? sessionLog.reps_completed : (prevPerf ? prevPerf.reps : null),
+                            previousWeight: sessionLog ? sessionLog.weight_used : (prevPerf ? prevPerf.weight : null),
+                            plannedWeight: prevPerf ? prevPerf.weight : null,
+                            plannedReps: prevPerf ? prevPerf.reps : null,
+                            notes: sessionLog ? sessionLog.notes : (prevPerf ? prevPerf.notes : null)
+                        };
+                    });
+
+                    return {
+                        id: we.id,
+                        name: we.exercise_templates.exercise_name,
+                        targetMuscle: we.exercise_templates.target_muscle,
+                        specificMuscle: we.exercise_templates.specific_muscle,
+                        targetSets: we.planned_sets,
+                        targetReps: we.planned_reps,
+                        notes: we.notes,
+                        sets: sets
+                    };
                 }));
             } else {
                 // Legacy JSONB structure
@@ -99,7 +151,8 @@ const { userDB, my_workoutsDB, workoutExercisesDB } = require('../database/db');
                     name: workout.workout_name,
                     exercises: exercises,
                     restTime: workout.rest_time || 3,
-                    usesNewStructure: workout.uses_new_structure
+                    usesNewStructure: workout.uses_new_structure,
+                    activeSessionId: activeSession ? activeSession.id : null
                 }
             });
         } catch (err) {

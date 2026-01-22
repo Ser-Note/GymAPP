@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { userDB } = require('../database/db');
-const { my_workoutsDB } = require('../database/db');
+const { userDB, my_workoutsDB, workoutExercisesDB, supabase } = require('../database/db');
 
 // ---- Edit Workout Router ---- //
 
@@ -56,6 +55,24 @@ router.post('/delete', async function(req, res, next)  {
     }
     
     try {
+        // First, get all workout exercises for this workout
+        const user = await userDB.getUserByName(req.session.username);
+        const workoutExercises = await workoutExercisesDB.getWorkoutExercises(workoutID, user.id);
+        
+        // Delete exercise logs for each workout exercise (to handle foreign key constraints)
+        for (const exercise of workoutExercises) {
+            // Delete all logs for this exercise
+            const { error: logsError } = await supabase
+                .from('exercise_logs')
+                .delete()
+                .eq('workout_exercise_id', exercise.id);
+            
+            if (logsError) {
+                console.warn(`Warning: Could not delete exercise logs for ${exercise.id}:`, logsError.message);
+            }
+        }
+        
+        // Delete the workout
         const deletedWorkout = await my_workoutsDB.deleteWorkoutById(workoutID);
         if(!deletedWorkout) {
             return res.status(404).json({ success: false, message: 'Workout not found or could not be deleted' });
