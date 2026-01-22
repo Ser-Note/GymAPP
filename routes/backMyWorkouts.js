@@ -76,9 +76,16 @@ const { userDB, my_workoutsDB, workoutExercisesDB } = require('../database/db');
                     name: we.exercise_templates.exercise_name,
                     targetMuscle: we.exercise_templates.target_muscle,
                     specificMuscle: we.exercise_templates.specific_muscle,
-                    plannedSets: we.planned_sets,
-                    plannedReps: we.planned_reps,
-                    notes: we.notes
+                    targetSets: we.planned_sets,
+                    targetReps: we.planned_reps,
+                    notes: we.notes,
+                    sets: Array.from({ length: we.planned_sets }, (_, i) => ({
+                        id: i + 1,
+                        setNumber: i + 1,
+                        reps: '',
+                        weight: '',
+                        completedReps: null
+                    }))
                 }));
             } else {
                 // Legacy JSONB structure
