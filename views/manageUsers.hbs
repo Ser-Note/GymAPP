@@ -28,7 +28,7 @@
             <button id="userSearchButton" aria-label="Search users">Search</button>
 
             {{#each users}}
-                {{#unless this.isAdmin}}
+              
                     <li class="user-item">
                         <div class="user-header">
                             <div class="user-id">
@@ -46,15 +46,17 @@
                             <button class="btn-user-action btnAuthPending">Pending</button>
                             {{/if}}
                             {{#if this.isAdmin}}
+                                {{#unless this.isAdmin}}
                             <button class="btn-user-action admin-badge">Admin</button>
                             {{else}}
                             <button class="btn-user-action user-badge">User</button>
+                                {{/unless}}
                             {{/if}}
                             <button class="btn-user-action btnDeleteUser">Delete</button>
                             <button class="btn-user-action btnEditWorkout">Edit/Auth</button>
                         </div>
                     </li>
-                {{/unless}}
+                
             {{/each}}
         </ul>
 
