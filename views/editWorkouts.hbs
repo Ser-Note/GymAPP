@@ -63,6 +63,7 @@
                                 <div class="exercise-name-section">
                                     <label for="exerciseName{{@index}}">Exercise Name</label>
                                     <input type="text" id="exerciseName{{@index}}" name="exerciseName[{{@index}}]" value="{{this.name}}" disabled style="background-color: #f0f0f0;">
+                                    <input type="hidden" name="templateId[{{@index}}]" value="{{this.templateId}}" data-exercise-id="{{this.id}}">
                                     <small style="color: #666;">Exercise name cannot be changed after creation</small>
                                 </div>
 
@@ -81,9 +82,27 @@
                                     <textarea id="notes{{@index}}" name="notes[{{@index}}]" placeholder="Add exercise notes..." data-exercise-id="{{this.id}}">{{this.notes}}</textarea>
                                 </div>
 
-                                <div class="exercise-info-section">
-                                    <p><strong>Muscle Group:</strong> {{this.targetMuscle}}</p>
-                                    {{#if this.specificMuscle}}<p><strong>Specific Muscle:</strong> {{this.specificMuscle}}</p>{{/if}}
+                                <div class="exercise-config-section">
+                                    <label for="targetMuscle{{@index}}">Target Muscle Group:</label>
+                                    <select id="targetMuscle{{@index}}" name="targetMuscle[{{@index}}]" data-exercise-id="{{this.id}}" data-exercise-index="{{@index}}">
+                                        <option value="">-- Select muscle group --</option>
+                                        <option value="Chest" {{#if (eq this.targetMuscle "Chest")}}selected{{/if}}>Chest</option>
+                                        <option value="Back" {{#if (eq this.targetMuscle "Back")}}selected{{/if}}>Back</option>
+                                        <option value="Shoulders" {{#if (eq this.targetMuscle "Shoulders")}}selected{{/if}}>Shoulders</option>
+                                        <option value="Legs" {{#if (eq this.targetMuscle "Legs")}}selected{{/if}}>Legs</option>
+                                        <option value="Biceps" {{#if (eq this.targetMuscle "Biceps")}}selected{{/if}}>Biceps</option>
+                                        <option value="Triceps" {{#if (eq this.targetMuscle "Triceps")}}selected{{/if}}>Triceps</option>
+                                        <option value="Abs" {{#if (eq this.targetMuscle "Abs")}}selected{{/if}}>Abs</option>
+                                        <option value="Cardio" {{#if (eq this.targetMuscle "Cardio")}}selected{{/if}}>Cardio</option>
+                                        <option value="Other" {{#if (eq this.targetMuscle "Other")}}selected{{/if}}>Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="exercise-config-section">
+                                    <label for="specificMuscle{{@index}}">Specific Muscle (optional):</label>
+                                    <select id="specificMuscle{{@index}}" name="specificMuscle[{{@index}}]" data-exercise-id="{{this.id}}" data-current-value="{{this.specificMuscle}}">
+                                        <option value="">-- Select specific muscle (optional) --</option>
+                                    </select>
                                 </div>
                             </div>
                         {{/each}}

@@ -1,6 +1,6 @@
 express = require('express');
 var router = express.Router();
-const { userDB, my_workoutsDB, workoutExercisesDB } = require('../database/db');
+const { userDB, my_workoutsDB, workoutExercisesDB, exerciseTemplateDB } = require('../database/db');
 
 // ---- Edit Workout Router ---- //
 
@@ -30,6 +30,7 @@ router.post('/', async function(req, res, next)  {
             exercises = exercises.map(we => ({
                 id: we.id,
                 workoutID: myWorkout.id,
+                templateId: we.exercise_template_id,
                 name: we.exercise_templates.exercise_name,
                 targetMuscle: we.exercise_templates.target_muscle,
                 specificMuscle: we.exercise_templates.specific_muscle,
@@ -91,11 +92,21 @@ router.post('/edit', async function(req, res, next)  {
             // Update each exercise's planned config
             for (const exercise of exercises) {
                 if (exercise.id) {
+                    // Update workout exercise configuration
                     await workoutExercisesDB.updateWorkoutExercise(exercise.id, {
                         planned_sets: parseInt(exercise.plannedSets) || 3,
                         planned_reps: exercise.plannedReps || '10',
                         notes: exercise.notes || null
                     });
+
+                    // Update the exercise template's muscle groups if provided
+                    if (exercise.targetMuscle && exercise.templateId) {
+                        await exerciseTemplateDB.updateTemplateMuscles(
+                            exercise.templateId,
+                            exercise.targetMuscle,
+                            exercise.specificMuscle || null
+                        );
+                    }
                 }
             }
         } else {

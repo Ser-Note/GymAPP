@@ -3,6 +3,78 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('.workoutEditForm');
     const usesNewStructure = form.getAttribute('data-uses-new-structure') === 'true';
 
+    // Muscle group sub-options mapping
+    const muscleSubOptions = {
+        Chest: ["Upper Chest", "Mid Chest", "Lower Chest", "Inner Chest", "Outer Chest", "Sternocostal", "Clavicular", "Pectoralis Major", "Pectoralis Minor"],
+        Back: ["Upper Back", "Mid Back", "Lower Back", "Lats", "Traps", "Rhomboids", "Erector Spinae", "Teres Major", "Teres Minor"],
+        Shoulders: ["Front Delts", "Side Delts", "Rear Delts", "Rotator Cuff"],
+        Legs: ["Quadriceps", "Hamstrings", "Glutes", "Calves", "Adductors", "Abductors"],
+        Biceps: ["Short Head", "Long Head", "Brachialis", "Brachioradialis"],
+        Triceps: ["Long Head", "Lateral Head", "Medial Head"],
+        Abs: ["Upper Abs", "Lower Abs", "Obliques", "Transverse Abdominis"]
+    };
+
+    // Initialize specific muscle dropdowns on page load for new structure
+    if (usesNewStructure) {
+        document.querySelectorAll('[name^="targetMuscle"]').forEach(targetMuscleSelect => {
+            const exerciseIndex = targetMuscleSelect.getAttribute('data-exercise-index');
+            const specificMuscleSelect = document.getElementById(`specificMuscle${exerciseIndex}`);
+            
+            if (targetMuscleSelect.value && specificMuscleSelect) {
+                // Get the current specific muscle value from the data attribute or value
+                const exerciseContent = targetMuscleSelect.closest('.exercise-content');
+                const currentSpecificMuscle = specificMuscleSelect.getAttribute('data-current-value') || '';
+                
+                updateSpecificMuscleOptions(targetMuscleSelect.value, specificMuscleSelect, currentSpecificMuscle);
+            }
+            
+            // Add change event listener
+            targetMuscleSelect.addEventListener('change', function() {
+                handleTargetMuscleChange(exerciseIndex);
+            });
+        });
+    }
+
+    // Handle target muscle change - clear specific muscle and update options
+    function handleTargetMuscleChange(exerciseIndex) {
+        const targetMuscleSelect = document.getElementById(`targetMuscle${exerciseIndex}`);
+        const specificMuscleSelect = document.getElementById(`specificMuscle${exerciseIndex}`);
+        
+        if (!targetMuscleSelect || !specificMuscleSelect) return;
+        
+        const selectedMuscle = targetMuscleSelect.value;
+        
+        // Clear specific muscle selection
+        specificMuscleSelect.value = '';
+        
+        // Update specific muscle options based on target muscle
+        updateSpecificMuscleOptions(selectedMuscle, specificMuscleSelect, '');
+    }
+
+    // Update specific muscle dropdown options
+    function updateSpecificMuscleOptions(targetMuscle, specificMuscleSelect, currentValue = '') {
+        // Clear existing options
+        specificMuscleSelect.innerHTML = '<option value="">-- Select specific muscle (optional) --</option>';
+        
+        // Get sub-options for the selected muscle
+        const subOptions = muscleSubOptions[targetMuscle];
+        
+        if (subOptions && subOptions.length > 0) {
+            subOptions.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option;
+                opt.textContent = option;
+                if (currentValue && option === currentValue) {
+                    opt.selected = true;
+                }
+                specificMuscleSelect.appendChild(opt);
+            });
+            specificMuscleSelect.disabled = false;
+        } else {
+            specificMuscleSelect.disabled = true;
+        }
+    }
+
     // Tab click handler - switch between exercises
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('exercise-tab') && !e.target.classList.contains('tab-delete')) {
@@ -222,17 +294,23 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.exercise-content').forEach((content, index) => {
                 const exerciseName = content.querySelector(`[name="exerciseName[${index}]"]`)?.value;
                 const exerciseId = content.querySelector('[data-exercise-id]')?.getAttribute('data-exercise-id');
+                const templateId = content.querySelector(`[name="templateId[${index}]"]`)?.value;
                 const plannedSets = parseInt(content.querySelector(`[name="plannedSets[${index}]"]`)?.value) || 3;
                 const plannedReps = content.querySelector(`[name="plannedReps[${index}]"]`)?.value || '10';
                 const notes = content.querySelector(`[name="notes[${index}]"]`)?.value || '';
+                const targetMuscle = content.querySelector(`[name="targetMuscle[${index}]"]`)?.value || '';
+                const specificMuscle = content.querySelector(`[name="specificMuscle[${index}]"]`)?.value || '';
                 
                 if (exerciseName && exerciseId) {
                     exercises.push({
                         id: exerciseId,
+                        templateId: templateId,
                         name: exerciseName,
                         plannedSets: plannedSets,
                         plannedReps: plannedReps,
-                        notes: notes
+                        notes: notes,
+                        targetMuscle: targetMuscle,
+                        specificMuscle: specificMuscle
                     });
                 }
             });

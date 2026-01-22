@@ -729,6 +729,82 @@ main.dashboard h1 {
   }
 }
 
+/* Exercise config section styles */
+.exercise-config-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.exercise-config-section label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.exercise-config-section input,
+.exercise-config-section textarea,
+.exercise-config-section select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #111827;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: inherit;
+  background-color: white;
+}
+
+.exercise-config-section select {
+  color: #111827;
+  background-color: white;
+  cursor: pointer;
+}
+
+.exercise-config-section select option {
+  color: #111827;
+  background-color: white;
+}
+
+.exercise-config-section textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.exercise-config-section input:focus,
+.exercise-config-section textarea:focus,
+.exercise-config-section select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.exercise-config-section textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Exercise info section styles */
+.exercise-info-section {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.exercise-info-section p {
+  margin: 0.5rem 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.exercise-info-section strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   main.dashboard {
@@ -895,6 +971,21 @@ main.dashboard h1 {
   .workoutEditForm button[type="submit"] {
     padding: 0.7rem 1.25rem;
     font-size: 0.95rem;
+  }
+
+  .exercise-config-section label {
+    font-size: 0.85rem;
+  }
+
+  .exercise-config-section input,
+  .exercise-config-section textarea,
+  .exercise-config-section select {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .exercise-config-section textarea {
+    min-height: 80px;
   }
 }
 
@@ -1069,4 +1160,18 @@ main.dashboard h1 {
     font-size: 0.85rem;
     margin-top: 1rem;
   }
-}
+
+  .exercise-config-section label {
+    font-size: 0.8rem;
+  }
+
+  .exercise-config-section input,
+  .exercise-config-section textarea,
+  .exercise-config-section select {
+    padding: 0.45rem 0.55rem;
+    font-size: 0.8rem;
+  }
+
+  .exercise-config-section textarea {
+    min-height: 70px;
+  }

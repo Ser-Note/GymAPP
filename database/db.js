@@ -305,6 +305,22 @@ const exerciseTemplatesDB = {
 
         if (error) throw error;
         return data;
+    },
+
+    // Update exercise template muscle groups
+    async updateTemplateMuscles(templateId, targetMuscle, specificMuscle) {
+        const { data, error } = await supabase
+            .from('exercise_templates')
+            .update({ 
+                target_muscle: targetMuscle,
+                specific_muscle: specificMuscle || null
+            })
+            .eq('id', templateId)
+            .select()
+            .single();
+
+        if (error) throw error;
+        return data;
     }
 };
 
