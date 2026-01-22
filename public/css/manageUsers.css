@@ -576,3 +576,204 @@ button:focus-visible {
     position: fixed;
     z-index: 1200;
 }
+
+/* ===== Tab Navigation ===== */
+.tab-navigation {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--color-border);
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text-light);
+    transition: var(--transition);
+    position: relative;
+}
+
+.tab-btn:hover {
+    color: var(--color-accent);
+}
+
+.tab-btn.active {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+}
+
+.tab-btn .badge {
+    display: inline-block;
+    background-color: var(--color-danger);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 0.5rem;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Exercises List ===== */
+.exercises-list {
+    list-style: none;
+    padding: 0;
+}
+
+.exercise-item {
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.exercise-item:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-accent);
+}
+
+.exercise-header {
+    flex: 1;
+}
+
+.exercise-details {
+    margin: 0;
+}
+
+.exercise-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.exercise-muscle {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    margin: 0.3rem 0;
+}
+
+.specific-muscle {
+    color: var(--color-text-light);
+    font-style: italic;
+}
+
+.exercise-creator,
+.exercise-date {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin: 0.3rem 0;
+}
+
+.exercise-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.btn-exercise-action {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.approve-exercise {
+    background-color: var(--color-success);
+    color: white;
+}
+
+.approve-exercise:hover {
+    background-color: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
+}
+
+.reject-exercise {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.reject-exercise:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+.exercise-info {
+    background-color: #e8f4f8;
+    border-left: 4px solid var(--color-accent);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    color: var(--color-primary);
+}
+
+.no-exercises {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .exercise-item {
+        flex-direction: column;
+    }
+    
+    .exercise-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .tab-navigation {
+        gap: 0.5rem;
+    }
+
+    .tab-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+    }
+}

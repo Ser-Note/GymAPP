@@ -22,6 +22,7 @@ const completeScreen = document.getElementById('completeScreen');
 // Overview
 const exerciseList = document.getElementById('exerciseList');
 const completeWorkoutBtn = document.getElementById('completeWorkoutBtn');
+const resetWorkoutBtn = document.getElementById('resetWorkoutBtn');
 
 // Detail
 const detailExerciseName = document.getElementById('detailExerciseName');
@@ -326,6 +327,12 @@ nextBtn.addEventListener('click', () => {
 
 homeBtn.addEventListener('click', () => {
   window.location.href = '/dashboard';
+});
+
+resetWorkoutBtn.addEventListener('click', () => {
+  if (confirm('Are you sure you want to reset this workout? All progress will be lost.')) {
+    window.location.href = '/myWorkouts';
+  }
 });
 
 function showScreen(id) {

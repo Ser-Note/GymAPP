@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const {userDB} = require('../database/db');
+const {userDB, exerciseTemplatesDB} = require('../database/db');
 
 
     // ---- Admin Manage Users Router ---- //
@@ -20,9 +20,11 @@ const {userDB} = require('../database/db');
             else
             {
                 const users = await userDB.getAllUsers();
+                const pendingExercises = await exerciseTemplatesDB.getPendingExercises();
                 res.render('manageUsers', { 
                     title: 'Manage Users',
                     users: users,
+                    pendingExercises: pendingExercises
                 });
             }
         }
@@ -169,6 +171,38 @@ const {userDB} = require('../database/db');
                     return res.status(200).json({ success: true, redirectUrl: '/adminEditDash?username=' + encodeURIComponent(req.body.username) });
                 }
             }
+        }
+    });
+
+    router.post('/approveExercise', async function(req, res, next) {
+        try {
+            if(!req.session || !req.session.username)
+            {
+                return res.status(401).json({ success: false, message: 'Unauthorized' });
+            }
+            
+            const isAdmin = await userDB.getIsAdmin(req.session.username);
+            if(!isAdmin)
+            {
+                return res.status(403).json({ success: false, message: 'Forbidden' });
+            }
+
+            const { exerciseId, isPublic } = req.body;
+            if (!exerciseId || isPublic === undefined)
+            {
+                return res.status(400).json({ success: false, message: 'Missing exerciseId or isPublic' });
+            }
+
+            const updatedExercise = await exerciseTemplatesDB.updateTemplateStatus(exerciseId, isPublic);
+            
+            return res.status(200).json({ 
+                success: true, 
+                message: isPublic ? 'Exercise approved and made public' : 'Exercise rejected',
+                exercise: updatedExercise
+            });
+        } catch (err) {
+            console.error('Error approving exercise:', err);
+            return res.status(500).json({ success: false, message: 'Server error' });
         }
     });
 

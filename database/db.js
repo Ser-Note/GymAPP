@@ -282,6 +282,18 @@ const exerciseTemplatesDB = {
         return data || null;
     },
 
+    // Get all pending exercises (private, not yet approved)
+    async getPendingExercises() {
+        const { data, error } = await supabase
+            .from('exercise_templates')
+            .select('id, exercise_name, target_muscle, specific_muscle, created_by_user_id, is_public, created_at, user(user_name)')
+            .eq('is_public', false)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data || [];
+    },
+
     // Update template authentication/public status (admin only)
     async updateTemplateStatus(templateId, isPublic) {
         const { data, error } = await supabase

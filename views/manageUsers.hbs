@@ -23,11 +23,25 @@
                 <img src="./photos/polarbear_dumbellCurl.svg" alt="Polar Bear Logo" class="logo">
             </div>
             <h1>{{title}}</h1>
-            <label for="userSearchInput">Search Users</label>
-            <input type="text" id="userSearchInput" placeholder="Search users..." aria-label="Search users">
-            <button id="userSearchButton" aria-label="Search users">Search</button>
 
-            {{#each users}}
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="users-tab">Manage Users</button>
+                <button class="tab-btn" data-tab="exercises-tab">
+                    Pending Exercises
+                    {{#if pendingExercises}}
+                    <span class="badge">{{pendingExercises.length}}</span>
+                    {{/if}}
+                </button>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="users-tab" class="tab-content active">
+                <label for="userSearchInput">Search Users</label>
+                <input type="text" id="userSearchInput" placeholder="Search users..." aria-label="Search users">
+                <button id="userSearchButton" aria-label="Search users">Search</button>
+
+                {{#each users}}
               
                     <li class="user-item">
                         <div class="user-header">
@@ -60,7 +74,49 @@
                     </li>
                 
             {{/each}}
-        </ul>
+            </div>
+
+            <!-- Exercises Tab -->
+            <div id="exercises-tab" class="tab-content">
+                {{#if pendingExercises}}
+                    {{#if pendingExercises.length}}
+                        <p class="exercise-info">Total pending exercises: <strong>{{pendingExercises.length}}</strong></p>
+                        <ul class="exercises-list">
+                            {{#each pendingExercises}}
+                            <li class="exercise-item" data-exercise-id="{{this.id}}">
+                                <div class="exercise-header">
+                                    <div class="exercise-details">
+                                        <h3 class="exercise-name">{{this.exercise_name}}</h3>
+                                        <p class="exercise-muscle">
+                                            <strong>Target:</strong> {{this.target_muscle}}
+                                            {{#if this.specific_muscle}}
+                                            <span class="specific-muscle"> • {{this.specific_muscle}}</span>
+                                            {{/if}}
+                                        </p>
+                                        <p class="exercise-creator">
+                                            <strong>Created by:</strong> {{#if this.user}}{{this.user.user_name}}{{else}}Unknown User{{/if}}
+                                        </p>
+                                        {{#if this.created_at}}
+                                        <p class="exercise-date">
+                                            <strong>Date:</strong> {{this.created_at}}
+                                        </p>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div class="exercise-actions">
+                                    <button class="btn-exercise-action approve-exercise" data-exercise-id="{{this.id}}">Approve</button>
+                                    <button class="btn-exercise-action reject-exercise" data-exercise-id="{{this.id}}">Reject</button>
+                                </div>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    {{else}}
+                        <p class="no-exercises">No pending exercises to review.</p>
+                    {{/if}}
+                {{else}}
+                    <p class="no-exercises">No pending exercises to review.</p>
+                {{/if}}
+            </div>
 
         <nav class="nav-bar">
             <div class="nav-track">

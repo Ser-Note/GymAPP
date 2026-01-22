@@ -1,3 +1,97 @@
+// ===== Tab Navigation =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const tabName = btn.getAttribute('data-tab');
+        
+        // Remove active class from all tabs and buttons
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        
+        // Add active class to clicked button and corresponding tab
+        btn.classList.add('active');
+        document.getElementById(tabName).classList.add('active');
+    });
+});
+
+// ===== Exercise Approval =====
+document.querySelectorAll('.approve-exercise').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const exerciseId = btn.getAttribute('data-exercise-id');
+        const exerciseItem = btn.closest('.exercise-item');
+        const exerciseName = exerciseItem.querySelector('.exercise-name').innerText;
+        
+        if (confirm(`Approve "${exerciseName}" to make it public?`)) {
+            try {
+                const response = await fetch('/manageUsers/approveExercise', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        exerciseId: exerciseId,
+                        isPublic: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data?.success) {
+                    console.log('Exercise approved:', data.message);
+                    alert(`"${exerciseName}" has been approved and is now public!`);
+                    exerciseItem.style.opacity = '0.5';
+                    btn.disabled = true;
+                    window.location.href = '/manageUsers';
+                } else {
+                    console.error('Approval failed:', data?.message);
+                    alert(data?.message || 'Failed to approve exercise. Please try again.');
+                }
+            } catch (err) {
+                console.error('Approval request failed', err);
+                alert('Unable to reach the server. Please try again.');
+            }
+        }
+    });
+});
+
+document.querySelectorAll('.reject-exercise').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const exerciseId = btn.getAttribute('data-exercise-id');
+        const exerciseItem = btn.closest('.exercise-item');
+        const exerciseName = exerciseItem.querySelector('.exercise-name').innerText;
+        
+        if (confirm(`Reject "${exerciseName}"? It will remain private.`)) {
+            try {
+                const response = await fetch('/manageUsers/approveExercise', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        exerciseId: exerciseId,
+                        isPublic: false
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data?.success) {
+                    console.log('Exercise rejected:', data.message);
+                    alert(`"${exerciseName}" has been rejected.`);
+                    exerciseItem.style.opacity = '0.5';
+                    btn.disabled = true;
+                    window.location.href = '/manageUsers';
+                } else {
+                    console.error('Rejection failed:', data?.message);
+                    alert(data?.message || 'Failed to reject exercise. Please try again.');
+                }
+            } catch (err) {
+                console.error('Rejection request failed', err);
+                alert('Unable to reach the server. Please try again.');
+            }
+        }
+    });
+});
+
 // Toggle Options Visibility
 var toggleButtons = document.querySelectorAll('.btn-toggle-options');
 toggleButtons.forEach(button => {
