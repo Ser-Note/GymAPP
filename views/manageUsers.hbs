@@ -45,13 +45,15 @@
                             {{else}}
                             <button class="btn-user-action btnAuthPending">Pending</button>
                             {{/if}}
-                            {{#if this.isAdmin}}
                                 {{#unless this.isAdmin}}
-                            <button class="btn-user-action admin-badge">Admin</button>
-                            {{else}}
-                            <button class="btn-user-action user-badge">User</button>
+                                    {{#if this.isAdmin}}
+                                        
+                                    <button class="btn-user-action admin-badge">Admin</button>
+                                    {{else}}
+                                    <button class="btn-user-action user-badge">User</button>
+                                        
+                                    {{/if}}
                                 {{/unless}}
-                            {{/if}}
                             <button class="btn-user-action btnDeleteUser">Delete</button>
                             <button class="btn-user-action btnEditWorkout">Edit/Auth</button>
                         </div>
