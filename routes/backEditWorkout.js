@@ -1,6 +1,6 @@
 express = require('express');
 var router = express.Router();
-const { userDB, my_workoutsDB, workoutExercisesDB, exerciseTemplateDB, workoutExerciseSetsDB } = require('../database/db');
+const { userDB, my_workoutsDB, workoutExercisesDB, exerciseTemplatesDB, workoutExerciseSetsDB } = require('../database/db');
 
 // ---- Edit Workout Router ---- //
 
@@ -112,7 +112,7 @@ router.post('/edit', async function(req, res, next)  {
 
                     // Update the exercise template's muscle groups if provided
                     if (exercise.targetMuscle && exercise.templateId) {
-                        await exerciseTemplateDB.updateTemplateMuscles(
+                        await exerciseTemplatesDB.updateTemplateMuscles(
                             exercise.templateId,
                             exercise.targetMuscle,
                             exercise.specificMuscle || null
