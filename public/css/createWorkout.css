@@ -1,13 +1,29 @@
 /* ===== WORKOUT FORM STYLES ===== */
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  line-height: 1.6;
+  padding: 1rem 1rem 140px;
+  min-height: 100vh;
+}
+
 .info {
   max-width: 900px;
-  margin: 30px auto;
+  margin: 0 auto 120px;
   padding: 30px;
-  padding-bottom: 120px;
   background: #f9fafb;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1200;
 }
 
 .info h1 {
@@ -315,10 +331,6 @@
 .sets-container {
   display: flex;
   flex-direction: column;
-
-    .exercise-meta {
-      grid-template-columns: 1fr;
-    }
   gap: 12px;
 }
 
@@ -451,9 +463,13 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  body {
+    padding: 1rem 0.5rem 140px;
+  }
+
   .info {
-    padding-bottom: 20px;
-    margin-bottom: 120px;
+    margin: 0 auto 0;
+    padding: 20px;
   }
 
   .btn-add {

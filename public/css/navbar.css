@@ -1,77 +1,83 @@
-/* Shared bottom nav styling (from manageUsers) */
+/* Shared bottom nav styling */
 .nav-bar {
-  --navbar-spacing-sm: 1rem;
-  --navbar-spacing-xs: 0.5rem;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: var(--navbar-spacing-sm) var(--navbar-spacing-sm);
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  width: 90%;
+  max-width: 800px;
+  background: rgba(236, 240, 241, 0.15);
+  border: 2px dotted #2c3e50;
+  border-radius: 50px;
+  padding: 15px 30px;
   margin: 0;
   display: flex;
+  gap: 0;
+  align-items: center;
   justify-content: center;
-  z-index: 1200;
-  background: linear-gradient(180deg, rgba(236, 240, 241, 0.4), rgba(236, 240, 241, 0.9));
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .nav-track {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 999px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0,0,0,0.08);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.65);
+  gap: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  border: none;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .nav-link {
   position: relative;
-  padding: 0.2rem 0.3rem;
-  border-radius: 999px;
-  font-weight: 600;
-  color: var(--color-primary, #2c3e50);
-  text-decoration: none;
-  letter-spacing: 0.3px;
-  transition: color 0.25s ease, transform 0.25s ease;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.1rem;
+  gap: 8px;
+  text-decoration: none;
+  color: #7f8c8d;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .nav-icon {
-  width: 18px;
-  height: 18px;
-  display: inline-block;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 50%;
+  border: 2px solid #3498db;
+  transition: all 0.3s ease;
 }
 
 .nav-home,
 .nav-profile,
 .nav-workout,
 .nav-link[href="/manageUsers"] {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  text-align: center;
-  white-space: nowrap ;
+  gap: 8px;
 }
 
 .nav-home .nav-icon,
 .nav-profile .nav-icon,
 .nav-workout .nav-icon,
 .nav-link[href="/manageUsers"] .nav-icon {
-  display: block;
-  margin: 0 auto;
-  width: 40px;
-  height: 40px;
-}
-
-.nav-workout .nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 50px;
   height: 50px;
 }
@@ -80,87 +86,68 @@
   position: relative;
 }
 
-/* Make polar bear head icon larger on desktop */
-/* center overlay labels over icons */
 .nav-home span,
 .nav-profile span,
 .nav-workout span,
 .nav-link[href="/manageUsers"] span {
   display: block;
   font-weight: 600;
-  font-size: 0.875rem;
-  color: var(--color-primary, #2c3e50);
-}
-
-.nav-workout span {
-  margin-top: -0.75rem;
-  white-space: nowrap;
+  font-size: 0.85rem;
+  color: #2c3e50;
 }
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  color: var(--color-accent, #3498db);
-  transform: translateY(-1px);
+  color: #3498db;
+  transform: scale(1.1);
 }
 
-.nav-link:focus-visible {
-  outline: 2px solid var(--color-accent, #3498db);
-  outline-offset: 4px;
+.nav-link:hover .nav-icon,
+.nav-link:focus-visible .nav-icon {
+  background: rgba(52, 152, 219, 0.3);
+  border-color: #2980b9;
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
 }
 
-/* Desktop tweaks */
-@media (min-width: 1024px) {
-  .nav-bar {
-    padding: var(--spacing-md, 1.5rem) var(--spacing-lg, 2rem);
-  }
+.nav-link.active .nav-icon {
+  background: rgba(52, 152, 219, 0.4);
+  border-color: #2980b9;
+}
 
-  .nav-track {
-    padding: 1rem 1.75rem;
-    gap: 1rem;
-  }
-
-  .nav-workout .nav-icon {
-    transform: translateY(-6px);
-  }
+.nav-link.active span {
+  color: #2980b9;
 }
 
 /* Mobile tweaks */
 @media (max-width: 767px) {
   .nav-bar {
-    padding: var(--navbar-spacing-xs, 0.5rem) var(--navbar-spacing-sm, 1rem);
+    width: calc(100% - 20px);
+    max-width: none;
+    left: 10px;
+    transform: none;
+    gap: 0;
+    padding: 12px 15px;
+    bottom: 15px;
+    border-radius: 30px;
   }
 
   .nav-track {
-    width: 100%;
     justify-content: space-between;
-    padding: 0.5rem 0.75rem;
-  }
-
-  .nav-link {
-    flex: 0 0 auto;
-    padding: 0.15rem 0.35rem;
-    font-size: 0.9rem;
   }
 
   .nav-home,
   .nav-profile,
   .nav-workout,
   .nav-link[href="/manageUsers"] {
-    width: 72px;
-    height: auto;
+    gap: 6px;
   }
 
   .nav-home .nav-icon,
   .nav-profile .nav-icon,
   .nav-workout .nav-icon,
   .nav-link[href="/manageUsers"] .nav-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .nav-workout .nav-icon {
-    width: 46px;
-    height: 46px;
+    width: 40px;
+    height: 40px;
   }
 
   .nav-home span,
@@ -168,50 +155,11 @@
   .nav-workout span,
   .nav-link[href="/manageUsers"] span {
     font-size: 0.75rem;
-  }
-
-  .nav-workout span {
-    margin-top: -0.1rem;
-  }
-}
-
-/* Small mobile tweaks */
-@media (max-width: 479px) {
-  .nav-home,
-  .nav-profile,
-  .nav-workout,
-  .nav-link[href="/manageUsers"] {
-    width: 72px;
-    height: auto;
-  }
-
-  .nav-home .nav-icon,
-  .nav-profile .nav-icon,
-  .nav-workout .nav-icon,
-  .nav-link[href="/manageUsers"] .nav-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .nav-workout .nav-icon {
-    width: 46px;
-    height: 46px;
-  }
-
-  .nav-home span,
-  .nav-profile span,
-  .nav-workout span,
-  .nav-link[href="/manageUsers"] span {
-    font-size: 0.75rem;
-  }
-
-  .nav-workout span {
-    margin-top: -0.08rem;
   }
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 @media (max-width: 600px) {
