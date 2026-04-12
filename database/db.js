@@ -698,6 +698,7 @@ const heartbeat = {
             .from('heartbeat')
             .update([{ date_beat: day }])
             .select()
+            .eq('id', 1)
             .single();
         if (error) throw error;
         return data || null;
@@ -714,5 +715,6 @@ module.exports = {
     workoutSessionsDB,
     exerciseLogsDB,
     workoutExerciseSetsDB,
-    supabase
+    supabase,
+    heartbeat
 };
