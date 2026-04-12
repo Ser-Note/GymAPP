@@ -1,4 +1,10 @@
 {
   "version": 2,
-    "buildCommand": "npm install"
+    "buildCommand": "npm install",
+  "crons": [
+    {
+      "path": "/api/beat",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }

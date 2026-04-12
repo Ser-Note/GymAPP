@@ -692,6 +692,18 @@ const workoutExerciseSetsDB = {
     }
 };
 
+const heartbeat = {
+    async beat(day) {
+        const { data, error } = await supabase
+            .from('heartbeat')
+            .update([{ date_beat: day }])
+            .select()
+            .single();
+        if (error) throw error;
+        return data || null;
+    }
+}
+
 
 module.exports = { 
     userDB, 

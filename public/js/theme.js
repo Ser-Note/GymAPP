@@ -7,37 +7,6 @@ let curTheme = getTheme();
 allElements.forEach(el => {
     el.classList.add(curTheme);
 });
-
-// #region Flower Theme Features
-// Add flower petals falling effect
-function setFlowerTheme() {
-    createFallingEffect('🌸', 30, 80, 80);
-}
-// #endregion
-
-// #region Fall Theme Features
-function setFallTheme() {
-
-    const body = document.querySelector('body');
-
-
-    createFallingEffect('🍂', 30, 30, 120);
-    createFallingEffect('<object data="./photos/Maple Leaf.png" height="50px" type="image/png"></object>', 30, 30, 80);//
-}
-// #endregion
-
-// #region Summer Theme Features
-function setSummerTheme(){
-    const body = document.querySelector('body');
-    const sun = document.createElement('sun');
-    sun.innerHTML = '<object class="sun" data="./photos/sun.png" height="300px" type="image/png"></object>';
-    body.appendChild(sun);
-}
-// #endregion
-
-// region makes code calapsable
-
-
 // #region Winter Theme Features
 // Snowflake animation function
 function createFallingEffect(content, size = 18, amount = 60, speedMult = 10) {
@@ -125,7 +94,7 @@ function getTheme() {
     //curDate.getMonth();
     const month = curDate.getMonth(); // 0 - 11
     let theme;
-    switch (month) {
+    switch (11) {
         case 0:
         case 10:
         case 11:

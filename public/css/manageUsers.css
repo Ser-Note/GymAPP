@@ -30,6 +30,7 @@
 }
 
 body {
+    overflow-y: hidden;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--color-bg);
     color: var(--color-text);
@@ -119,7 +120,11 @@ label[for="userSearchInput"] {
 
 /* Users List Container */
 .info {
+    overflow-y: scroll;
     list-style: none;
+    width: min(95%, 750px);
+    
+    height: calc(90vh - 30px);
     max-width: 900px;
     margin: 0 auto;
     margin-bottom: 180px;
@@ -140,6 +145,10 @@ label[for="userSearchInput"] {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
+}
+
+.info li:last-child {
+    margin-bottom: 120px;
 }
 
 .info li:hover {

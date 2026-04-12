@@ -291,7 +291,7 @@ body {
   color: #111827;
   position: relative;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 /* Main dashboard container */
@@ -1178,3 +1178,4 @@ main.dashboard h1 {
   .exercise-config-section textarea {
     min-height: 70px;
   }
+}

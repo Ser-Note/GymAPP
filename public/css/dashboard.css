@@ -247,6 +247,7 @@ body {
   color: #111827;
   position: relative;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 /* Centered card that contains login info */
@@ -257,6 +258,7 @@ body {
   background: var(--card-bg);
   border-radius: var(--card-radius);
   padding: 2rem;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
